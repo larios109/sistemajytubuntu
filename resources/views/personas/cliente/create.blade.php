@@ -1,0 +1,76 @@
+@extends('adminlte::page')
+
+<link rel="icon" href="{{ asset('images/apple-icon-57x57.png') }}">
+
+@section('title', '| Registrar cliente')
+
+@section('content_header')
+    <h1 class="text-center">Cliente</h1>
+    <hr class="bg-dark border-1 border-top border-dark">
+@stop
+
+@section('content')
+    <form action="{{route('cliente.store')}}" method='POST'>
+        @csrf
+        <div class="card  mb-2">
+
+            <div  class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Persona</label>
+                <select class="col-sm-7" class="form-control" id="persona" name="persona" >
+                    <option disabled selected>Escoja un codigo de una persona</option>
+                    @foreach($personas as $persona)
+                        {
+                            <option id=".$personas['persona']">{{$persona["cod_persona"]}}.{{$persona["primer_nom"]}} {{$persona["segund_nom"]}} {{$persona["primer_apellido"]}} {{$persona["segund_apellido"]}}</option>
+                        }
+                    @endforeach
+                </select>
+                @if ($errors->has('persona'))
+                    <div     
+                        id="persona-error"                                          
+                        class="error text-danger pl-3"
+                        for="persona"
+                        style="display: block;">
+                        <strong>{{$errors->first('persona')}}</strong>
+                    </div>
+                @endif
+            </div>
+
+            <div class="row mb-3">
+                <label for="calendar" class="col-sm-2 col-form-label">Fecha Ingreso</label>
+                 <div class="col-sm-7">
+                    <input type="date" id="Ingreso" name="Ingreso" class="form-control">
+                </div>
+                @if ($errors->has('Ingreso'))
+                    <div     
+                        id="Ingreso-error"                                          
+                        class="Ingreso text-danger pl-3"
+                        for="Ingreso"
+                        style="display: block;">
+                        <strong>{{$errors->first('Ingreso')}}</strong>
+                    </div>
+                @endif
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-xs-12 mb-2">
+                    <a href="{{route('cliente.index')}}"
+                    class="btn btn-danger w-100"
+                    >Cancelar <i class="fa fa-times-circle ml-2"></i></a>
+                </div>
+                <div class="col-sm-6 col-xs-12 mb-2">
+                    <button 
+                        type="submit"
+                        class="btn btn-success w-100">
+                        Guardar <i class="fa fa-check-circle ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+     </form>
+@stop
+
+@section('css')
+@stop
+
+@section('js')
+@stop
