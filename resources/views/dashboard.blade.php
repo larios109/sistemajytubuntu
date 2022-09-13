@@ -47,12 +47,12 @@
                                     <div class="col-md-4 col-xl-4">
                                         <div class="card text-white bg-dark">
                                             <div class="card-block">
-                                            <h5>Ventas</h5>                                               
+                                            <h5>Solicitud Pedidos</h5>                                               
                                                 @php
                                                  $cant_ventas = DB::table('ventas')->count();                                                
                                                 @endphp
                                                 <h2 class="text-right"><i class="fas fa-fw fa-file-invoice f-left"></i><span>{{$cant_ventas}}</span></h2>
-                                                <p class="m-b-0 text-right"><a href="/ventas" class="text-white">Ver más</a></p>
+                                                <p class="m-b-0 text-right"><a href="/solicitudpedidos" class="text-white">Ver más</a></p>
                                             </div>
                                         </div>
                                     </div> 

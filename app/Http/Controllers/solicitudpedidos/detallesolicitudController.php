@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Ventas;
+namespace App\Http\Controllers\solicitudpedidos;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
-use App\Models\detalleventa;
 
-class detalleventaController extends Controller
+class detallesolicitudController extends Controller
 {
     public function __construct()
     {
@@ -27,7 +26,7 @@ class detalleventaController extends Controller
     public function index()
     {
         $response = Http::get('http://localhost:3000/detalle_venta');
-        return view('ventas.detalleventas.index')
+        return view('solicitudpedidos.detallesolicitud.index')
         ->with('detalleventas', json_decode($response,true));
     }
 
@@ -40,7 +39,7 @@ class detalleventaController extends Controller
     {
         $response = Http::get('http://localhost:3000/ventas');
         $response2 = Http::get('http://localhost:3000/lista_productos');
-        return view('ventas.detalleventas.create')
+        return view('solicitudpedidos.detallesolicitud.create')
         ->with('ventas', json_decode($response,true))
         ->with('producto', json_decode($response2,true));
 
@@ -76,7 +75,7 @@ class detalleventaController extends Controller
             'usr_registro' =>  auth()->user()->name
         ]);
         
-        return redirect()->route('detalleventas.index');
+        return redirect()->route('detallesolicitud.index');
     }
 
     /**
@@ -107,7 +106,7 @@ class detalleventaController extends Controller
         $data=[];
         $data['detalleventa']=$detalleventa;
 
-        return view ('ventas.detalleventas.edit',['detalleventa'=>$detalleventa])
+        return view ('solicitudpedidos.detallesolicitud.edit',['detalleventa'=>$detalleventa])
         ->with('ventas', json_decode($response3,true))
         ->with('producto', json_decode($response2,true));
     }
@@ -143,7 +142,7 @@ class detalleventaController extends Controller
             'usr_registro' =>  auth()->user()->name
         ]);
 
-        return redirect()->route('detalleventas.index');
+        return redirect()->route('detallesolicitud.index');
     }
 
     /**
@@ -155,6 +154,6 @@ class detalleventaController extends Controller
     public function destroy($cod_detalle_venta)
     {
         $eliminar = Http::delete('http://localhost:3000/detalle_venta/eliminar/'.$cod_detalle_venta);
-        return redirect()->route('detalleventas.index')->with('eliminar', 'Ok');
+        return redirect()->route('detallesolicitud.index')->with('eliminar', 'Ok');
     }
 }

@@ -2,15 +2,15 @@
 
 <link rel="icon" href="{{ asset('images/apple-icon-57x57.png') }}">
 
-@section('title', '| Registrar Venta')
+@section('title', '| Solicitud Pedidos')
 
 @section('content_header')
-    <h1 class="text-center">Ventas</h1>
+    <h1 class="text-center">Solicitud Pedidos</h1>
     <hr class="bg-dark border-1 border-top border-dark">
 @stop
 
 @section('content')
-    <form action="{{route('ventas.store')}}" method='POST'>
+    <form action="{{route('solicitudpedidos.store')}}" method='POST'>
         @csrf
         <div class="card  mb-2">
 
@@ -148,7 +148,7 @@
 
             <div class="row">
                 <div class="col-sm-6 col-xs-12 mb-2">
-                    <a href="{{route('ventas.index')}}"
+                    <a href="{{route('solicitudpedidos.index')}}"
                     class="btn btn-danger w-100"
                     >Cancelar <i class="fa fa-times-circle ml-2"></i></a>
                 </div>

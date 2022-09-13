@@ -7,57 +7,58 @@
 <link href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 @stop
 
-@section('title', '| Detalle Ventas')
+@section('title', '| Solicitud Pedidos')
 @section('content_header')
-    <h1 class="text-center">Detalle de Ventas</h1>
+    <h1 class="text-center">Solicitud Pedidos</h1>
     <hr class="bg-dark border-1 border-top border-dark">
 @stop
 
 @section('content')
 
-@can ('crear->detalleventa')
+@can ('crear->venta')
 <a 
-    href="{{route('detalleventas.create')}}"
+    href="{{route('solicitudpedidos.create')}}"
     class="btn btn-outline-info text-center btn-block">
-    <spam>Registrar Detalle de venta</spam> <i class="fas fa-plus-square"></i>
+    <spam>Registrar Solicitud</spam> <i class="fas fa-plus-square"></i>
 </a>
 @endcan
 
 <div class="table-responsive-sm mt-5">
-    <table id="tabladetalleventa" class="table table-stripped table-bordered table-condensed table-hover">
+    <table id="venta" class="table table-stripped table-bordered table-condensed table-hover">
         <thead class=thead-dark>
             <tr>
-                <th class="text-center">Codigo Detalle venta</th>
-                <th class="text-center">Codigo venta</th>
+                <th class="text-center">Codigo Solicitud</th>
+                <th class="text-center">Nombre Cliente</th>
+                <th class="text-center">Apellido Cliente</th>
                 <th class="text-center">Nombre Producto</th>
                 <th class="text-center">Cantidad</th>
-                <th class="text-center">Precio Venta</th>
-                <th class="text-center">ISV</th>
-                <th class="text-center">Forma Pago</th>
-                <th class="text-center">Total</th>
+                <th class="text-center">Precio Producto</th>
+                <th class="text-center">Nombre Empleado</th>
+                <th class="text-center">Fecha de Creacion</th>
                 <th class="text-center">Opciones</th>
             </tr>
         </thead>
         <tbody>
-            @php $i=1; @endphp
-            @foreach($detalleventas as $detalle)
+        @php $i=1; @endphp
+            @foreach($ventas as $venta)
                 <tr>
                     <td class="text-center">{{$i}}</td>
-                    <td class="text-center">{{$detalle["cod_venta"]}}</td>
-                    <td class="text-center">{{$detalle["nombre_producto"]}}</td>
-                    <td class="text-center">{{$detalle["cantidad"]}}</td>
-                    <td class="text-center">{{$detalle["precio_venta"]}}</td>
-                    <td class="text-center">{{$detalle["impuesto_sobre_venta"]}}</td>
-                    <td class="text-center">{{$detalle["forma_pago"]}}</td>
-                    <td class="text-center">{{$detalle["subtotal"]}}</td>
+                    <td class="text-center">{{$venta["primer_nom"]}}</td>
+                    <td class="text-center">{{$venta["primer_apellido"]}}</td>
+                    <td class="text-center">{{$venta["nombre_producto"]}}</td>
+                    <td class="text-center">{{$venta["cant"]}}</td>
+                    <td class="text-center">{{$venta["prec_vent_lote"]}}</td>
+                    <td class="text-center">{{$venta["usr_registro"]}}</td>
+                    <td class="text-center">{{date('Y-m-d', strtotime($venta["fecha_creacion"]))}}</td>
                     <td class="text-center">
-                        @can ('editar->detalleventa')
-                        <form action="{{route('detalleventas.destroy',$detalle["cod_detalle_venta"])}}" class="d-inline formulario-eliminar" method='POST' >
-                            <a href="{{route('detalleventas.edit',$detalle["cod_detalle_venta"])}}" class="btn btn-warning btm-sm fa fa-edit"></a>
-                            @can ('borrar->detalleventa')
-                            <button type="submit" class="btn btn-danger btm-sm fa fa-times-circle">   
-                             @csrf
-                             @method('DELETE')
+                        @can ('editar->venta')
+                        <form action="{{route('solicitudpedidos.destroy',$venta["cod_venta"])}}" class="d-inline formulario-eliminar" method="POST">
+                            <a href="{{route('solicitudpedidos.edit',$venta["cod_venta"])}}" class="btn btn-warning btm-sm fa fa-edit"></a>
+                            @can ('borrar->venta')
+                            <button type="submit"
+                            class="btn btn-danger btm-sm fa fa-times-circle">
+                            @csrf
+                            @method('DELETE')
                             </button>
                             @endcan
                         </form>
@@ -124,7 +125,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#tabladetalleventa').DataTable({
+        $('#venta').DataTable({
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
             },
@@ -156,6 +157,5 @@
             ]
         });
     });
-</script>
 </script>
 @stop

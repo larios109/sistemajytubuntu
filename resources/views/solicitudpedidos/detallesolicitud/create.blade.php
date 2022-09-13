@@ -2,22 +2,22 @@
 
 <link rel="icon" href="{{ asset('images/apple-icon-57x57.png') }}">
 
-@section('title', '| Crear Detalle de Venta')
+@section('title', '| Crear Detalle Solicitud Pedidos')
 
 @section('content_header')
-    <h1 class="text-center">Detalle de Ventas</h1>
+    <h1 class="text-center">Detalle Solicitud Pedidos</h1>
     <hr class="bg-dark border-1 border-top border-dark">
 @stop
 
 @section('content')
-    <form action="{{route('detalleventas.store')}}" method='POST'>
+    <form action="{{route('detallesolicitud.store')}}" method='POST'>
         @csrf
         <div class="card  mb-2">
 
             <div  class="row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">Codigo Venta</label>
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Codigo Solicitud</label>
                 <select class="col-sm-7" class="form-control" id="codv" name="codv">
-                    <option disabled selected>Escoja un codigo de venta</option>
+                    <option disabled selected>Escoja un codigo de solicitud</option>
                     @foreach($ventas as $codvent)
                         {
                             <option id=".$codvent['codv']">{{$codvent["cod_venta"]}}</option>
@@ -149,7 +149,7 @@
 
             <div class="row">
                 <div class="col-sm-6 col-xs-12 mb-2">
-                    <a href="{{route('detalleventas.index')}}"
+                    <a href="{{route('detallesolicitud.index')}}"
                     class="btn btn-danger w-100"
                     >Cancelar <i class="fa fa-times-circle ml-2"></i></a>
                 </div>

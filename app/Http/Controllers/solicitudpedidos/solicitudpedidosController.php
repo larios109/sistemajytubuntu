@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Ventas;
+namespace App\Http\Controllers\solicitudpedidos;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
-use App\Models\venta;
 
-class ventaController extends Controller
+class solicitudpedidosController extends Controller
 {
     public function __construct()
     {
@@ -27,7 +26,7 @@ class ventaController extends Controller
     public function index()
     {
         $response = Http::get('http://localhost:3000/ventas');
-        return view('ventas.ventas.index')
+        return view('solicitudpedidos.solicitudpedidos.index')
         ->with('ventas', json_decode($response,true));
     }
     /**
@@ -40,7 +39,7 @@ class ventaController extends Controller
         $response2 = Http::get('http://localhost:3000/cliente');
         $response3 = Http::get('http://localhost:3000/lista_productos');
 
-        return view('ventas.ventas.create')
+        return view('solicitudpedidos.solicitudpedidos.create')
         ->with('clientes', json_decode($response2,true))
         ->with('productos', json_decode($response3,true));
     }
@@ -74,7 +73,7 @@ class ventaController extends Controller
             'pv_forma_pago' =>$request->pago,
         ]);
         
-        return redirect()->route('ventas.index');
+        return redirect()->route('solicitudpedidos.index');
     }
 
     /**
@@ -105,7 +104,7 @@ class ventaController extends Controller
         $data=[];
         $data['actualizarventas']=$actualizarventas;
 
-        return view ('ventas.ventas.edit',['actualizarventas'=>$actualizarventas])
+        return view ('solicitudpedidos.solicitudpedidos.edit',['actualizarventas'=>$actualizarventas])
         ->with('productos', json_decode($response4,true))
         ->with('clientes', json_decode($response3,true));
     }
@@ -134,7 +133,7 @@ class ventaController extends Controller
             'prec_vent_lote' =>$request->precio,
         ]);
 
-        return redirect()->route('ventas.index');
+        return redirect()->route('solicitudpedidos.index');
     }
 
     /**
@@ -146,6 +145,6 @@ class ventaController extends Controller
     public function destroy($cod_venta)
     {
         $eliminar = Http::delete('http://localhost:3000/ventas/eliminar/'.$cod_venta);
-        return redirect()->route('ventas.index')->with('eliminar', 'Ok');
+        return redirect()->route('solicitudpedidos.index')->with('eliminar', 'Ok');
     }
 }

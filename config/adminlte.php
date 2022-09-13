@@ -250,12 +250,6 @@ return [
         [
             'text'    => 'Personas',
             'icon'    => 'fas fa-fw fa-user',
-            'can'=> 'ver->personas',
-            'can'=> 'ver->cliente',
-            'can'=> 'ver->direccion',
-            'can'=> 'ver->correo',
-            'can'=> 'ver->telefonos',
-            'can'=> 'ver->compania',
             'submenu' => [
                 [
                     'text' => 'Personas',
@@ -282,17 +276,11 @@ return [
                     'url'  => '/telefonos',
                     'can'=> 'ver->telefonos',
                 ],
-                [
-                    'text' => 'Compañia',
-                    'url'  => '/compania',
-                    'can'=> 'ver->compania',
-                ],
             ],
         ],
         [
             'text'    => 'Colaboradores',
             'icon'    => 'fas fa-fw fa-user-tie',
-            'can'=> 'ver->usuarios',
             'can'=> 'ver->usuarios',
             'can'=> 'ver->pagosalario',
             'submenu' => [
@@ -329,10 +317,6 @@ return [
         [
             'text'    => 'Productos e Inventario',
             'icon'    => 'fas fa-fw fa-wine-bottle',
-            'can'=> 'ver->categoria',
-            'can'=> 'ver->listaproductos',
-            'can'=> 'ver->inventario',
-            'can'=> 'ver->otrosinsumos',
             'submenu' => [
                 [
                     'text' => 'Categoria Productos',
@@ -359,17 +343,15 @@ return [
         [
             'text'    => 'Solicitud Pedidos',
             'icon'    => 'fas fa-fw fa-file-invoice',
-            'can'=> 'ver->venta',
-            'can'=> 'ver->detalleventa',
             'submenu' => [
                 [
-                    'text' => 'Ventas',
-                    'url'  => '/ventas',
+                    'text' => 'Solicitud Pedidos',
+                    'url'  => '/solicitudpedidos',
                     'can'=> 'ver->venta',
                 ],
                 [
-                    'text' => 'Detalle de Ventas',
-                    'url'  => '/detalleventas',
+                    'text' => 'Detalle Solicitud Pedidos',
+                    'url'  => '/detallesolicitud',
                     'can'=> 'ver->detalleventa',
                 ],
             ],
@@ -404,17 +386,14 @@ return [
                     'url'  => '/rotrosinsumos',
                 ],
                 [
-                    'text' => 'Reporte Ventas',
-                    'url'  => '/reporteventas',
+                    'text' => 'Reporte Solicitud Pedidos',
+                    'url'  => '/reportesolicitud',
                 ],
             ],
         ],
         [
             'text'    => 'Seguridad',
             'icon'    => 'fas fa-fw fa-lock',
-            'can'=> 'ver->bitacora',
-            'can'=> 'ver->rol',
-            'can'=> 'ver->preguntas',
             'submenu' => [
                 [
                     'text' => 'Bitacora',

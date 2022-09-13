@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
 
 
-class rventasController extends Controller
+class rsolicitudpedidosController extends Controller
 {
     public function __construct()
     {
@@ -22,7 +22,7 @@ class rventasController extends Controller
     public function index()
     {
         $response = Http::get('http://localhost:3000/reporte_ventas');
-        return view('reportes.reporteventas.index')
+        return view('reportes.reportesolicitud.index')
         ->with('reporteventas', json_decode($response,true));
     }
 

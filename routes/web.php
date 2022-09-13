@@ -22,8 +22,8 @@ use App\Http\Controllers\productos\listaproductoController;
 use App\Http\Controllers\productos\inventarioController;
 
 // Controllers ventas
-use App\Http\Controllers\ventas\detalleventaController;
-use App\Http\Controllers\ventas\ventaController;
+use App\Http\Controllers\solicitudpedidos\detallesolicitudController;
+use App\Http\Controllers\solicitudpedidos\solicitudpedidosController;
 
 // Controllers empleado
 use App\Http\Controllers\UsuarioController;
@@ -35,7 +35,7 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\seguridad\preguntasController;
 
 // Controllers reportes
-use App\Http\Controllers\reportes\rventasController;
+use App\Http\Controllers\reportes\rsolicitudpedidosController;
 use App\Http\Controllers\reportes\rproductosController;
 use App\Http\Controllers\reportes\rotrosinsumosController;
 use App\Http\Controllers\reportes\rmateriasalienteController;
@@ -81,8 +81,8 @@ Route::resource('listaproductos',listaproductoController::class)->names('listapr
 Route::resource('inventario',inventarioController::class)->names('inventario');
 
 // Route ventas
-Route::resource('detalleventas',detalleventaController::class)->names('detalleventas');
-Route::resource('ventas',ventaController::class)->names('ventas');
+Route::resource('detallesolicitud',detallesolicitudController::class)->names('detallesolicitud');
+Route::resource('solicitudpedidos',solicitudpedidosController::class)->names('solicitudpedidos');
 
 // Route empleados
 Route::resource('pagosalario',pagosalarioController::class)->names('pagosalario');
@@ -94,7 +94,7 @@ Route::resource('roles',RolController::class)->names('roles');
 Route::resource('preguntas',preguntasController::class)->names('preguntas');
 
 // Route reportes
-Route::resource('reporteventas',rventasController::class)->names('reporteventas');
+Route::resource('reportesolicitud',rsolicitudpedidosController::class)->names('reportesolicitud');
 Route::resource('reporteproductos',rproductosController::class)->names('reporteproductos');
 Route::resource('reportempleado',rempleadosController::class)->names('reportempleado');
 Route::resource('reportesalarios',rsalariosController::class)->names('reportesalarios');
