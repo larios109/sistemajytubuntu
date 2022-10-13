@@ -38,7 +38,9 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre</label>
                  <div class="col-sm-7">
-                    <input type="text" id="name" name="name" class="form-control" maxlength="30" onkeydown="return /[a-z, ]/i.test(event.key)" onkeyup="capitalizarPrimeraLetraname()" placeholder="Ingrese el Nombre" value="{{old('name')}}">
+                    <input type="text" id="name" name="name" class="form-control" minlength = "10" maxlength="30" 
+                    onkeydown="return /[a-z]/i.test(event.key)" onkeyup="this.value=this.value.toUpperCase();"
+                    placeholder="Ingrese el Nombre" value="{{old('name')}}">
                 </div>
                 @if ($errors->has('Nombre'))
                     <div                 
@@ -69,18 +71,11 @@
 
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Contraseña</label>
-                 <div class="col-sm-7">
-                    {!! Form::password('password', array('class' => 'form-control')) !!}
+                <div class="col-sm-7">
+                    <x-jet-input class="{{ $errors->has('password') ? 'is-invalid' : '' }}" type="password"
+                                 name="password" required autocomplete="new-password" />
+                    <x-jet-input-error for="password"></x-jet-input-error>
                 </div>
-                @if ($errors->has('Cotnraseña'))
-                    <div
-                        id="Cotnraseña-error"                                                
-                        class="error text-danger pl-3"
-                        for="Cotnraseña"
-                        style="display: block;">
-                        <strong>{{$errors->first('Cotnraseña')}}</strong>
-                    </div>
-                 @endif
             </div>
 
             <div class="row mb-3">
@@ -88,15 +83,6 @@
                  <div class="col-sm-7">
                     {!! Form::password('confirm-password', array('class' => 'form-control')) !!}
                 </div>
-                @if ($errors->has('Cotnraseña'))
-                    <div
-                        id="Cotnraseña-error"                                                
-                        class="error text-danger pl-3"
-                        for="Cotnraseña"
-                        style="display: block;">
-                        <strong>{{$errors->first('Cotnraseña')}}</strong>
-                    </div>
-                 @endif
             </div>
 
             <div  class="row mb-3">
@@ -138,25 +124,6 @@
 @stop
 
 @section('js')
-<script>
-    var input = document.getElementById('name');
-    //función que capitaliza la primera letra
-    function capitalizarPrimeraLetraname() {
-    //almacenamos el valor del input
-    var palabra = input.value;
-    //Si el valor es nulo o undefined salimos
-    if(!input.value) return;
-    // almacenamos la mayuscula
-    var mayuscula = palabra.substring(0,1).toUpperCase();
-    //si la palabra tiene más de una letra almacenamos las minúsculas
-    if (palabra.length > 0) {
-        var minuscula = palabra.substring(1).toLowerCase();
-    }
-    //escribimos la palabra con la primera letra mayuscula
-    input.value = mayuscula.concat(minuscula);
-    }
-</script>
-
 <script>
     window.onload = function() {
         var myInput = document.getElementById('name');

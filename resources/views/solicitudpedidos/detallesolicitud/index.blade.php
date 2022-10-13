@@ -15,14 +15,6 @@
 
 @section('content')
 
-@can ('crear->detalleventa')
-<a 
-    href="{{route('detallesolicitud.create')}}"
-    class="btn btn-outline-info text-center btn-block">
-    <spam>Registrar Detalle Solicitud Pedidos</spam> <i class="fas fa-plus-square"></i>
-</a>
-@endcan
-
 <div class="table-responsive-sm mt-5">
     <table id="tabladetalleventa" class="table table-stripped table-bordered table-condensed table-hover">
         <thead class=thead-dark>

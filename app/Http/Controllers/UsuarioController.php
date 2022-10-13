@@ -10,6 +10,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\Rules;
 
 class UsuarioController extends Controller
 {
@@ -57,7 +58,8 @@ class UsuarioController extends Controller
             'persona'=>'required',
             'name'=>'required',
             'email'=>'required|email|unique:users,email',
-            'password'=>'required|same:confirm-password',
+            'password'=>['required', 'same:confirm-password', Rules\Password::defaults() -> mixedCase() -> numbers() 
+            -> letters() -> symbols()],
             'roles'=>'required'
         ]);
 
@@ -112,7 +114,8 @@ class UsuarioController extends Controller
         $this->validate ($request,[
             'name'=>'required',
             'email'=>'required|email|unique:users,email,'.$id,
-            'password'=>'same:confirm-password',
+            'password'=>['required', 'same:confirm-password', Rules\Password::defaults() -> mixedCase() -> numbers() 
+            -> letters() -> symbols()],
             'roles'=>'required'
         ]);
 

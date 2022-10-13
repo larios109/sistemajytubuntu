@@ -5,6 +5,7 @@
 @section('css')
 <!-- <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet"> -->
 <link href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css" rel="stylesheet">
 @stop
 
 @section('title', '| Bitacora')
@@ -14,6 +15,26 @@
 @stop
 
 @section('content')
+<div class="form-inline" id="form_main_ventas">
+    <div class="form-group mx-sm-3 mb-1">
+        <div class="input-group">
+            <div class="input-group-append">				
+                <span class="input-group-text"><div class="sb-nav-link-icon"></div>Fecha Inicio</span>
+            </div>
+            <input type="text" id="min" name="min" class="form-control" data-toggle="tooltip" data-placement="top" title="">
+        </div>
+    </div>
+
+    <div class="form-group mx-sm-3 mb-1">
+        <div class="input-group">
+            <div class="input-group-append">				
+                <span class="input-group-text"><div class="sb-nav-link-icon"></div>Fecha Fin</span>
+            </div>
+            <input type="text" id="max" name="max" class="form-control" data-toggle="tooltip" data-placement="top" title="">
+        </div>
+    </div>
+</div>
+
 <div class="table-responsive-sm mt-5">
     <table id="tablabitacora" class="table table-stripped table-bordered table-condensed table-hover">
         <thead class=thead-dark>
@@ -23,28 +44,28 @@
                 <th class="text-center">Tabla</th>
                 <th class="text-center">Evento</th>
                 <th class="text-center">Fecha</th>
-                <th class="text-center">campo 1</th>
-                <th class="text-center">campo 2</th>
-                <th class="text-center">campo 3</th>
-                <th class="text-center">campo 4</th>
-                <th class="text-center">campo 5</th>
-                <th class="text-center">campo 6</th>
-                <th class="text-center">campo 7</th>
-                <th class="text-center">campo 8</th>
-                <th class="text-center">campo 9</th>
-                <th class="text-center">campo 10</th>
-                <th class="text-center">campo 11</th>
-                <th class="text-center">campo 12</th>
-                <th class="text-center">campo 13</th>
-                <th class="text-center">campo 14</th>
-                <th class="text-center">campo 15</th>
-                <th class="text-center">campo 16</th>
-                <th class="text-center">campo 17</th>
-                <th class="text-center">campo 18</th>
-                <th class="text-center">campo 19</th>
-                <th class="text-center">campo 20</th>
-                <th class="text-center">campo 21</th>
-                <th class="text-center">campo 22</th>
+                <th class="text-center">Campo 1</th>
+                <th class="text-center">Campo 2</th>
+                <th class="text-center">Campo 3</th>
+                <th class="text-center">Campo 4</th>
+                <th class="text-center">Campo 5</th>
+                <th class="text-center">Campo 6</th>
+                <th class="text-center">Campo 7</th>
+                <th class="text-center">Campo 8</th>
+                <th class="text-center">Campo 9</th>
+                <th class="text-center">Campo 10</th>
+                <th class="text-center">Campo 11</th>
+                <th class="text-center">Campo 12</th>
+                <th class="text-center">Campo 13</th>
+                <th class="text-center">Campo 14</th>
+                <th class="text-center">Campo 15</th>
+                <th class="text-center">Campo 16</th>
+                <th class="text-center">Campo 17</th>
+                <th class="text-center">Campo 18</th>
+                <th class="text-center">Campo 19</th>
+                <th class="text-center">Campo 20</th>
+                <th class="text-center">Campo 21</th>
+                <th class="text-center">Campo 22</th>
             </tr>
         </thead>
         <tbody>
@@ -104,6 +125,10 @@
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+<script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
+<link href="https://code.jquery.com/jquery-3.5.1.js">
+
 <script>
     $(document).ready(function() {
         $('#tablabitacora').DataTable({
@@ -136,6 +161,45 @@
                     className: 'btn btn-success glyphicon glyphicon-duplicate'
                 }
             ]
+        });
+    });
+
+    var minDate, maxDate;
+ 
+    // Custom filtering function which will search data in column four between two values
+    $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+            var min = minDate.val();
+            var max = maxDate.val();
+            var date = new Date( data[4] );
+    
+            if (
+                ( min === null && max === null ) ||
+                ( min === null && date <= max ) ||
+                ( min <= date   && max === null ) ||
+                ( min <= date   && date <= max )
+            ) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+    $(document).ready(function fecha() {
+            // Create date inputs
+            minDate = new DateTime($('#min'), {
+                format: 'D MMM YYYY'
+            });
+            maxDate = new DateTime($('#max'), {
+                format: 'D MMM YYYY'
+            });
+        
+            // DataTables initialisation
+            var table = $('#tablabitacora').DataTable();
+        
+            // Refilter the table
+            $('#min, #max').on('change', function () {
+                table.draw();
         });
     });
 </script>

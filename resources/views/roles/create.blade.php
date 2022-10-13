@@ -17,7 +17,9 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre del rol</label>
                  <div class="col-sm-7">
-                    <input type="text" id="name" name="name" class="form-control" maxlength="15" onkeydown="return /[a-z, ]/i.test(event.key)" placeholder="Ingrese el Nombre" value="{{old('name')}}">
+                    <input type="text" id="name" name="name" class="form-control" minlength = "10" maxlength="20" 
+                    onkeydown="return /[a-z ]/i.test(event.key)" onkeyup="this.value=this.value.toUpperCase();" placeholder="Ingrese el Nombre" 
+                    value="{{old('name')}}">
                 </div>
                 @if ($errors->has('Nombre'))
                     <div                 
