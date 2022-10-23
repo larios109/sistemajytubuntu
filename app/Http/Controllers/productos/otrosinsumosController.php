@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
-
+use App\Http\Requests\otrosinsumosrequest;
+use Illuminate\Validation\Validator;
 
 class otrosinsumosController extends Controller
 {
@@ -46,14 +47,8 @@ class otrosinsumosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(otrosinsumosrequest $request)
     {
-        $request->validate([
-            'insumo'=>'required',
-            'Descripcion'=>'required',
-            'Precio'=>'required',
-            'cantidad'=>'required'
-        ]);
 
         $response = Http::post('http://localhost:3000/otros_insumos/insertar', [
             'insumo' => $request->insumo,
@@ -108,7 +103,7 @@ class otrosinsumosController extends Controller
             'Descripcion'=>'required',
             'Precio'=>'required',
             'cantidad'=>'required'
-        ]);
+        ]); 
 
         $response = Http::put('http://localhost:3000/otros_insumos/actualizar/' . $cod_insumos, [
             'insumo' => $request->insumo,

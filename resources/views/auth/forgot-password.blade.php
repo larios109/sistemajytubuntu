@@ -9,7 +9,7 @@
         <div class="card-body">
 
             <div class="mb-3">
-                {{ __('¿Olvidaste tu contraseña? No hay problema. Simplemente háganos saber su dirección de correo electrónico y le enviaremos un enlace de restablecimiento de contraseña que le permitirá elegir una nueva.') }}
+                {{ __('Introduce tu dirección de correo electrónico y te enviaremos un enlace de restablecimiento de contraseña.') }}
             </div>
 
             @if (session('status'))
@@ -29,8 +29,12 @@
                 </div>
 
                 <div class="d-flex justify-content-end mt-4">
+                        <a class="text-muted me-3 text-decoration-none" href="{{ route('login') }}">
+                            {{ __('Regresar') }}
+                        </a>
+
                     <x-jet-button>
-                        {{ __('Enlace de restablecimiento de contraseña de correo electrónico') }}
+                        {{ __('Enviar enlace de restablecimiento') }}
                     </x-jet-button>
                 </div>
             </form>

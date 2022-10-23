@@ -43,7 +43,7 @@
                         @endif
                         
                         <x-jet-button>
-                            {{ __('INICIAR SESIÓN') }}
+                            {{ __('Iniciar Sesión') }}
                         </x-jet-button>
                     </div>
                 </div>

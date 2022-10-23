@@ -39,8 +39,7 @@
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre</label>
                  <div class="col-sm-7">
                     <input type="text" id="name" name="name" class="form-control" minlength = "10" maxlength="30" 
-                    onkeydown="return /[a-z]/i.test(event.key)" onkeyup="this.value=this.value.toUpperCase();"
-                    placeholder="Ingrese el Nombre" value="{{old('name')}}">
+                    onkeydown="return /[a-z ]/i.test(event.key)" onkeyup="this.value=this.value.toUpperCase();" value="USUARIO NUEVO" readonly="">
                 </div>
                 @if ($errors->has('Nombre'))
                     <div                 
@@ -73,7 +72,7 @@
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Contraseña</label>
                 <div class="col-sm-7">
                     <x-jet-input class="{{ $errors->has('password') ? 'is-invalid' : '' }}" type="password"
-                                 name="password" required autocomplete="new-password" />
+                                 name="password" required autocomplete="new-password" data-toggle="password"/>
                     <x-jet-input-error for="password"></x-jet-input-error>
                 </div>
             </div>
@@ -81,7 +80,7 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Confirmar Contraseña</label>
                  <div class="col-sm-7">
-                    {!! Form::password('confirm-password', array('class' => 'form-control')) !!}
+                    {!! Form::password('confirm-password', array('class' => 'form-control', 'data-toggle=password')) !!}
                 </div>
             </div>
 
@@ -121,6 +120,11 @@
 @stop
 
 @section('css')
+<!--Show/Hide password-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
 @stop
 
 @section('js')

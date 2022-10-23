@@ -35,23 +35,6 @@
                 @endif
             </div>
 
-            <div class="row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">Referencia Direccion</label>
-                 <div class="col-sm-7">
-                    <input type="text" id="direccion" name="direccion" class="form-control" maxlength="30" 
-                    onkeyup="capitalizarPrimeraLetradireccion()" placeholder="Ingrese la direccion" value="{{old('direccion')}}">
-                </div>
-                @if ($errors->has('direccion'))
-                    <div               
-                        id="direccion-error"                               
-                        class="error text-danger pl-3"
-                        for="direccion"
-                        style="display: block;">
-                        <strong>{{$errors->first('direccion')}}</strong>
-                    </div>
-                @endif
-            </div>
-
             <div  class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Departamento ID</label>
                 <select class="col-sm-7" class="form-control" id="Departamento" name="Departamento">
@@ -90,6 +73,23 @@
                         for="Municipio"
                         style="display: block;">
                         <strong>{{$errors->first('Municipio')}}</strong>
+                    </div>
+                @endif
+            </div>
+
+            <div class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Referencia Direccion</label>
+                 <div class="col-sm-7">
+                    <input type="text" id="direccion" name="direccion" class="form-control" maxlength="30" 
+                    onkeyup="capitalizarPrimeraLetradireccion()" placeholder="Ingrese la direccion" value="{{old('direccion')}}">
+                </div>
+                @if ($errors->has('direccion'))
+                    <div               
+                        id="direccion-error"                               
+                        class="error text-danger pl-3"
+                        for="direccion"
+                        style="display: block;">
+                        <strong>{{$errors->first('direccion')}}</strong>
                     </div>
                 @endif
             </div>

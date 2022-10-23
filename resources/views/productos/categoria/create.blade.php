@@ -18,7 +18,7 @@
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre Categoria</label>
                  <div class="col-sm-7">
                     <input type="text" id="categoria" name="categoria" class="form-control" maxlength="20" 
-                    onkeydown="return /[a-z, ]/i.test(event.key)" onkeyup="capitalizarPrimeraLetracategoria()"
+                    onkeydown="return /[a-z ]/i.test(event.key)" onkeyup="capitalizarPrimeraLetracategoria()"
                      placeholder="Ingrese el Nombre del Producto" value="{{old('categoria')}}">
                 </div>
                 @if ($errors->has('categoria'))
@@ -31,6 +31,7 @@
                     </div>
                 @endif
             </div>
+            <div id="respuesta"> </div>
 
             <div class="row">
                 <div class="col-sm-6 col-xs-12 mb-2">

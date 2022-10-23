@@ -410,6 +410,10 @@ return [
                     'url'  => '/preguntas',
                     'can'=> 'ver->preguntas',
                 ],
+                [
+                    'text' => 'Backup',
+                    'url'  => '/backups',
+                ],
             ],
         ],
     ],

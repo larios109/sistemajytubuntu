@@ -52,7 +52,7 @@
                             @endcan
                         </form>
                         @endcan
-                </td>
+                    </td>
                 </tr>
             @php $i++; @endphp
             @endforeach

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
 use App\Models\cliente;
+use App\Http\Requests\clientesrequest;
 
 class clienteController extends Controller
 {
@@ -47,13 +48,8 @@ class clienteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(clientesrequest $request)
     {
-        $request->validate([
-            'persona'=>'required',
-            'Ingreso'=>'required'
-        ]);
-
         $response = Http::post('http://localhost:3000/cliente/insertar', [
             'cod_persona' => $request->persona,
             'fecha_registro' => $request->Ingreso,

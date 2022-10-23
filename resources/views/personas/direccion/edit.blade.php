@@ -94,6 +94,24 @@
                 @endif
             </div>
 
+            <div class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Referencia Direccion</label>
+                 <div class="col-sm-7">
+                    <input type="text" id="direccion" name="direccion" class="form-control" maxlength="25" 
+                    onkeydown="return /[a-z, ]/i.test(event.key)"  onkeyup="capitalizarPrimeraLetradireccion()" 
+                    placeholder="Ingrese la direccion" value="{{$direccionactu->ref_direccion}}">
+                </div>
+                @if ($errors->has('direccion'))
+                    <div               
+                        id="direccion-error"                               
+                        class="error text-danger pl-3"
+                        for="direccion"
+                        style="display: block;">
+                        <strong>{{$errors->first('direccion')}}</strong>
+                    </div>
+                @endif
+            </div>
+
             <div class="row">
                 <div class="col-sm-6 col-xs-12 mb-2">
                     <a href="{{route('direccion.index')}}"

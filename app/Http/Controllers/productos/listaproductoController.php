@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
+use App\Http\Requests\listaproductosrequest;
 
 class listaproductoController extends Controller
 {
@@ -47,15 +48,8 @@ class listaproductoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(listaproductosrequest $request)
     {
-        $request->validate([
-            'Categoria'=>'required',
-            'Nombre'=>'required',
-            'Descripcion'=>'required',
-            'Precio'=>'required',
-        ]);
-
         $response = Http::post('http://localhost:3000/lista_productos/insertar', [
             'cod_cate_produc' => $request->Categoria,
             'nombre_producto' => $request->Nombre,

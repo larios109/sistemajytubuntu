@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
+use App\Http\Requests\personasrequest;
 
 class personasController extends Controller
 {
@@ -49,23 +50,8 @@ class personasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(personasrequest $request)
     {
-        $request->validate([
-            'Nombre'=>'required',
-            'Nombre2'=>'required',
-            'Apellido'=>'required',
-            'Apellido2'=>'required',
-            'DNI'=>'required',
-            'Genero'=>'required',
-            'Telefono'=>'required',
-            'tipotelefono'=>'required',
-            'Correo'=>'required',
-            'Nacimiento'=>'required',
-            'direccion'=>'required',
-            'Departamento'=>'required',
-            'Municipio'=>'required',
-        ]);
 
         $response = Http::post('http://localhost:3000/personas/insertar', [
             'primer_nom' => $request->Nombre,

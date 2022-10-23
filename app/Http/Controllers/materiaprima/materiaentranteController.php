@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
+use App\Http\Requests\materiaentranterequest;
 
 class materiaentranteController extends Controller
 {
@@ -45,17 +46,8 @@ class materiaentranteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(materiaentranterequest $request)
     {
-        $request->validate([
-            'Materia'=>'required',
-            'Descripcion'=>'required',
-            'Medida'=>'required',
-            'Precio'=>'required',
-            'cantidad'=>'required',
-            'caducidad'=>'required',
-        ]);
-
         $response = Http::post('http://localhost:3000/materia_entrante/insertar', [
             'nom_materia' => $request->Materia,
             'descripcion' => $request->Descripcion,

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\presguntasrequest;
 
 class preguntasController extends Controller
 {
@@ -46,12 +47,8 @@ class preguntasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(presguntasrequest $request)
     {
-        $request->validate([
-            'pregunta'=>'required',
-            'respuesta'=>'required'
-        ]);
 
         $response = Http::post('http://localhost:3000/preguntas/insertar', [
             'pregunta' => $request->pregunta,

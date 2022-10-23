@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
+use App\Http\Requests\categoriaproductosrequest;
 
 
 class categoriaController extends Controller
@@ -46,11 +47,8 @@ class categoriaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(categoriaproductosrequest $request)
     {
-        $request->validate([
-            'categoria'=>'required'
-        ]);
 
         $response = Http::post('http://localhost:3000/categoria_productos/insertar', [
             'nom_cat' => $request->categoria,
@@ -95,11 +93,8 @@ class categoriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $cod_cate_produc)
+    public function update(categoriaproductosrequest $request, $cod_cate_produc)
     {
-        $request->validate([
-            'categoria'=>'required'
-        ]);
 
         $response = Http::put('http://localhost:3000/categoria_productos/actualizar/' . $cod_cate_produc, [
             'nom_cat' => $request->categoria,

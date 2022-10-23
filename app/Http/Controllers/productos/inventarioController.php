@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
+use App\Http\Requests\inventariorequest;
 
 class inventarioController extends Controller
 {
@@ -47,14 +48,8 @@ class inventarioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(inventariorequest $request)
     {
-        $request->validate([
-            'Producto'=>'required',
-            'cantidad'=>'required',
-            'caducidad'=>'required',
-        ]);
-
         $response = Http::post('http://localhost:3000/inventario/insertar', [
             'cod_producto' => $request->Producto,
             'cant_invent' => $request->cantidad,

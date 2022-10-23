@@ -33,6 +33,7 @@ use App\Http\Controllers\empleados\pagosalarioController;
 use App\Http\Controllers\seguridad\bitacoraController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\seguridad\preguntasController;
+use App\Http\Controllers\seguridad\backupController;
 
 // Controllers reportes
 use App\Http\Controllers\reportes\rsolicitudpedidosController;
@@ -42,6 +43,9 @@ use App\Http\Controllers\reportes\rmateriasalienteController;
 use App\Http\Controllers\reportes\rempleadosController;
 use App\Http\Controllers\reportes\rsalariosController;
 use App\Http\Controllers\reportes\rtelefonoscorreosController;
+
+//Controller Primera sesion
+use App\Http\Controllers\seguridad\primerasesionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,9 +62,11 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::group(['middleware' => ['changepassword']], function () {
+    Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
 
 //Route personas
 Route::resource('personas',personasController::class)->names('personas');
@@ -101,3 +107,11 @@ Route::resource('reportesalarios',rsalariosController::class)->names('reportesal
 Route::resource('rmateriasaliente',rmateriasalienteController::class)->names('rmateriasaliente');
 Route::resource('rotrosinsumos',rotrosinsumosController::class)->names('rotrosinsumos');
 Route::resource('telefonoscorreos',rtelefonoscorreosController::class)->names('telefonoscorreos');
+
+//Primer Inicio de sesion
+Route::resource('primerasesion',primerasesionController::class)->names('primerasesion');
+
+//Backup
+Route::resource('backups',backupController::class)->names('backups');
+Route::get('backups/{file_name}', [backupController::class, 'download'])->name('backups.download');
+Route::delete('backups', [backupController::class, 'clean'])->name('backups.clean');
