@@ -58,12 +58,6 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => 'innodb',
-            'dump' => [
-                'dump_binary_path' =>  'C:\xampp\mysql\bin',
-                'use_single_transaction',
-                'timeout' => 60 * 5,
-                'exclude_tables' => ['categoria_productos', 'compañia', 'departamento', 'municipio'],
-            ],
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
