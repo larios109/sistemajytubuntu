@@ -254,112 +254,88 @@ return [
                 [
                     'text' => 'Personas',
                     'url'  => '/personas',
-                    'can'=> 'ver->personas',
-                ],
-                [
-                    'text' => 'Clientes',
-                    'url'  => '/cliente',
-                    'can'=> 'ver->cliente',
+                    'can'=> 'visualizar personas',
                 ],
                 [
                     'text' => 'Dirección',
                     'url'  => '/direccion',
-                    'can'=> 'ver->direccion',
+                    'can'=> 'visualizar direcciones',
                 ],
                 [
                     'text' => 'Correos',
                     'url'  => '/correos',
-                    'can'=> 'ver->correo',
+                    'can'=> 'visualizar correos',
                 ],
                 [
                     'text' => 'Telefonos',
                     'url'  => '/telefonos',
-                    'can'=> 'ver->telefonos',
+                    'can'=> 'visualizar telefonos',
                 ],
             ],
         ],
         [
             'text'    => 'Colaboradores',
             'icon'    => 'fas fa-fw fa-user-tie',
-            'can'=> 'ver->usuarios',
-            'can'=> 'ver->pagosalario',
             'submenu' => [
                 [
                     'text' => 'Colaboradores',
-                    'url'  => '/usuarios',
-                    'can'=> 'ver->usuarios',
+                    'url'  => '/colaboradores',
+                    'can'=> 'visualizar Colaboradores',
                 ],
                 [
                     'text' => 'Pago Salario',
                     'url'  => '/pagosalario',
-                    'can'=> 'ver->pagosalario',
+                    'can'=> 'visualizar pago salario',
                 ],
             ],
         ],
         [
             'text'    => 'Materia Prima',
             'icon'    => 'fas fa-fw fa-boxes',
-            'can'=> 'ver->materiaentrante',
-            'can'=> 'ver->materiasaliente',
             'submenu' => [
                 [
                     'text' => 'Materia Entrante',
                     'url'  => '/materiaentrante',
-                    'can'=> 'ver->materiaentrante',
+                    'can'=> 'visualizar materia entrante',
                 ],
                 [
                     'text' => 'Materia Saliente',
                     'url'  => '/materiasaliente',
-                    'can'=> 'ver->materiasaliente',
+                    'can'=> 'visualizar materia saliente',
                 ],
             ],
         ],
         [
-            'text'    => 'Productos e Inventario',
+            'text'    => 'Productos',
             'icon'    => 'fas fa-fw fa-wine-bottle',
             'submenu' => [
                 [
-                    'text' => 'Categoria Productos',
+                    'text' => 'Categoria',
                     'url'  => '/categoria',
-                    'can'=> 'ver->categoria',
+                    'can'=> 'visualizar categorias',
                 ],
                 [
-                    'text' => 'Lista Producto',
-                    'url'  => '/listaproductos',
-                    'can'=> 'ver->listaproductos',
-                ],
-                [
-                    'text' => 'Inventario',
-                    'url'  => '/inventario',
-                    'can'=> 'ver->inventario',
+                    'text' => 'Productos',
+                    'url'  => '/productos',
+                    'can'=> 'visualizar productos',
                 ],
                 [
                     'text' => 'Otros Insumos',
                     'url'  => '/otrosinsumos',
-                    'can'=> 'ver->otrosinsumos',
+                    'can'=> 'visualizar otros insumos',
                 ],
             ],
         ],
         [
             'text'    => 'Solicitud Pedidos',
             'icon'    => 'fas fa-fw fa-file-invoice',
-            'submenu' => [
-                [
-                    'text' => 'Solicitud Pedidos',
-                    'url'  => '/solicitudpedidos',
-                    'can'=> 'ver->venta',
-                ],
-                [
-                    'text' => 'Detalle Solicitud Pedidos',
-                    'url'  => '/detallesolicitud',
-                    'can'=> 'ver->detalleventa',
-                ],
-            ],
+            'url'  => '/solicitudpedidos',
+            'can'=> 'visualizar solicitud pedidos',
         ],
         [
             'text'    => 'Reportes',
             'icon'    => 'fas fa-fw fa-file',
-            'can'=> 'ver->reportes',
+            'can'=> 'visualizar reportes',
             'submenu' => [
                 [
                     'text' => 'Reporte Colaboradores',
@@ -385,10 +361,6 @@ return [
                     'text' => 'Reporte Otros Insumos',
                     'url'  => '/rotrosinsumos',
                 ],
-                [
-                    'text' => 'Reporte Solicitud Pedidos',
-                    'url'  => '/reportesolicitud',
-                ],
             ],
         ],
         [
@@ -398,21 +370,27 @@ return [
                 [
                     'text' => 'Bitacora',
                     'url'  => '/bitacora',
-                    'can'=> 'ver->bitacora',
+                    'can'=> 'visualizar bitacora',
                 ],
                 [
                     'text' => 'Roles',
                     'url'  => '/roles',
-                    'can'=> 'ver->rol',
+                    'can'=> 'visualizar roles',
                 ],
                 [
                     'text' => 'Preguntas',
                     'url'  => '/preguntas',
-                    'can'=> 'ver->preguntas',
+                    'can'=> 'visualizar preguntas',
                 ],
                 [
                     'text' => 'Backup',
                     'url'  => '/backups',
+                    'can'=> 'visualizar backup',
+                ],
+                [
+                    'text' => 'Usuarios',
+                    'url'  => '/usuarios',
+                    'can'=> 'visualizar usuarios',
                 ],
             ],
         ],

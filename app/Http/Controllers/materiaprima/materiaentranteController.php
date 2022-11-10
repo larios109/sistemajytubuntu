@@ -13,10 +13,10 @@ class materiaentranteController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:ver->materiaentrante|crear->materiaentrante|editar->materiaentrante|borrar->materiaentrante',['only'=>['index']]);
-        $this->middleware('permission:crear->materiaentrante',['only'=>['create','store']]);
-        $this->middleware('permission:editar->materiaentrante',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar->materiaentrante',['only'=>['destroy']]);
+        $this->middleware('permission:visualizar materia entrante|Registrar materia entrante|editar materia entrante|borrar materia entrante',['only'=>['index']]);
+        $this->middleware('permission:Registrar materia entrante',['only'=>['create','store']]);
+        $this->middleware('permission:editar materia entrante',['only'=>['edit','update']]);
+        $this->middleware('permission:borrar materia entrante',['only'=>['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -26,7 +26,9 @@ class materiaentranteController extends Controller
     public function index()
     {
         $response = Http::get('http://localhost:3000/materia_entrante');
-        return view('materiaprima.materiaentrante.index')
+        $user = Auth::user();
+        $fecha = now();
+        return view('materiaprima.materiaentrante.index',["user"=>$user, "fecha"=>$fecha])
         ->with('materiaentrante', json_decode($response,true));
     }
 

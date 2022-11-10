@@ -24,7 +24,8 @@ class categoriaproductosrequest extends FormRequest
     public function rules()
     {
         return [
-            'categoria'=>'required|unique:categoria_productos,nom_cat'
+            'nombre'=>'required|unique:categoria,nombre',
+            'descripcion'=>'required|max:100',
         ];
     }
 }

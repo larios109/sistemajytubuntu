@@ -6,16 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
+use Illuminate\Support\Facades\DB;
 
 class materiasalienteController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:ver->materiasaliente|crear->materiasaliente|editar->materiasaliente|borrar->materiasaliente',['only'=>['index']]);
-        $this->middleware('permission:crear->materiasaliente',['only'=>['create','store']]);
-        $this->middleware('permission:editar->materiasaliente',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar->materiasaliente',['only'=>['destroy']]);
+        $this->middleware('permission:visualizar materia saliente|Registrar materia saliente|editar materia saliente|borrar materia saliente',['only'=>['index']]);
+        $this->middleware('permission:Registrar materia saliente',['only'=>['create','store']]);
+        $this->middleware('permission:editar materia saliente',['only'=>['edit','update']]);
+        $this->middleware('permission:borrar materia saliente',['only'=>['destroy']]);
     }
     
     /**
@@ -26,7 +27,9 @@ class materiasalienteController extends Controller
     public function index()
     {
         $response = Http::get('http://localhost:3000/materia_saliente');
-        return view('materiaprima.materiasaliente.index')
+        $user = Auth::user();
+        $fecha = now();
+        return view('materiaprima.materiasaliente.index',["user"=>$user, "fecha"=>$fecha])
         ->with('materiasaliente', json_decode($response,true));
     }
 
@@ -37,9 +40,8 @@ class materiasalienteController extends Controller
      */
     public function create()
     {
-        $response = Http::get('http://localhost:3000/materia_entrante');
-        return view('materiaprima.materiasaliente.create')
-        ->with('materiaentrante', json_decode($response,true));
+        $materiaentrante=DB::table('materia_prima_entrante')->get();
+        return view('materiaprima.materiasaliente.create',["materiaentrante"=>$materiaentrante]);
     }
 
     /**
@@ -85,7 +87,7 @@ class materiasalienteController extends Controller
      */
     public function edit($cod_materia_s)
     {
-        $response2 = Http::get('http://localhost:3000/materia_entrante');
+        $materiaentrante=DB::table('materia_prima_entrante')->get();
 
         $response=Http::get('http://localhost:3000/materia_saliente/'.$cod_materia_s);
         $materiasalientes=json_decode($response->getbody()->getcontents())[0];
@@ -93,8 +95,7 @@ class materiasalienteController extends Controller
         $data=[];
         $data['materiasalientes']=$materiasalientes;
 
-        return view('materiaprima.materiasaliente.edit',['materiasalientes'=>$materiasalientes])
-        ->with('materiaentrante', json_decode($response2,true));
+        return view('materiaprima.materiasaliente.edit',['materiasalientes'=>$materiasalientes, "materiaentrante"=>$materiaentrante]);
     }
 
     /**

@@ -28,6 +28,7 @@ class personasrequest extends FormRequest
             'Nombre2'=>'required',
             'Apellido'=>'required',
             'Apellido2'=>'required',
+            'tipo'=>'required',
             'DNI'=>'required|unique:persona,dni',
             'Genero'=>'required',
             'Telefono'=>'required',

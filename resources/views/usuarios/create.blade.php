@@ -2,10 +2,10 @@
 
 <link rel="icon" href="{{ asset('images/apple-icon-57x57.png') }}">
 
-@section('title', '| Registrar Colaborador')
+@section('title', '| Registrar Usuario')
 
 @section('content_header')
-    <h1 class="text-center">Colaborador</h1>
+    <h1 class="text-center">Usuario</h1>
     <hr class="bg-dark border-1 border-top border-dark">
 @stop
 
@@ -13,27 +13,6 @@
     <form action="{{route('usuarios.store')}}" method='POST'>
         @csrf
         <div class="card  mb-2">
-
-            <div  class="row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">Persona</label>
-                <select class="col-sm-7" class="form-control" id="persona" name="persona" >
-                    <option disabled selected>Escoja un codigo de una persona</option>
-                    @foreach($personas as $persona)
-                        {
-                            <option id=".$personas['persona']">{{$persona["cod_persona"]}}.{{$persona["primer_nom"]}} {{$persona["segund_nom"]}} {{$persona["primer_apellido"]}} {{$persona["segund_apellido"]}}</option>
-                        }
-                    @endforeach
-                </select>
-                @if ($errors->has('persona'))
-                    <div     
-                        id="persona-error"                                          
-                        class="error text-danger pl-3"
-                        for="persona"
-                        style="display: block;">
-                        <strong>{{$errors->first('persona')}}</strong>
-                    </div>
-                @endif
-            </div>
 
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre</label>

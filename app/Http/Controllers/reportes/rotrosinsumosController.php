@@ -22,7 +22,9 @@ class rotrosinsumosController extends Controller
     public function index()
     {
         $response = Http::get('http://localhost:3000/otros_insumos');
-        return view('reportes.rotrosinsumos.index')
+        $user = Auth::user();
+        $fecha = now();
+        return view('reportes.rotrosinsumos.index',["user"=>$user, "fecha"=>$fecha])
         ->with('otrosinsumos', json_decode($response,true));
     }
 

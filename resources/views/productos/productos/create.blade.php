@@ -5,93 +5,111 @@
 @section('title', '| Registar Producto')
 
 @section('content_header')
-    <h1 class="text-center">Lista Productos</h1>
+    <h1 class="text-center">Productos</h1>
     <hr class="bg-dark border-1 border-top border-dark">
 @stop
 
 @section('content')
-    <form action="{{route('listaproductos.store')}}" method='POST'>
+    <form action="{{route('productos.store')}}" method='POST'>
         @csrf
         <div class="card  mb-2">
 
             <div  class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Categoria</label>
-                <select class="col-sm-7" class="form-control" id="Categoria" name="Categoria">
+                <select class="col-sm-7" class="form-control" id="idcategoria" name="idcategoria" required>
                     <option disabled selected>Escoja un codigo de una categoria</option>
-                    @foreach($categoria as $cate)
+                    @foreach($categorias as $cate)
                         {
-                            <option id=".$depa['Categoria']">{{$cate["cod_cate_produc"]}}.{{$cate["nom_cat"]}}</option>
+                            <option value="{{ $cate->idcategoria}}">{{ $cate->nombre}}</option>
                         }
                     @endforeach
                 </select>
-                @if ($errors->has('Categoria'))
+                @if ($errors->has('idcategoria'))
                     <div     
-                        id="Categoria-error"                                          
+                        id="idcategoria-error"                                          
                         class="error text-danger pl-3"
-                        for="Categoria"
+                        for="idcategoria"
                         style="display: block;">
-                        <strong>{{$errors->first('Categoria')}}</strong>
+                        <strong>{{$errors->first('idcategoria')}}</strong>
                     </div>
                 @endif
             </div>
 
             <div class="row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre del Producto</label>
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre</label>
                  <div class="col-sm-7">
-                    <input type="text" id="Nombre" name="Nombre" class="form-control" maxlength="20" 
-                    onkeydown="return /[a-z, ]/i.test(event.key)" onkeyup="capitalizarPrimeraLetranombre()" 
-                    placeholder="Ingrese el Nombre del Producto" value="{{old('Nombre')}}">
+                    <input type="text" id="nombre" name="nombre" class="form-control" maxlength="20" 
+                    onkeydown="return /[a-z ]/i.test(event.key)" onkeyup="capitalizarPrimeraLetranombre()" 
+                    placeholder="Ingrese el Nombre del Producto" value="{{old('nombre')}}" required>
                 </div>
-                @if ($errors->has('Nombre'))
+                @if ($errors->has('nombre'))
                     <div               
-                        id="Nombre-error"                               
+                        id="nombre-error"                               
                         class="error text-danger pl-3"
-                        for="Nombre"
+                        for="nombre"
                         style="display: block;">
-                        <strong>{{$errors->first('Nombre')}}</strong>
+                        <strong>{{$errors->first('nombre')}}</strong>
                     </div>
                 @endif
             </div>
 
             <div class="row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">Descripcion del Producto</label>
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Precio</label>
                  <div class="col-sm-7">
-                    <input type="text" id="Descripcion" name="Descripcion" class="form-control"  maxlength="25" 
-                    onkeyup="capitalizarPrimeraLetradescripcion()"  placeholder="Ingrese la descripcion del producto" 
-                    value="{{old('Descripcion')}}">
-                </div>
-                @if ($errors->has('Descripcion'))
-                    <div                 
-                        id="Descripcion-error"                             
-                        class="error text-danger pl-3"
-                        for="Descripcion"
-                        style="display: block;">
-                        <strong>{{$errors->first('Descripcion')}}</strong>
-                    </div>
-                @endif
-            </div>
-
-            <div class="row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">Precio Producto</label>
-                 <div class="col-sm-7">
-                    <input type="number" id="Precio" name="Precio"  class="form-control" min="1" max="99999999" maxlength="8" 
+                    <input type="number" id="precio_producto" name="precio_producto"  class="form-control" min="1" max="99999" maxlength="10" 
                     oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
-                    placeholder="Ingrese el Precio del Producto" value="{{old('Precio')}}">
+                    placeholder="Ingrese el Precio del Producto" value="{{old('precio_producto')}}" required>
                 </div>
-                @if ($errors->has('Precio'))
+                @if ($errors->has('precio_producto'))
                     <div          
-                        id="Precio-error"                                     
+                        id="precio_producto-error"                                     
                         class="error text-danger pl-3"
-                        for="Precio"
+                        for="precio_producto"
                         style="display: block;">
-                        <strong>{{$errors->first('Precio')}}</strong>
+                        <strong>{{$errors->first('precio_producto')}}</strong>
+                    </div>
+                @endif
+            </div>
+
+            <div class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Stock</label>
+                 <div class="col-sm-7">
+                    <input type="number" id="stock" name="stock"  class="form-control" min="1" max="9999999999" maxlength="10" 
+                    oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+                    placeholder="Ingrese la Cantidad" value="{{old('stock')}}" required>
+                </div>
+                @if ($errors->has('stock'))
+                    <div               
+                        id="stock-error"                               
+                        class="error text-danger pl-3"
+                        for="stock"
+                        style="display: block;">
+                        <strong>{{$errors->first('stock')}}</strong>
+                    </div>
+                @endif
+            </div>
+
+            <div class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Descripcion</label>
+                 <div class="col-sm-7">
+                    <input type="text" id="descripcion" name="descripcion" class="form-control"  maxlength="25" 
+                    onkeyup="capitalizarPrimeraLetradescripcion()"  placeholder="Ingrese la descripcion del producto" 
+                    value="{{old('descripcion')}}" required>
+                </div>
+                @if ($errors->has('descripcion'))
+                    <div                 
+                        id="descripcion-error"                             
+                        class="error text-danger pl-3"
+                        for="descripcion"
+                        style="display: block;">
+                        <strong>{{$errors->first('descripcion')}}</strong>
                     </div>
                 @endif
             </div>
 
             <div class="row">
                 <div class="col-sm-6 col-xs-12 mb-2">
-                    <a href="{{route('listaproductos.index')}}"
+                    <a href="{{route('productos.index')}}"
                     class="btn btn-danger w-100"
                     >Cancelar <i class="fa fa-times-circle ml-2"></i></a>
                 </div>
@@ -112,7 +130,7 @@
 
 @section('js')
 <script>
-    var input = document.getElementById('Nombre');
+    var input = document.getElementById('nombre');
     //función que capitaliza la primera letra
     function capitalizarPrimeraLetranombre() {
     //almacenamos el valor del input
@@ -129,7 +147,7 @@
     input.value = mayuscula.concat(minuscula);
     }
 
-    var input2 = document.getElementById('Descripcion');
+    var input2 = document.getElementById('descripcion');
     //función que capitaliza la primera letra
     function capitalizarPrimeraLetradescripcion() {
     //almacenamos el valor del input
@@ -149,8 +167,8 @@
 
 <script>
     window.onload = function() {
-        var myInput = document.getElementById('Nombre');
-        var myInput2 = document.getElementById('Descripcion');
+        var myInput = document.getElementById('nombre');
+        var myInput2 = document.getElementById('descripcion');
 
         //ONPASTE
         myInput.onpaste = function(e) {

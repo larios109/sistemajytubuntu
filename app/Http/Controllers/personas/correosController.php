@@ -7,16 +7,17 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
 use App\Models\correo;
+use Illuminate\Support\Facades\DB;
 
 class correosController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:ver->correo|crear->correo|editar->correo|borrar->correo',['only'=>['index']]);
-        $this->middleware('permission:crear->correo',['only'=>['create','store']]);
-        $this->middleware('permission:editar->correo',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar->correo',['only'=>['destroy']]);
+        $this->middleware('permission:visualizar correos|Registrar correo|editar correo|borrar correo',['only'=>['index']]);
+        $this->middleware('permission:Registrar correo',['only'=>['create','store']]);
+        $this->middleware('permission:editar correo',['only'=>['edit','update']]);
+        $this->middleware('permission:borrar correo',['only'=>['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -26,7 +27,9 @@ class correosController extends Controller
     public function index()
     {
         $response = Http::get('http://localhost:3000/correo');
-        return view('personas.correos.index')
+        $user = Auth::user();
+        $fecha = now();
+        return view('personas.correos.index',["user"=>$user, "fecha"=>$fecha])
         ->with('correos', json_decode($response,true));
     }
 
@@ -88,7 +91,7 @@ class correosController extends Controller
     public function edit($cod_correo)
     {
         $response2 = Http::get('http://localhost:3000/users');
-        $response3 = Http::get('http://localhost:3000/personas');
+        $personas = DB::table('persona')->get();
 
         $response=Http::get('http://localhost:3000/correo/'.$cod_correo);
         $actualizarcorreo=json_decode($response->getbody()->getcontents())[0];
@@ -96,9 +99,8 @@ class correosController extends Controller
         $data=[];
         $data['actualizarcorreo']=$actualizarcorreo;
 
-        return view ('personas.correos.edit',['actualizarcorreo'=>$actualizarcorreo])
-        ->with('users', json_decode($response2,true))
-        ->with('personas', json_decode($response3,true));
+        return view ('personas.correos.edit',['actualizarcorreo'=>$actualizarcorreo, 'personas'=>$personas])
+        ->with('users', json_decode($response2,true));
     }
 
     /**

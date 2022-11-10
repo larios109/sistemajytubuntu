@@ -16,6 +16,8 @@ class backupController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('permission:visualizar backup|borrar backup',['only'=>['index']]);
+        $this->middleware('permission:borrar backup',['only'=>['destroy']]);
     }
     /**
      * Display a listing of the resource.

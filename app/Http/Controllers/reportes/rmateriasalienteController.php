@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
-
+use Illuminate\Support\Facades\DB;
 
 class rmateriasalienteController extends Controller
 {
@@ -21,9 +21,13 @@ class rmateriasalienteController extends Controller
      */
     public function index()
     {
-        $response = Http::get('http://localhost:3000/reporte_materia_prima_saliente');
-        return view('reportes.rmateriasaliente.index')
-        ->with('reportemateriainvent', json_decode($response,true));
+        $reportemateriainvent=DB::table('materia_prima_saliente as ms')
+        ->join('materia_prima_entrante as me', 'ms.cod_materia_e', '=', 'me.cod_materia_e')
+        ->select('ms.cod_materia_s', 'me.nom_materia', 'ms.cant_saliente', 'ms.usr_registro', 'ms.fec_registro')
+        ->orderBy('ms.cod_materia_s','desc')->get();
+        $user = Auth::user();
+        $fecha = now();
+        return view('reportes.rmateriasaliente.index', ["reportemateriainvent" => $reportemateriainvent, "user"=>$user, "fecha"=>$fecha]);
     }
 
     /**

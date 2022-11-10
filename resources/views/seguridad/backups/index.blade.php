@@ -47,10 +47,12 @@
                             <a class="btn btn-info btn-sm" href="{{ route('backups.download',$backup['file_name']) }}">
                                 <span>Descargar</span>
                             </a>
+                            @can ('borrar backup')
                             <button type="submit" class="btn btn-danger btn-sm" class="fas fa-trash-alt"><span>Borrar</span>
                             @csrf
                             @method('DELETE')
                             </button>
+                            @endcan
                         </form>
                     </td>
                 </tr>

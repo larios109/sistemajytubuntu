@@ -10,7 +10,7 @@
                 <div class="row mb-3">
                     <div class="form-group mt-3">
                         <label for="name">Nombre de Usuario</label>
-                        <input type="text" name="name" value="{{ Auth::user()->name }}" class="form-control @error('name') is-invalid @enderror" 
+                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" 
                         minlength = "10" maxlength="30" onkeyup="this.value=this.value.toUpperCase();" required>
                         @error('name')
                             <span class="invalid-feedback" role="alert">

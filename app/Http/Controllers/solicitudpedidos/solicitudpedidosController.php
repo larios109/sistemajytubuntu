@@ -6,16 +6,23 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
+use App\Http\Requests\solicitudrequest;
+use Illuminate\Support\Facades\DB;
+use App\Models\detallesolicitudpedido;
+use App\Models\solicitudpedido;
+use Carbon\Carbon;
+use Response;
+use Illuminate\Support\Collection;
 
 class solicitudpedidosController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:ver->venta|crear->venta|editar->venta|borrar->venta',['only'=>['index']]);
-        $this->middleware('permission:crear->venta',['only'=>['create','store']]);
-        $this->middleware('permission:editar->venta',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar->venta',['only'=>['destroy']]);
+        $this->middleware('permission:visualizar solicitud pedidos|Registrar solicitud|borrar solicitud|visualizar detalle solicitud pedidos',['only'=>['index']]);
+        $this->middleware('permission:Registrar solicitud',['only'=>['create','store']]);
+        $this->middleware('permission:visualizar detalle solicitud pedidos',['only'=>['show']]);
+        $this->middleware('permission:borrar solicitud',['only'=>['destroy']]);
     }
     
     /**
@@ -23,11 +30,19 @@ class solicitudpedidosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $response = Http::get('http://localhost:3000/ventas');
-        return view('solicitudpedidos.solicitudpedidos.index')
-        ->with('ventas', json_decode($response,true));
+        if ($request)
+        {
+           $ventas=DB::table('venta as v')
+            ->join('persona as p','v.cod_persona','=','p.cod_persona')
+            ->select('v.idventa','v.cod_persona','p.primer_nom','p.primer_apellido', 'v.fecha_hora','v.impuesto', 'v.total_venta')
+            ->orderBy('v.idventa','desc')->get();
+            $user = Auth::user();
+            $fecha = now();
+            return view('solicitudpedidos.solicitudpedidos.index',["ventas"=>$ventas, "user"=>$user, "fecha"=>$fecha]);
+
+        }
     }
     /**
      * Show the form for creating a new resource.
@@ -36,12 +51,14 @@ class solicitudpedidosController extends Controller
      */
     public function create()
     {
-        $response2 = Http::get('http://localhost:3000/cliente');
-        $response3 = Http::get('http://localhost:3000/lista_productos');
+        $clientes=DB::table('persona')->where('tipo_persona','=','Cliente')->get();
 
-        return view('solicitudpedidos.solicitudpedidos.create')
-        ->with('clientes', json_decode($response2,true))
-        ->with('productos', json_decode($response3,true));
+        $articulos=DB::table('articulo as art')
+            ->select('art.nombre AS articulo', 'art.idarticulo','art.stock','art.precio_producto')
+            ->where('art.stock','>','0')
+            ->get();
+
+        return view("solicitudpedidos.solicitudpedidos.create",["clientes"=>$clientes,"articulos"=>$articulos]); 
     }
 
     /**
@@ -50,30 +67,42 @@ class solicitudpedidosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'cliente'=>'required',
-            'producto'=>'required',
-            'cantidad'=>'required',
-            'precio'=>'required',
-            'Impuesto'=>'required',
-            'total'=>'required',
-            'pago'=>'required',
-        ]);
+    public function store(solicitudrequest $request)
+    {        
+        try {
+            DB::beginTransaction();
+            $solicitudpedido = new solicitudpedido;
+            $solicitudpedido->cod_persona=$request->get('cod_cliente');
+            $solicitudpedido->fecha_hora=now();
+            $solicitudpedido->impuesto = $request->get('isv_total');
+            $solicitudpedido->total_venta=$request->get('total_venta');
+            $solicitudpedido->usr_registro=auth()->user()->name;
+            $solicitudpedido->save();
 
-        $response = Http::post('http://localhost:3000/ventas/insertar', [
-            'cod_cliente' => $request->cliente,
-            'pi_cod_producto' => $request->producto,
-            'pv_usr_registro' =>auth()->user()->name,
-            'cant' =>$request->cantidad,
-            'prec_vent_lote' =>$request->precio,
-            'impuesto_sobre_venta' =>$request->Impuesto,
-            'subtotal' =>$request->total,
-            'pv_forma_pago' =>$request->pago,
-        ]);
+            $idarticulo = $request->get('idarticulo');
+            $cantidad = $request->get('cantidad');
+            $precio_venta = $request->get('precio_producto');
+
+            $cont = 0;
+
+            while ($cont<count($idarticulo)) {
+                $detallesolicitudpedido=new detallesolicitudpedido();
+                $detallesolicitudpedido->idventa=$solicitudpedido->idventa;
+                $detallesolicitudpedido->idarticulo=$idarticulo[$cont];
+                $detallesolicitudpedido->cantidad=$cantidad[$cont];
+                $detallesolicitudpedido->precio_venta=$precio_venta[$cont];
+                $detallesolicitudpedido->save();
+                $cont=$cont+1;
+            }
+
+            DB::commit();
+        } catch (Exception $e) 
+        {
+            DB::rollback();
+        }
         
         return redirect()->route('solicitudpedidos.index');
+        // return Redirect::to('solicitudpedidos/solicitudpedidos');
     }
 
     /**
@@ -84,7 +113,20 @@ class solicitudpedidosController extends Controller
      */
     public function show($id)
     {
-        
+        $venta=DB::table('venta as v')
+        ->join('persona as p','v.cod_persona','=','p.cod_persona')
+        ->join('detalle_venta as dv','v.idventa','=','dv.idventa')
+        ->select('v.idventa','p.cod_persona','p.primer_nom','p.primer_apellido', 'v.fecha_hora','v.impuesto', 'v.total_venta')
+        ->where('v.idventa','=',$id)
+        ->first();
+
+        $detalles=DB::table('detalle_venta as d')
+        ->join('articulo as a','d.idarticulo','=','a.idarticulo')
+        ->select('a.nombre as articulo','d.cantidad','d.precio_venta')
+        ->where('d.idventa','=',$id)
+        ->get();
+
+        return view("solicitudpedidos.solicitudpedidos.show",["venta"=>$venta,"detalles"=>$detalles]);
     }
 
     /**
@@ -93,20 +135,9 @@ class solicitudpedidosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($cod_venta)
+    public function edit($id)
     {
-        $response3 = Http::get('http://localhost:3000/cliente');
-        $response4 = Http::get('http://localhost:3000/lista_productos');
 
-        $response=Http::get('http://localhost:3000/ventas/'.$cod_venta);
-        $actualizarventas=json_decode($response->getbody()->getcontents())[0];
-
-        $data=[];
-        $data['actualizarventas']=$actualizarventas;
-
-        return view ('solicitudpedidos.solicitudpedidos.edit',['actualizarventas'=>$actualizarventas])
-        ->with('productos', json_decode($response4,true))
-        ->with('clientes', json_decode($response3,true));
     }
 
     /**
@@ -116,24 +147,9 @@ class solicitudpedidosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $cod_venta)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'cliente'=>'required',
-            'producto'=>'required',
-            'cantidad'=>'required',
-            'precio'=>'required',
-        ]);
 
-        $detalleventa = Http::put('http://localhost:3000/ventas/actualizar/' . $cod_venta, [
-            'cod_cliente' => $request->cliente,
-            'cod_producto' => $request->producto,
-            'usr_registro' =>auth()->user()->name,
-            'cant' =>$request->cantidad,
-            'prec_vent_lote' =>$request->precio,
-        ]);
-
-        return redirect()->route('solicitudpedidos.index');
     }
 
     /**
@@ -142,9 +158,10 @@ class solicitudpedidosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($cod_venta)
+    public function destroy($idventa)
     {
-        $eliminar = Http::delete('http://localhost:3000/ventas/eliminar/'.$cod_venta);
+        $solicitupedido=solicitudpedido::findOrFail($idventa);
+        $solicitupedido->delete();
         return redirect()->route('solicitudpedidos.index')->with('eliminar', 'Ok');
     }
 }

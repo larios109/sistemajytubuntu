@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
-
+use Illuminate\Support\Facades\DB;
 
 class rsolicitudpedidosController extends Controller
 {
@@ -21,9 +21,11 @@ class rsolicitudpedidosController extends Controller
      */
     public function index()
     {
-        $response = Http::get('http://localhost:3000/reporte_ventas');
-        return view('reportes.reportesolicitud.index')
-        ->with('reporteventas', json_decode($response,true));
+        $reporteventas=DB::table('venta as v')
+        ->join('detalle_venta as dv', 'v.idventa', '=', 'dv.idventa')
+        ->select('ms.cod_materia_s', 'me.nom_materia', 'ms.cant_saliente', 'ms.usr_registro', 'ms.fec_registro')
+        ->orderBy('ms.cod_materia_s','desc')->get();
+        return view('reportes.reportesolicitud.index');
     }
 
     /**

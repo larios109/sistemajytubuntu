@@ -7,15 +7,16 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\auth;
 
 class RolController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:ver->rol|crear->rol|editar->rol|borrar->rol',['only'=>['index']]);
-        $this->middleware('permission:crear->rol',['only'=>['create','store']]);
-        $this->middleware('permission:editar->rol',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar->rol',['only'=>['destroy']]);
+        $this->middleware('permission:visualizar roles|crear rol|editar rol|borrar rol',['only'=>['index']]);
+        $this->middleware('permission:crear rol',['only'=>['create','store']]);
+        $this->middleware('permission:editar rol',['only'=>['edit','update']]);
+        $this->middleware('permission:borrar rol',['only'=>['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -25,7 +26,9 @@ class RolController extends Controller
     public function index()
     {
         $roles=Role::paginate(50);
-        return view ('roles.index',compact('roles'));
+        $user = Auth::user();
+        $fecha = now();
+        return view ('roles.index',compact('roles'),["user"=>$user, "fecha"=>$fecha]);
     }
 
     /**
@@ -36,7 +39,84 @@ class RolController extends Controller
     public function create()
     {
         $permission=Permission::get();
-        return view ('roles.create',compact('permission'));
+
+        $personas = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->where('id', '<', '5')->get();
+
+        $direcciones = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [5, 8])->get();
+
+        $Correos = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [9, 12])->get();
+
+        $telefonos = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [13, 16])->get();
+
+        $colaboradores = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [17, 20])->get();
+
+        $pagosalario = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [21, 24])->get();
+
+        $materiaentrante = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [25, 28])->get();
+
+        $materiasaliente = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [29, 32])->get();
+
+        $categorias = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [33, 36])->get();
+
+        $productos = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [37, 40])->get();
+
+        $insumos = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [41, 44])->get();
+
+        $solicitud = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [45, 48])->get();
+
+        $reportes = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->where('id', '=', '49')->get();
+
+        $bitacora = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->where('id', '=', '50')->get();
+
+        $roles = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [51, 54])->get();
+
+        $preguntas = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [55, 58])->get();
+
+        $backup = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [59, 61])->get();
+
+        $usuaruios = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [62, 65])->get();
+
+        return view ('roles.create',compact('permission'),["personas"=>$personas, "usuaruios"=>$usuaruios,
+        "direcciones"=>$direcciones, "Correos"=>$Correos, "telefonos"=>$telefonos, "colaboradores"=>$colaboradores,
+        "pagosalario"=>$pagosalario, "materiaentrante"=>$materiaentrante, "materiasaliente"=>$materiasaliente,
+        "categorias"=>$categorias, "productos"=>$productos, "insumos"=>$insumos, "solicitud"=>$solicitud,
+        "reportes"=>$reportes, "bitacora"=>$bitacora, "roles"=>$roles, "preguntas"=>$preguntas, "backup"=>$backup]);
     }
 
     /**
@@ -78,12 +158,90 @@ class RolController extends Controller
     public function edit($id)
     {
         $role = Role::find($id);
-        $permission = Permission::get();
+
+        $permission=Permission::get();
+
+        $personas = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->where('id', '<', '5')->get();
+
+        $direcciones = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [5, 8])->get();
+
+        $Correos = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [9, 12])->get();
+
+        $telefonos = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [13, 16])->get();
+
+        $colaboradores = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [17, 20])->get();
+
+        $pagosalario = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [21, 24])->get();
+
+        $materiaentrante = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [25, 28])->get();
+
+        $materiasaliente = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [29, 32])->get();
+
+        $categorias = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [33, 36])->get();
+
+        $productos = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [37, 40])->get();
+
+        $insumos = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [41, 44])->get();
+
+        $solicitud = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [45, 48])->get();
+
+        $reportes = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->where('id', '=', '49')->get();
+
+        $bitacora = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->where('id', '=', '50')->get();
+
+        $roles = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [51, 54])->get();
+
+        $preguntas = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [55, 58])->get();
+
+        $backup = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [59, 61])->get();
+
+        $usuaruios = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [62, 65])->get();
+
         $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
             ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
             ->all();
     
-        return view('roles.edit',compact('role','permission','rolePermissions'));
+        return view('roles.edit',compact('role','permission','rolePermissions'),["personas"=>$personas,
+        "direcciones"=>$direcciones, "Correos"=>$Correos, "telefonos"=>$telefonos, "colaboradores"=>$colaboradores,
+        "pagosalario"=>$pagosalario, "materiaentrante"=>$materiaentrante, "materiasaliente"=>$materiasaliente,
+        "categorias"=>$categorias, "productos"=>$productos, "insumos"=>$insumos, "solicitud"=>$solicitud,
+        "reportes"=>$reportes, "bitacora"=>$bitacora, "roles"=>$roles, "preguntas"=>$preguntas, "backup"=>$backup, "usuaruios"=>$usuaruios]);
     }
 
     /**

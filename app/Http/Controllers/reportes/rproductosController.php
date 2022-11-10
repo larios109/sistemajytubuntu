@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
-
+use Illuminate\Support\Facades\DB;
 
 class rproductosController extends Controller
 {
@@ -21,9 +21,13 @@ class rproductosController extends Controller
      */
     public function index()
     {
-        $response = Http::get('http://localhost:3000/reporte_productos');
-        return view('reportes.reporteproductos.index')
-        ->with('reporteproductos', json_decode($response,true));
+        $reporteproductos=DB::table('articulo as a')
+        ->join('categoria as c', 'a.idcategoria', '=', 'c.idcategoria')
+        ->select('a.idarticulo', 'c.nombre AS categoria', 'a.nombre', 'a.stock')
+        ->orderBy('a.idarticulo','desc')->get();
+        $user = Auth::user();
+        $fecha = now();
+        return view('reportes.reporteproductos.index',["reporteproductos"=>$reporteproductos, "user"=>$user, "fecha"=>$fecha]);
     }
 
     /**

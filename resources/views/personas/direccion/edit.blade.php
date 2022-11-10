@@ -17,10 +17,15 @@
 
             <div  class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Persona</label>
-                <select class="col-sm-7" class="form-control" id="persona" name="persona" >
+                <select class="form-control selectpicker col-sm-7 border" id="persona" name="persona" 
+                data-live-search="true">
                     @foreach($personas as $persona)
                         {
-                            <option id=".$personas['persona']">{{$persona["cod_persona"]}}.{{$persona["primer_nom"]}} {{$persona["segund_nom"]}} {{$persona["primer_apellido"]}} {{$persona["segund_apellido"]}}</option>
+                            @if ($persona->cod_persona == $direccionactu->cod_persona)
+                            <option value="{{$persona->cod_persona}}" selected>{{ $persona->primer_nom}} {{ $persona->segund_nom}} {{ $persona->primer_apellido}} {{ $persona->segund_apellido}}</option>
+                            @else
+                            <option value="{{$persona->cod_persona}}">{{ $persona->primer_nom}} {{ $persona->segund_nom}} {{ $persona->primer_apellido}} {{ $persona->segund_apellido}}</option>
+                            @endif
                         }
                     @endforeach
                 </select>
@@ -31,24 +36,6 @@
                         for="persona"
                         style="display: block;">
                         <strong>{{$errors->first('persona')}}</strong>
-                    </div>
-                @endif
-            </div>
-
-            <div class="row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">Referencia Direccion</label>
-                 <div class="col-sm-7">
-                    <input type="text" id="direccion" name="direccion" class="form-control" maxlength="25" 
-                    onkeydown="return /[a-z, ]/i.test(event.key)"  onkeyup="capitalizarPrimeraLetradireccion()" 
-                    placeholder="Ingrese la direccion" value="{{$direccionactu->ref_direccion}}">
-                </div>
-                @if ($errors->has('direccion'))
-                    <div               
-                        id="direccion-error"                               
-                        class="error text-danger pl-3"
-                        for="direccion"
-                        style="display: block;">
-                        <strong>{{$errors->first('direccion')}}</strong>
                     </div>
                 @endif
             </div>
@@ -131,9 +118,16 @@
 @stop
 
 @section('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
 @stop
 
 @section('js')
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/i18n/defaults-*.min.js"></script>
+
 <script>
     var input = document.getElementById('direccion');
     //función que capitaliza la primera letra

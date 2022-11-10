@@ -24,8 +24,12 @@ class clientesrequest extends FormRequest
     public function rules()
     {
         return [
-            'persona'=>'required|unique:cliente,cod_persona',
-            'Ingreso'=>'required'
+            'Nombre'=>'required',
+            'Nombre2'=>'required',
+            'Apellido'=>'required',
+            'Apellido2'=>'required',
+            'DNI'=>'unique:cliente,dni',
+            'Genero'=>'required',
         ];
     }
 }

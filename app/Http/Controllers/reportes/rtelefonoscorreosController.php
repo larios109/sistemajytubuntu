@@ -22,7 +22,9 @@ class rtelefonoscorreosController extends Controller
     public function index()
     {
         $response = Http::get('http://localhost:3000/reporte_tel_correos');
-        return view('reportes.telefonoscorreos.index')
+        $user = Auth::user();
+        $fecha = now();
+        return view('reportes.telefonoscorreos.index',["user"=>$user, "fecha"=>$fecha])
         ->with('telefonoscorreos', json_decode($response,true));
     }
 

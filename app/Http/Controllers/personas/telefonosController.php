@@ -7,16 +7,17 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
 use App\Models\telefono;
+use Illuminate\Support\Facades\DB;
 
 class telefonosController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:ver->telefonos|crear->telefonos|editar->telefonos|borrar->telefonos',['only'=>['index']]);
-        $this->middleware('permission:crear->telefonos',['only'=>['create','store']]);
-        $this->middleware('permission:editar->telefonos',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar->telefonos',['only'=>['destroy']]);
+        $this->middleware('permission:visualizar telefonos|Registrar telefono|editar telefono|borrar telefono',['only'=>['index']]);
+        $this->middleware('permission:Registrar telefono',['only'=>['create','store']]);
+        $this->middleware('permission:editar telefono',['only'=>['edit','update']]);
+        $this->middleware('permission:borrar telefono',['only'=>['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -26,7 +27,9 @@ class telefonosController extends Controller
     public function index()
     {
         $response = Http::get('http://localhost:3000/telefono');
-        return view('personas.telefonos.index')
+        $user = Auth::user();
+        $fecha = now();
+        return view('personas.telefonos.index',["user"=>$user, "fecha"=>$fecha])
         ->with('telefonos', json_decode($response,true));
     }
 
@@ -90,7 +93,7 @@ class telefonosController extends Controller
     public function edit($cod_telefono)
     {
         $response2 = Http::get('http://localhost:3000/users');
-        $response3 = Http::get('http://localhost:3000/personas');
+        $personas = DB::table('persona')->get();
 
         $response  =Http::get('http://localhost:3000/telefono/'.$cod_telefono);
         $actualizartelefono = json_decode($response->getbody()->getcontents())[0];
@@ -98,9 +101,8 @@ class telefonosController extends Controller
         $data=[];
         $data['actualizartelefono']=$actualizartelefono;
 
-        return view ('personas.telefonos.edit',['actualizartelefono'=>$actualizartelefono])
-        ->with('users', json_decode($response2,true))
-        ->with('personas', json_decode($response3,true));
+        return view ('personas.telefonos.edit',['actualizartelefono'=>$actualizartelefono, 'personas'=>$personas])
+        ->with('users', json_decode($response2,true));
     }
 
     /**

@@ -6,16 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
+use Illuminate\Support\Facades\DB;
 
 class direccionController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:ver->direccion|crear->direccion|editar->direccion|borrar->direccion',['only'=>['index']]);
-        $this->middleware('permission:crear->direccion',['only'=>['create','store']]);
-        $this->middleware('permission:editar->direccion',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar->direccion',['only'=>['destroy']]);
+        $this->middleware('permission:visualizar direcciones|Registrar direccion|editar direccion|borrar direccion',['only'=>['index']]);
+        $this->middleware('permission:Registrar direccion',['only'=>['create','store']]);
+        $this->middleware('permission:editar direccion',['only'=>['edit','update']]);
+        $this->middleware('permission:borrar direccion',['only'=>['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -24,8 +25,10 @@ class direccionController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+        $fecha = now();
         $response = Http::get('http://localhost:3000/direccion');
-        return view('personas.direccion.index')
+        return view('personas.direccion.index', ["user"=>$user, "fecha"=>$fecha])
         ->with('direccion', json_decode($response,true));
     }
 
@@ -90,7 +93,7 @@ class direccionController extends Controller
      */
     public function edit($cod_direccion)
     {
-        $response2 = Http::get('http://localhost:3000/personas');
+        $personas = DB::table('persona')->get();
         $response3 = Http::get('http://localhost:3000/departamento');
         $response4 = Http::get('http://localhost:3000/municipio');
 
@@ -100,8 +103,7 @@ class direccionController extends Controller
         $data=[];
         $data['direccionactu']=$direccionactu;
 
-        return view('personas.direccion.edit',['direccionactu'=>$direccionactu])
-        ->with('personas', json_decode($response2,true))
+        return view('personas.direccion.edit',['direccionactu'=>$direccionactu, 'personas'=>$personas])
         ->with('departamento', json_decode($response3,true))
         ->with('municipio', json_decode($response4,true));
     }

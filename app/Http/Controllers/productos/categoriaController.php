@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
 use App\Http\Requests\categoriaproductosrequest;
+use App\Models\categoria;
+use Illuminate\Support\Facades\DB;
 
 
 class categoriaController extends Controller
@@ -14,21 +16,24 @@ class categoriaController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:ver->categoria|crear->categoria|editar->categoria|borrar->categoria',['only'=>['index']]);
-        $this->middleware('permission:crear->categoria',['only'=>['create','store']]);
-        $this->middleware('permission:editar->categoria',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar->categoria',['only'=>['destroy']]);
+        $this->middleware('permission:visualizar categorias|Registrar categoria|editar categoria|borrar categoria',['only'=>['index']]);
+        $this->middleware('permission:Registrar categoria',['only'=>['create','store']]);
+        $this->middleware('permission:editar categoria',['only'=>['edit','update']]);
+        $this->middleware('permission:borrar categoria',['only'=>['destroy']]);
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $response = Http::get('http://localhost:3000/categoria_productos');
-        return view('productos.categoria.index')
-        ->with('categoria', json_decode($response,true));
+        $categorias = DB::table('categoria')
+        ->select('idcategoria','nombre','descripcion')->orderBy('idcategoria', 'desc')->get();
+        $user = Auth::user();
+        $fecha = now();
+        return view('productos.categoria.index',["categorias"=>$categorias, "user"=>$user, "fecha"=>$fecha]);
+        
     }
 
     /**
@@ -50,10 +55,10 @@ class categoriaController extends Controller
     public function store(categoriaproductosrequest $request)
     {
 
-        $response = Http::post('http://localhost:3000/categoria_productos/insertar', [
-            'nom_cat' => $request->categoria,
-            'usr_registro' =>  auth()->user()->name
-        ]);
+        $categoria = new categoria();
+        $categoria->nombre = $request->nombre;
+        $categoria->descripcion = $request->descripcion;
+        $categoria->save();
 
         return redirect()->route('categoria.index');
     }
@@ -75,15 +80,10 @@ class categoriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($cod_cate_produc)
+    public function edit($idcategoria)
     {
-        $response=Http::get('http://localhost:3000/categoria_productos/'.$cod_cate_produc);
-        $actualizarcategoria=json_decode($response->getbody()->getcontents())[0];
-
-        $data=[];
-        $data['actualizarcategoria']=$actualizarcategoria;
-
-        return view ('productos.categoria.edit',['actualizarcategoria'=>$actualizarcategoria]);
+        $categorias = categoria::findOrFail($idcategoria);
+        return view ('productos.categoria.edit',['categorias'=>$categorias]);
     }
 
     /**
@@ -93,13 +93,12 @@ class categoriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(categoriaproductosrequest $request, $cod_cate_produc)
+    public function update(Request $request, $idcategoria)
     {
-
-        $response = Http::put('http://localhost:3000/categoria_productos/actualizar/' . $cod_cate_produc, [
-            'nom_cat' => $request->categoria,
-            'usr_registro' =>  auth()->user()->name
-        ]);
+        $categoria = categoria::findOrFail($idcategoria);
+        $categoria->nombre = $request->nombre;
+        $categoria->descripcion = $request->descripcion;
+        $categoria->save();
 
         return redirect()->route('categoria.index');
     }
@@ -110,9 +109,10 @@ class categoriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($cod_cate_produc)
+    public function destroy($idcategoria)
     {
-        $eliminar = Http::delete('http://localhost:3000/categoria_productos/eliminar/'.$cod_cate_produc);
+        $categoria = categoria::findOrFail($idcategoria);
+        $categoria->delete();
         return redirect()->route('categoria.index')->with('eliminar', 'Ok');
     }
 }

@@ -16,119 +16,106 @@ class seederTablaPermisos extends Seeder
     public function run()
     {
         $permisos=[
-            //tabla roles
-            'ver->rol',
-            'crear->rol',
-            'editar->rol',
-            'borrar->rol',
-
-            //tabla bitacora
-            'ver->bitacora',
-
-            //tabla correos
-            'ver->correo',
-            'crear->correo',
-            'editar->correo',
-            'borrar->correo',
-
-            //tabla telefonos
-            'ver->telefonos',
-            'crear->telefonos',
-            'editar->telefonos',
-            'borrar->telefonos',
-
-            //tabla ventas
-            'ver->venta',
-            'crear->venta',
-            'editar->venta',
-            'borrar->venta',
-
-            //tabla detalle ventas
-            'ver->detalleventa',
-            'crear->detalleventa',
-            'editar->detalleventa',
-            'borrar->detalleventa',
-
-            //tabla materia entrante
-            'ver->materiaentrante',
-            'crear->materiaentrante',
-            'editar->materiaentrante',
-            'borrar->materiaentrante',
-
-            //tabla materia entrante
-            'ver->materiasaliente',
-            'crear->materiasaliente',
-            'editar->materiasaliente',
-            'borrar->materiasaliente',
-
-            //tabla materia entrante
-            'ver->otrosinsumos',
-            'crear->otrosinsumos',
-            'editar->otrosinsumos',
-            'borrar->otrosinsumos',
-
-            //tabla lista productos
-            'ver->listaproductos',
-            'crear->listaproductos',
-            'editar->listaproductos',
-            'borrar->listaproductos',
-
-            //tabla inventario
-            'ver->inventario',
-            'crear->inventario',
-            'editar->inventario',
-            'borrar->inventario',
-
-            //tabla clientes
-            'ver->cliente',
-            'crear->cliente',
-            'editar->cliente',
-            'borrar->cliente',
+            //tabla personas
+            'visualizar personas',
+            'Registrar persona',
+            'editar persona',
+            'borrar persona',
 
             //tabla direccion
-            'ver->direccion',
-            'crear->direccion',
-            'editar->direccion',
-            'borrar->direccion',
+            'visualizar direcciones',
+            'Registrar direccion',
+            'editar direccion',
+            'borrar direccion',
 
-            //tabla compania
-            'ver->compania',
-            'crear->compania',
-            'editar->compania',
-            'borrar->compania',
+            //tabla correos
+            'visualizar correos',
+            'Registrar correo',
+            'editar correo',
+            'borrar correo',
+            
+            //tabla telefonos
+            'visualizar telefonos',
+            'Registrar telefono',
+            'editar telefono',
+            'borrar telefono',
 
             //tabla usuarios
-            'ver->usuarios',
-            'crear->usuarios',
-            'editar->usuarios',
-            'borrar->usuarios',
-
+            'visualizar Colaboradores',
+            'Registrar Colaborador',
+            'editar Colaborador',
+            'borrar Colaborador',
+                        
             //tabla pago salario
-            'ver->pagosalario',
-            'crear->pagosalario',
-            'editar->pagosalario',
-            'borrar->pagosalario',
+            'visualizar pago salario',
+            'Registrar pago salario',
+            'editar pago salario',
+            'borrar pago salario',
+
+            //tabla materia entrante
+            'visualizar materia entrante',
+            'Registrar materia entrante',
+            'editar materia entrante',
+            'borrar materia entrante',
+            
+            //tabla materia saliente
+            'visualizar materia saliente',
+            'Registrar materia saliente',
+            'editar materia saliente',
+            'borrar materia saliente',
 
             //tabla categoria productos
-            'ver->categoria',
-            'crear->categoria',
-            'editar->categoria',
-            'borrar->categoria',
+            'visualizar categorias',
+            'Registrar categoria',
+            'editar categoria',
+            'borrar categoria',
 
-            //tabla personas
-            'ver->personas',
-            'crear->personas',
-            'editar->personas',
-            'borrar->personas',
+            //tabla productos
+            'visualizar productos',
+            'Registrar producto',
+            'editar producto',
+            'borrar producto',
 
-            //tabla preguntas
-            'ver->preguntas',
-            'crear->preguntas',
-            'editar->preguntas',
-            'borrar->preguntas',
+            //tabla otros insumos
+            'visualizar otros insumos',
+            'Registrar otros insumos',
+            'editar otros insumos',
+            'borrar otros insumos',
+
+            //tabla solicitud pedidos
+            'visualizar solicitud pedidos',
+            'Registrar solicitud',
+            'borrar solicitud',
+            'visualizar detalle solicitud pedidos',
 
             //Modulo Reportes
-            'ver->reportes',
+            'visualizar reportes',
+
+            //tabla bitacora
+            'visualizar bitacora',
+
+            //tabla roles
+            'visualizar roles',
+            'crear rol',
+            'editar rol',
+            'borrar rol',
+
+            //tabla preguntas
+            'visualizar preguntas',
+            'crear pregunta',
+            'editar pregunta',
+            'borrar pregunta',
+
+            //tabla backup
+            'visualizar backup',
+            'crear backup',
+            'borrar backup',
+
+            //tabla usuario
+            'visualizar usuarios',
+            'crear usuario',
+            'editar usuario',
+            'borrar usuario',
         ];
         foreach($permisos as $permiso){
             Permission::create(['name'=>$permiso]);

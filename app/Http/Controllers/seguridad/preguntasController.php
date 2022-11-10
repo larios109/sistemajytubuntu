@@ -14,10 +14,10 @@ class preguntasController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:ver->preguntas|crear->preguntas|editar->preguntas|borrar->preguntas',['only'=>['index']]);
-        $this->middleware('permission:crear->preguntas',['only'=>['create','store']]);
-        $this->middleware('permission:editar->preguntas',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar->preguntas',['only'=>['destroy']]);
+        $this->middleware('permission:visualizar preguntas|crear pregunta|editar pregunta|borrar pregunta',['only'=>['index']]);
+        $this->middleware('permission:crear pregunta',['only'=>['create','store']]);
+        $this->middleware('permission:editar pregunta',['only'=>['edit','update']]);
+        $this->middleware('permission:borrar pregunta',['only'=>['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -27,7 +27,9 @@ class preguntasController extends Controller
     public function index()
     {
         $response = Http::get('http://localhost:3000/preguntas');
-        return view('seguridad.preguntas.index')
+        $user = Auth::user();
+        $fecha = now();
+        return view('seguridad.preguntas.index',["user"=>$user, "fecha"=>$fecha])
         ->with('preguntas', json_decode($response,true));
     }
 

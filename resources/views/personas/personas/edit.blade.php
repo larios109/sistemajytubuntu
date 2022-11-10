@@ -87,6 +87,24 @@
                  @endif
             </div>
 
+            <div  class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Tipo Persona</label>
+                <select class="col-sm-7" class="form-control" id="tipo" name="tipo">
+                    <option selected value="{{$actualizarpersona->tipo_persona}}">{{$actualizarpersona->tipo_persona}}</option>
+                    <option>Colaborador</option>
+                    <option>Cliente</option>
+                </select>
+                @if ($errors->has('tipo'))
+                    <div     
+                        id="tipo-error"                                          
+                        class="error text-danger pl-3"
+                        for="tipo"
+                        style="display: block;">
+                        <strong>{{$errors->first('tipo')}}</strong>
+                    </div>
+                @endif
+            </div>
+
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">DNI</label>
                  <div class="col-sm-7">
@@ -108,6 +126,7 @@
             <div  class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Genero</label>
                 <select class="col-sm-7" class="form-control" id="Genero" name="Genero">
+                    <option  selected value="{{$actualizarpersona->genero}}">{{$actualizarpersona->genero}}</option>
                     <option>Femenino</option>
                     <option>Masculino</option>
                 </select>

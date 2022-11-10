@@ -8,16 +8,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
 use App\Models\cliente;
 use App\Http\Requests\clientesrequest;
+use Illuminate\Support\Facades\DB;
 
 class clienteController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:ver->cliente|crear->cliente|editar->cliente|borrar->cliente',['only'=>['index']]);
-        $this->middleware('permission:crear->cliente',['only'=>['create','store']]);
-        $this->middleware('permission:editar->cliente',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar->cliente',['only'=>['destroy']]);
+        $this->middleware('permission:visualizar clientes|Registrar cliente|editar cliente|borrar cliente',['only'=>['index']]);
+        $this->middleware('permission:Registrar cliente',['only'=>['create','store']]);
+        $this->middleware('permission:editar cliente',['only'=>['edit','update']]);
+        $this->middleware('permission:borrar cliente',['only'=>['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -26,8 +27,10 @@ class clienteController extends Controller
      */
     public function index()
     {
-        $response = Http::get('http://localhost:3000/cliente');
-        return view('personas.cliente.index')->with('clientes', json_decode($response,true));
+        $clientes = DB::table('cliente')->get();
+        $user = Auth::user();
+        $fecha = now();
+        return view("personas.cliente.index", ["clientes" => $clientes, "user"=>$user, "fecha"=>$fecha]);
     }
 
     /**
@@ -37,9 +40,7 @@ class clienteController extends Controller
      */
     public function create()
     {   
-        $response = Http::get('http://localhost:3000/personas');
-        return view('personas.cliente.create')
-        ->with('personas', json_decode($response,true));
+        return view('personas.cliente.create');
     }
 
     /**
@@ -50,11 +51,16 @@ class clienteController extends Controller
      */
     public function store(clientesrequest $request)
     {
-        $response = Http::post('http://localhost:3000/cliente/insertar', [
-            'cod_persona' => $request->persona,
-            'fecha_registro' => $request->Ingreso,
-            'usr_registro' =>  auth()->user()->name
-        ]);
+        $cliente = new cliente;
+        $cliente -> primer_nom = $request -> get('Nombre');
+        $cliente -> segund_nom = $request -> get('Nombre2');
+        $cliente -> primer_apellido = $request -> get('Apellido');
+        $cliente -> segund_apellido = $request -> get('Apellido2');
+        $cliente -> dni = $request -> get('DNI');
+        $cliente -> genero = $request -> get('Genero');
+        $cliente -> fecha_registro = now();
+        $cliente -> usr_registro = auth()->user()->name;
+        $cliente -> save();
 
         return redirect()->route('cliente.index');
     }
@@ -76,9 +82,10 @@ class clienteController extends Controller
      * @param  int  $cod_detalle_venta
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($cod_cliente)
     {
-
+        $cliente = cliente::findOrFail($cod_cliente);
+        return view('personas.cliente.edit', ["cliente" => $cliente]);
     }
 
     /**
@@ -88,9 +95,27 @@ class clienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $cod_cliente)
     {
+        $request->validate([
+            'Nombre'=>'required',
+            'Nombre2'=>'required',
+            'Apellido'=>'required',
+            'Apellido2'=>'required',
+            'DNI'=>'required',
+            'Genero'=>'required',
+        ]);
 
+        $cliente = cliente::findOrFail($cod_cliente);
+        $cliente -> primer_nom = $request -> get('Nombre');
+        $cliente -> segund_nom = $request -> get('Nombre2');
+        $cliente -> primer_apellido = $request -> get('Apellido');
+        $cliente -> segund_apellido = $request -> get('Apellido2');
+        $cliente -> dni = $request -> get('DNI');
+        $cliente -> genero = $request -> get('Genero');
+        $cliente -> usr_registro = auth()->user()->name;
+        $cliente -> update();
+        return redirect()->route('cliente.index');
     }
 
     /**
@@ -101,7 +126,8 @@ class clienteController extends Controller
      */
     public function destroy($cod_cliente)
     {
-        $eliminar = Http::delete('http://localhost:3000/cliente/eliminar/'.$cod_cliente);
+        $cliente = cliente::findOrFail($cod_cliente);
+        $cliente->delete();
         return redirect()->route('cliente.index')->with('eliminar', 'Ok');
     }
 }

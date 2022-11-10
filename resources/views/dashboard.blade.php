@@ -20,7 +20,7 @@
                                 <div class="col-md-4 col-xl-4">
                                     <div class="card text-white bg-dark">
                                             <div class="card-block">
-                                            <h5>Colaboradores</h5>                                               
+                                            <h5>Usuarios</h5>                                               
                                                 @php
                                                  use App\Models\User;
                                                 $cant_usuarios = User::count();                                                
@@ -34,12 +34,12 @@
                                     <div class="col-md-4 col-xl-4">
                                         <div class="card text-white bg-dark">
                                             <div class="card-block">
-                                            <h5>Clientes</h5>                                               
+                                            <h5>Personas</h5>                                               
                                                 @php
-                                                    $cant_cliente = DB::table('cliente')->count();                                                
+                                                    $cant_personas = DB::table('persona')->count();                                              
                                                 @endphp
-                                                <h2 class="text-right"><i class="fa fa-user f-left"></i><span>{{$cant_cliente}}</span></h2>
-                                                <p class="m-b-0 text-right"><a href="/cliente" class="text-white">Ver más</a></p>
+                                                <h2 class="text-right"><i class="fa fa-user f-left"></i><span>{{$cant_personas}}</span></h2>
+                                                <p class="m-b-0 text-right"><a href="/personas" class="text-white">Ver más</a></p>
                                             </div>
                                         </div>
                                     </div>
@@ -49,7 +49,7 @@
                                             <div class="card-block">
                                             <h5>Solicitud Pedidos</h5>                                               
                                                 @php
-                                                 $cant_ventas = DB::table('ventas')->count();                                                
+                                                 $cant_ventas = DB::table('venta')->count();                                                
                                                 @endphp
                                                 <h2 class="text-right"><i class="fas fa-fw fa-file-invoice f-left"></i><span>{{$cant_ventas}}</span></h2>
                                                 <p class="m-b-0 text-right"><a href="/solicitudpedidos" class="text-white">Ver más</a></p>
@@ -62,7 +62,7 @@
                                             <div class="card-block">
                                             <h5>Productos</h5>                                               
                                                 @php
-                                                    $cant_prod = DB::table('lista_productos')->count();                                          
+                                                    $cant_prod = DB::table('articulo')->count();                                          
                                                 @endphp
                                                 <h2 class="text-right"><i class="fas fa-fw fa-wine-bottle f-left"></i><span>{{$cant_prod}}</span></h2>
                                                 <p class="m-b-0 text-right"><a href="/listaproductos" class="text-white">Ver más</a></p>

@@ -7,16 +7,18 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
 use App\Http\Requests\personasrequest;
+use Illuminate\Support\Facades\DB;
+use App\Models\persona;
 
 class personasController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:ver->personas|crear->personas|editar->personas|borrar->personas',['only'=>['index']]);
-        $this->middleware('permission:crear->personas',['only'=>['create','store']]);
-        $this->middleware('permission:editar->personas',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar->personas',['only'=>['destroy']]);
+        $this->middleware('permission:visualizar personas|Registrar persona|editar persona|borrar persona',['only'=>['index']]);
+        $this->middleware('permission:Registrar persona',['only'=>['create','store']]);
+        $this->middleware('permission:editar persona',['only'=>['edit','update']]);
+        $this->middleware('permission:borrar persona',['only'=>['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -25,8 +27,10 @@ class personasController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+        $fecha = now();
         $response = Http::get('http://localhost:3000/personas');
-        return view('personas.personas.index')
+        return view('personas.personas.index',["user"=>$user, "fecha"=>$fecha])
         ->with('personas', json_decode($response,true));
     }
 
@@ -58,6 +62,7 @@ class personasController extends Controller
             'segund_nom' => $request->Nombre2,
             'primer_apellido' => $request->Apellido,
             'segund_apellido' => $request->Apellido2,
+            'tipo_persona' => $request->tipo,
             'dni' => $request->DNI,
             'genero' => $request->Genero,
             'fecha_nacimiento' => $request->Nacimiento,
@@ -92,11 +97,7 @@ class personasController extends Controller
      */
     public function edit($cod_persona)
     {
-        $response = Http::get('http://localhost:3000/personas/'.$cod_persona);
-        $actualizarpersona = json_decode($response->getbody()->getcontents())[0];
-
-        $data = [];
-        $data['actualizarpersona'] = $actualizarpersona;
+        $actualizarpersona = persona::findOrFail($cod_persona);
 
         return view('personas.personas.edit',['actualizarpersona'=>$actualizarpersona]);
     }
@@ -115,21 +116,23 @@ class personasController extends Controller
             'Nombre2'=>'required',
             'Apellido'=>'required',
             'Apellido2'=>'required',
+            'tipo'=>'required',
             'DNI'=>'required',
             'Genero'=>'required',
             'Nacimiento'=>'required',
         ]);
 
-        $response = Http::put('http://localhost:3000/personas/actualizar/' . $cod_persona, [
-            'primer_nom' => $request->Nombre,
-            'segund_nom' => $request->Nombre2,
-            'primer_apellido' => $request->Apellido,
-            'segund_apellido' => $request->Apellido2,
-            'dni' => $request->DNI,
-            'genero' => $request->Genero,
-            'fecha_nacimiento' => $request->Nacimiento,
-            'usr_registro' => auth()->user()->name,
-        ]);
+        $persona = persona::findOrFail($cod_persona);
+        $persona -> primer_nom = $request -> get('Nombre');
+        $persona -> segund_nom = $request -> get('Nombre2');
+        $persona -> primer_apellido = $request -> get('Apellido');
+        $persona -> segund_apellido = $request -> get('Apellido2');
+        $persona -> tipo_persona = $request -> get('tipo');
+        $persona -> dni = $request -> get('DNI');
+        $persona -> genero = $request -> get('Genero');
+        $persona -> fecha_nacimiento = $request -> get('Nacimiento');
+        $persona -> usr_registro = auth()->user()->name;
+        $persona -> update();
 
         return redirect()->route('personas.index');
     }

@@ -14,10 +14,10 @@ class otrosinsumosController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:ver->otrosinsumos|crear->otrosinsumos|editar->otrosinsumos|borrar->otrosinsumos',['only'=>['index']]);
-        $this->middleware('permission:crear->otrosinsumos',['only'=>['create','store']]);
-        $this->middleware('permission:editar->otrosinsumos',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar->otrosinsumos',['only'=>['destroy']]);
+        $this->middleware('permission:visualizar otros insumos|Registrar otros insumos|editar otros insumos|borrar otros insumos',['only'=>['index']]);
+        $this->middleware('permission:Registrar otros insumos',['only'=>['create','store']]);
+        $this->middleware('permission:editar otros insumos',['only'=>['edit','update']]);
+        $this->middleware('permission:borrar otros insumos',['only'=>['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -27,7 +27,9 @@ class otrosinsumosController extends Controller
     public function index()
     {
         $response = Http::get('http://localhost:3000/otros_insumos');
-        return view('productos.otrosinsumos.index')
+        $user = Auth::user();
+        $fecha = now();
+        return view('productos.otrosinsumos.index',["user"=>$user, "fecha"=>$fecha])
         ->with('otrosinsumos', json_decode($response,true));
     }
 

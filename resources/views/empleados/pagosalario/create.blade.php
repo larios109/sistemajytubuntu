@@ -15,11 +15,12 @@
         <div class="card  mb-2">
             <div  class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Codigo Colaborador</label>
-                <select class="col-sm-7" class="form-control" id="Empleado" name="Empleado">
+                <select class="form-control selectpicker col-sm-7 border" id="Empleado" name="Empleado"
+                data-live-search="true">
                     <option disabled selected>Escoja un Colaborador</option>
-                    @foreach($users as $user)
+                    @foreach($colaboradores as $colaborador)
                         {
-                            <option id=".$user['Empleado']">{{$user["name"]}}</option>
+                            <option value="{{$colaborador->cod_empleado}}_{{$colaborador->sueldo_bruto}}">{{$colaborador->cod_empleado}}.{{$colaborador->nombre}}</option>
                         }
                     @endforeach
                 </select>
@@ -37,7 +38,7 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Sueldo Bruto</label>
                  <div class="col-sm-7">
-                    <input type="number" id="SueldoB" name="SueldoB" min="1" max="999999" maxlength="6" step="0.00001" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" class="form-control" placeholder="Ingrese el sueldo bruto" value="{{old('SueldoB')}}">
+                    <input type="number" id="SueldoB" name="SueldoB" min="1" max="999999" readonly="" maxlength="6" step="0.00001" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" class="form-control" placeholder="Sueldo bruto" value="{{old('SueldoB')}}">
                 </div>
                 @if ($errors->has('SueldoB'))
                     <div               
@@ -165,9 +166,16 @@
 @stop
 
 @section('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
 @stop
 
 @section('js')
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/i18n/defaults-*.min.js"></script>
+
 <script>
     var input = document.getElementById('Descripcion');
     //función que capitaliza la primera letra
@@ -219,4 +227,15 @@
         }
     }
 </script> 
+
+<script>
+
+    $("#Empleado").change(mostrarValores);//trae los valores del articulo cada vez que se seleccione
+
+    function mostrarValores()
+    {
+    datospago=document.getElementById('Empleado').value.split('_');
+    $("#SueldoB").val(datospago[1]);
+    }
+</script>
 @stop

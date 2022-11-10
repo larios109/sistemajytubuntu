@@ -18,7 +18,7 @@ use App\Http\Controllers\materiaprima\materiasalienteController;
 // Controllers productos
 use App\Http\Controllers\productos\categoriaController;
 use App\Http\Controllers\productos\otrosinsumosController;
-use App\Http\Controllers\productos\listaproductoController;
+use App\Http\Controllers\productos\productosController;
 use App\Http\Controllers\productos\inventarioController;
 
 // Controllers ventas
@@ -28,6 +28,7 @@ use App\Http\Controllers\solicitudpedidos\solicitudpedidosController;
 // Controllers empleado
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\empleados\pagosalarioController;
+use App\Http\Controllers\empleados\colaboradoresController;
 
 // Controllers seguridad
 use App\Http\Controllers\seguridad\bitacoraController;
@@ -83,16 +84,18 @@ Route::resource('materiasaliente',materiasalienteController::class)->names('mate
 // Route productos
 Route::resource('categoria',categoriaController::class)->names('categoria');
 Route::resource('otrosinsumos',otrosinsumosController::class)->names('otrosinsumos');
-Route::resource('listaproductos',listaproductoController::class)->names('listaproductos');
+// Route::resource('listaproductos',listaproductoController::class)->names('listaproductos');
 Route::resource('inventario',inventarioController::class)->names('inventario');
+Route::resource('productos',productosController::class)->names('productos');
 
 // Route ventas
-Route::resource('detallesolicitud',detallesolicitudController::class)->names('detallesolicitud');
+// Route::resource('detallesolicitud',detallesolicitudController::class)->names('detallesolicitud');
 Route::resource('solicitudpedidos',solicitudpedidosController::class)->names('solicitudpedidos');
 
 // Route empleados
 Route::resource('pagosalario',pagosalarioController::class)->names('pagosalario');
 Route::resource('usuarios',UsuarioController::class)->names('usuarios');
+Route::resource('colaboradores',colaboradoresController::class)->names('colaboradores');
 
 // Route seguridad
 Route::resource('bitacora',bitacoraController::class)->names('bitacora');

@@ -7,5 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class pagosalario extends Model
 {
-    use HasFactory;
+    protected $table='pago_salario';
+    
+    protected $primaryKey='cod_pago';
+
+    public $timestamps=false;
+
+    protected $fillable = [
+        'cod_empleado',
+        'sueldo_bruto', 
+        'IHSS', 
+        'RAP', 
+        'otras_deducciones', 
+        'vacaciones', 
+        'descripion_vacaciones', 
+        'salario', 
+        'usr_registro',
+        'fecha_registro',
+    ];
+
+    protected $guarded =[
+    ];
 }

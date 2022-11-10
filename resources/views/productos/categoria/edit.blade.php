@@ -10,7 +10,7 @@
 @stop
 
 @section('content')
-    <form action="{{route('categoria.update', $actualizarcategoria->cod_cate_produc)}}" method='POST'>
+    <form action="{{route('categoria.update', $categorias->idcategoria)}}" method='POST'>
         @csrf
         @method('PUT')
         <div class="card  mb-2">
@@ -18,9 +18,27 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre Categoria</label>
                  <div class="col-sm-7">
-                    <input type="text" id="categoria" name="categoria" class="form-control" maxlength="20" 
-                    onkeydown="return /[a-z, ]/i.test(event.key)" onkeyup="capitalizarPrimeraLetracategoria()"
-                     placeholder="Ingrese el Nombre del Producto" value="{{$actualizarcategoria->nom_cat}}">
+                    <input type="text" id="nombre" name="nombre" class="form-control" maxlength="20" 
+                    onkeydown="return /[a-z ]/i.test(event.key)" onkeyup="capitalizarPrimeraLetracategoria()"
+                     placeholder="Ingrese el Nombre de la categoria" value="{{$categorias->nombre}}" required>
+                </div>
+                @if ($errors->has('nombre'))
+                    <div               
+                        id="nombre-error"                               
+                        class="error text-danger pl-3"
+                        for="nombre"
+                        style="display: block;">
+                        <strong>{{$errors->first('nombre')}}</strong>
+                    </div>
+                @endif
+            </div>
+
+            <div class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Descripcion</label>
+                 <div class="col-sm-7">
+                    <input type="text" id="descripcion" name="descripcion" class="form-control" maxlength="60" 
+                    onkeydown="return /[a-z ]/i.test(event.key)" onkeyup="capitalizarPrimeraLetradescripcion()"
+                     placeholder="Ingrese una descripcion" value="{{$categorias->descripcion}}" required>
                 </div>
                 @if ($errors->has('categoria'))
                     <div               
@@ -56,7 +74,7 @@
 
 @section('js')
 <script>
-    var input = document.getElementById('categoria');
+    var input = document.getElementById('nombre');
     //función que capitaliza la primera letra
     function capitalizarPrimeraLetracategoria() {
     //almacenamos el valor del input
@@ -72,11 +90,28 @@
     //escribimos la palabra con la primera letra mayuscula
     input.value = mayuscula.concat(minuscula);
     }
+
+    var input2 = document.getElementById('descripcion');
+    //función que capitaliza la primera letra
+    function capitalizarPrimeraLetradescripcion() {
+    //almacenamos el valor del input
+    var palabra = input2.value;
+    //Si el valor es nulo o undefined salimos
+    if(!input2.value) return;
+    // almacenamos la mayuscula
+    var mayuscula = palabra.substring(0,1).toUpperCase();
+    //si la palabra tiene más de una letra almacenamos las minúsculas
+    if (palabra.length > 0) {
+        var minuscula = palabra.substring(1).toLowerCase();
+    }
+    //escribimos la palabra con la primera letra mayuscula
+    input2.value = mayuscula.concat(minuscula);
+    }
 </script>
 
 <script>
     window.onload = function() {
-        var myInput = document.getElementById('categoria');
+        var myInput = document.getElementById('nombre');
 
         //ONPASTE
         myInput.onpaste = function(e) {

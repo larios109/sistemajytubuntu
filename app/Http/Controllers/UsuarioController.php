@@ -11,16 +11,17 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\auth;
 
 class UsuarioController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:ver->usuarios|crear->usuarios|editar->usuarios|borrar->usuarios',['only'=>['index']]);
-        $this->middleware('permission:crear->usuarios',['only'=>['create','store']]);
-        $this->middleware('permission:editar->usuarios',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar->usuarios',['only'=>['destroy']]);
+        $this->middleware('permission:visualizar usuarios|crear usuario|editar usuario|borrar usuario',['only'=>['index']]);
+        $this->middleware('permission:crear usuario',['only'=>['create','store']]);
+        $this->middleware('permission:editar usuario',['only'=>['edit','update']]);
+        $this->middleware('permission:borrar usuario',['only'=>['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -30,7 +31,9 @@ class UsuarioController extends Controller
     public function index()
     {
         $usuarios=User::all();
-        return view('usuarios.index',compact('usuarios'));
+        $user = Auth::user();
+        $fecha = now();
+        return view('usuarios.index',compact('usuarios'),["user"=>$user, "fecha"=>$fecha]);
     }
 
     /**
@@ -55,7 +58,6 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $this->validate ($request,[
-            'persona'=>'required',
             'name'=>'required',
             'email'=>'required|email|unique:users,email',
             'password'=>['required', 'same:confirm-password', Rules\Password::defaults() -> mixedCase() -> numbers() 
@@ -68,11 +70,6 @@ class UsuarioController extends Controller
 
         $user=User::create($input);
         $user->assignRole($request->input('roles'));
-
-        $response = Http::post('http://localhost:3000/empleados/insertar', [
-            'cod_persona' => $request->persona,
-            'user_registro' => Auth()->user()->name
-        ]);
 
         return redirect()->route('usuarios.index');
     }

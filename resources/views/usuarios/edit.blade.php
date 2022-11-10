@@ -2,10 +2,10 @@
 
 <link rel="icon" href="{{ asset('images/apple-icon-57x57.png') }}">
 
-@section('title', '| Actualizar Colaborador')
+@section('title', '| Actualizar Usuario')
 
 @section('content_header')
-    <h1 class="text-center">Colaborador</h1>
+    <h1 class="text-center">Usuario</h1>
     <hr class="bg-dark border-1 border-top border-dark">
 @stop
 

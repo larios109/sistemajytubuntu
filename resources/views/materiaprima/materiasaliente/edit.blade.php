@@ -10,17 +10,21 @@
 @stop
 
 @section('content')
-    <form action="{{route('materiasaliente.update',$materiasalientes->cod_materia_s)}}" method='POST'>
+    <form action="{{route('materiasaliente.update',$materiasalientes->cod_materia_s)}}" method='POST' id="formstore">
         @csrf
         @method('PUT')
-        <div class="card  mb-2">
+        <div class="card  mb-6">
 
-        <div  class="row mb-3">
+        <div  class="row mb-2">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre Materia</label>
-                <select class="col-sm-7" class="form-control" id="Materia" name="Materia">
+                <select class="form-control selectpicker col-sm-7 border" id="Materia" name="Materia" data-live-search="true">
                     @foreach($materiaentrante as $materiae)
                         {
-                            <option id=".$materiae['Materia']">{{$materiae["cod_materia_e"]}}.{{$materiae["nom_materia"]}}</option>
+                            @if ($materiae->cod_materia_e == $materiasalientes->cod_materia_e)
+                            <option value="{{$materiae->cod_materia_e}}_{{$materiae->cant}}" selected>{{ $materiae->nom_materia}}</option>
+                            @else
+                            <option value="{{$materiae->cod_materia_e}}_{{$materiae->cant}}">{{ $materiae->nom_materia}}</option>
+                            @endif
                         }
                     @endforeach
                 </select>
@@ -33,6 +37,13 @@
                         <strong>{{$errors->first('Materia')}}</strong>
                     </div>
                 @endif
+            </div>
+
+            <div  class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Materia Disponible</label>
+                <div class="col-sm-7">
+                    <input type="text" id="cant" name="Descripcion" class="form-control" readonly="">
+                </div>
             </div>
 
             <div class="row mb-3">
@@ -90,9 +101,16 @@
 @stop
 
 @section('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
 @stop
 
 @section('js')
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/i18n/defaults-*.min.js"></script>
+
 <script>
     var input2 = document.getElementById('Descripcion');
     //función que capitaliza la primera letra
@@ -129,4 +147,30 @@
         }
     }
 </script> 
+
+<script>
+    $("#Materia").change(mostrarValores);//trae los valores del articulo cada vez que se seleccione
+
+    function mostrarValores()
+    {
+    datosMateria=document.getElementById('Materia').value.split('_');
+    $("#cant").val(datosMateria[1]);
+    }
+</script>
+
+<script>
+    const form = document.getElementById('formstore');
+
+    form.addEventListener("submit", function(event){
+            cantidad=$("#cantidad").val();
+            cant=$("#cant").val(); 
+            if (cantidad>cant) {
+                event.preventDefault();
+                alert("La cantidad a usar supera la cantidad actual");
+            }else{
+
+            }
+        }
+    )
+</script>
 @stop
