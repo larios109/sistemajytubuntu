@@ -47,6 +47,7 @@
                 <th class="text-center">Categoria Producto</th>
                 <th class="text-center">Nombre</th>
                 <th class="text-center">Stock</th>
+                <th class="text-center">Fecha Registro</th>
             </tr>
         </thead>
         <tbody>
@@ -57,6 +58,7 @@
                     <td class="text-center">{{$rproductos->categoria}}</td>
                     <td class="text-center">{{$rproductos->nombre}}</td>
                     <td class="text-center">{{$rproductos->stock}}</td>
+                    <td class="text-center">{{$rproductos->fec_registro}}</td>
                 </tr>
             @php $i++; @endphp
             @endforeach
@@ -130,7 +132,7 @@
         function( settings, data, dataIndex ) {
             var min = minDate.val();
             var max = maxDate.val();
-            var date = new Date( data[3] );
+            var date = new Date( data[4] );
     
             if (
                 ( min === null && max === null ) ||

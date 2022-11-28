@@ -71,7 +71,7 @@ class UsuarioController extends Controller
         $user=User::create($input);
         $user->assignRole($request->input('roles'));
 
-        return redirect()->route('usuarios.index');
+        return redirect()->route('usuarios.index')->with('store', 'registro');
     }
 
     /**
@@ -128,7 +128,7 @@ class UsuarioController extends Controller
         DB::table('model_has_roles')->where('model_id',$id)->delete();
 
         $user->assignRole($request->input('roles'));
-        return redirect()->route('usuarios.index');
+        return redirect()->route('usuarios.index')->with('update', 'editado');
     }
 
     /**

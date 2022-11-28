@@ -250,28 +250,8 @@ return [
         [
             'text'    => 'Personas',
             'icon'    => 'fas fa-fw fa-user',
-            'submenu' => [
-                [
-                    'text' => 'Personas',
-                    'url'  => '/personas',
-                    'can'=> 'visualizar personas',
-                ],
-                [
-                    'text' => 'Dirección',
-                    'url'  => '/direccion',
-                    'can'=> 'visualizar direcciones',
-                ],
-                [
-                    'text' => 'Correos',
-                    'url'  => '/correos',
-                    'can'=> 'visualizar correos',
-                ],
-                [
-                    'text' => 'Telefonos',
-                    'url'  => '/telefonos',
-                    'can'=> 'visualizar telefonos',
-                ],
-            ],
+            'url'  => '/personas',
+            'can'=> 'visualizar personas',
         ],
         [
             'text'    => 'Colaboradores',
@@ -368,6 +348,11 @@ return [
             'icon'    => 'fas fa-fw fa-lock',
             'submenu' => [
                 [
+                    'text' => 'Backup',
+                    'url'  => '/backups',
+                    'can'=> 'visualizar backup',
+                ],
+                [
                     'text' => 'Bitacora',
                     'url'  => '/bitacora',
                     'can'=> 'visualizar bitacora',
@@ -381,11 +366,6 @@ return [
                     'text' => 'Preguntas',
                     'url'  => '/preguntas',
                     'can'=> 'visualizar preguntas',
-                ],
-                [
-                    'text' => 'Backup',
-                    'url'  => '/backups',
-                    'can'=> 'visualizar backup',
                 ],
                 [
                     'text' => 'Usuarios',

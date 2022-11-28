@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\materiasaliente;
 
 class materiasalienteController extends Controller
 {
@@ -40,7 +41,9 @@ class materiasalienteController extends Controller
      */
     public function create()
     {
-        $materiaentrante=DB::table('materia_prima_entrante')->get();
+        $materiaentrante=DB::table('materia_prima_entrante')
+        ->where('estado', '=', '1')
+        ->get();
         return view('materiaprima.materiasaliente.create',["materiaentrante"=>$materiaentrante]);
     }
 
@@ -59,13 +62,13 @@ class materiasalienteController extends Controller
         ]);
 
         $response = Http::post('http://localhost:3000/materia_saliente/insertar', [
-            'pi_cod_materia_e' => $request->Materia,
+            'pi_cod_materia_e' => $request->codm,
             'descripcion_s' => $request->Descripcion,
             'cant_saliente' => $request->cantidad,
             'usr_registro' =>  auth()->user()->name,
         ]);
 
-        return redirect()->route('materiasaliente.index'); 
+        return redirect()->route('materiasaliente.index')->with('store', 'registro'); 
     }
 
     /**
@@ -87,15 +90,17 @@ class materiasalienteController extends Controller
      */
     public function edit($cod_materia_s)
     {
-        $materiaentrante=DB::table('materia_prima_entrante')->get();
+        $materiaentrante = DB::table('materia_prima_entrante')
+        ->where('estado', '=', '1')
+        ->get();
+        $materiasalientes = DB::table('materia_prima_saliente as ms')
+        ->join('materia_prima_entrante as me', 'ms.cod_materia_e', '=', 'me.cod_materia_e')
+        ->select('ms.cod_materia_s', 'ms.cod_materia_e', 'me.nom_materia', 'ms.descripcion_s', 'ms.cant_saliente')
+        ->where('ms.cod_materia_s', '=', $cod_materia_s)->first();
 
-        $response=Http::get('http://localhost:3000/materia_saliente/'.$cod_materia_s);
-        $materiasalientes=json_decode($response->getbody()->getcontents())[0];
 
-        $data=[];
-        $data['materiasalientes']=$materiasalientes;
-
-        return view('materiaprima.materiasaliente.edit',['materiasalientes'=>$materiasalientes, "materiaentrante"=>$materiaentrante]);
+        return view('materiaprima.materiasaliente.edit',['materiasalientes'=>$materiasalientes, 
+        "materiaentrante"=>$materiaentrante]);
     }
 
     /**
@@ -114,13 +119,13 @@ class materiasalienteController extends Controller
         ]);
 
         $response = Http::put('http://localhost:3000/materia_saliente/actualizar/' . $cod_materia_s, [
-            'cod_materia_e' => $request->Materia,
+            'cod_materia_e' => $request->codm,
             'descripcion_s' => $request->Descripcion,
             'cant_saliente' => $request->cantidad,
             'usr_registro' =>  auth()->user()->name,
         ]);
 
-        return redirect()->route('materiasaliente.index'); 
+        return redirect()->route('materiasaliente.index')->with('update', 'editado'); 
     }
 
     /**

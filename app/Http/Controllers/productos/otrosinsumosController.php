@@ -8,16 +8,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
 use App\Http\Requests\otrosinsumosrequest;
 use Illuminate\Validation\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Models\otrosinsumos;
 
 class otrosinsumosController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:visualizar otros insumos|Registrar otros insumos|editar otros insumos|borrar otros insumos',['only'=>['index']]);
+        $this->middleware('permission:visualizar otros insumos|Registrar otros insumos|editar otros insumos|editar estado insumos',['only'=>['index']]);
         $this->middleware('permission:Registrar otros insumos',['only'=>['create','store']]);
         $this->middleware('permission:editar otros insumos',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar otros insumos',['only'=>['destroy']]);
+        $this->middleware('permission:editar estado insumos',['only'=>['changestatus']]);
     }
     /**
      * Display a listing of the resource.
@@ -26,11 +28,10 @@ class otrosinsumosController extends Controller
      */
     public function index()
     {
-        $response = Http::get('http://localhost:3000/otros_insumos');
+        $otrosinsumos = DB::table('otros_insumos')->get();
         $user = Auth::user();
         $fecha = now();
-        return view('productos.otrosinsumos.index',["user"=>$user, "fecha"=>$fecha])
-        ->with('otrosinsumos', json_decode($response,true));
+        return view('productos.otrosinsumos.index',["user"=>$user, "fecha"=>$fecha, "otrosinsumos"=>$otrosinsumos]);
     }
 
     /**
@@ -52,15 +53,18 @@ class otrosinsumosController extends Controller
     public function store(otrosinsumosrequest $request)
     {
 
-        $response = Http::post('http://localhost:3000/otros_insumos/insertar', [
-            'insumo' => $request->insumo,
-            'descripcion' => $request->Descripcion,
-            'precio' => $request->Precio,
-            'cant' => $request->cantidad,
-            'usr_registro' =>  auth()->user()->name
-        ]);
+        $otrosinsumos = new otrosinsumos;
+        $otrosinsumos -> insumo = $request -> get('insumo');
+        $otrosinsumos -> descripcion = $request -> get('Descripcion');
+        $otrosinsumos -> precio = $request -> get('Precio');
+        $otrosinsumos -> cant = $request -> get('cantidad');
+        $otrosinsumos -> tip_medida = $request -> get('Medida');
+        $otrosinsumos -> estado = 1;
+        $otrosinsumos -> fecha_registro  = now();
+        $otrosinsumos -> usr_registro = auth()->user()->name;
+        $otrosinsumos -> save();
 
-        return redirect()->route('otrosinsumos.index');
+        return redirect()->route('otrosinsumos.index')->with('store', 'registro');
     }
 
     /**
@@ -82,11 +86,7 @@ class otrosinsumosController extends Controller
      */
     public function edit($cod_insumos)
     {
-        $response=Http::get('http://localhost:3000/otros_insumos/'.$cod_insumos);
-        $otrosinsumos=json_decode($response->getbody()->getcontents())[0];
-
-        $data=[];
-        $data['otrosinsumos']=$otrosinsumos;
+        $otrosinsumos = otrosinsumos::findOrFail($cod_insumos);
 
         return view ('productos.otrosinsumos.edit',['otrosinsumos'=>$otrosinsumos]);
     }
@@ -100,22 +100,15 @@ class otrosinsumosController extends Controller
      */
     public function update(Request $request, $cod_insumos)
     {
-        $request->validate([
-            'insumo'=>'required',
-            'Descripcion'=>'required',
-            'Precio'=>'required',
-            'cantidad'=>'required'
-        ]); 
+        $otrosinsumos = otrosinsumos::findOrFail($cod_insumos);
+        $otrosinsumos -> insumo = $request -> get('insumo');
+        $otrosinsumos -> descripcion = $request -> get('Descripcion');
+        $otrosinsumos -> precio = $request -> get('Precio');
+        $otrosinsumos -> cant = $request -> get('cantidad');
+        $otrosinsumos -> tip_medida = $request -> get('Medida');
+        $otrosinsumos -> update();
 
-        $response = Http::put('http://localhost:3000/otros_insumos/actualizar/' . $cod_insumos, [
-            'insumo' => $request->insumo,
-            'descripcion' => $request->Descripcion,
-            'precio' => $request->Precio,
-            'cant' => $request->cantidad,
-            'usr_registro' =>  auth()->user()->name
-        ]);
-
-        return redirect()->route('otrosinsumos.index');
+        return redirect()->route('otrosinsumos.index')->with('update', 'editado');
     }
 
     /**
@@ -124,9 +117,21 @@ class otrosinsumosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($cod_insumos)
+    public function destroy($id)
     {
-        $eliminar = Http::delete('http://localhost:3000/otros_insumos/eliminar/'.$cod_insumos);
+
+    }
+
+    public function changestatus($cod_insumos){ 
+
+        $estadoupdate = otrosinsumos::select('estado')->where('cod_insumos', $cod_insumos)->first();
+    
+        if($estadoupdate->estado == 1)  {
+            $estado = 0;
+        }else{
+            $estado = 1;
+        }
+        otrosinsumos::where('cod_insumos', $cod_insumos)->update(['estado' => $estado]);
         return redirect()->route('otrosinsumos.index')->with('eliminar', 'Ok');
     }
 }

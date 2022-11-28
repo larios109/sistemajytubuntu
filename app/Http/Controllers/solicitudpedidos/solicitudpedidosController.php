@@ -13,6 +13,7 @@ use App\Models\solicitudpedido;
 use Carbon\Carbon;
 use Response;
 use Illuminate\Support\Collection;
+use PDF;
 
 class solicitudpedidosController extends Controller
 {
@@ -37,7 +38,7 @@ class solicitudpedidosController extends Controller
            $ventas=DB::table('venta as v')
             ->join('persona as p','v.cod_persona','=','p.cod_persona')
             ->select('v.idventa','v.cod_persona','p.primer_nom','p.primer_apellido', 'v.fecha_hora','v.impuesto', 'v.total_venta')
-            ->orderBy('v.idventa','desc')->get();
+            ->orderBy('v.idventa')->get();
             $user = Auth::user();
             $fecha = now();
             return view('solicitudpedidos.solicitudpedidos.index',["ventas"=>$ventas, "user"=>$user, "fecha"=>$fecha]);
@@ -51,11 +52,12 @@ class solicitudpedidosController extends Controller
      */
     public function create()
     {
-        $clientes=DB::table('persona')->where('tipo_persona','=','Cliente')->get();
+        $clientes=DB::table('persona')->where('estado','=','1')->get();
 
         $articulos=DB::table('articulo as art')
-            ->select('art.nombre AS articulo', 'art.idarticulo','art.stock','art.precio_producto')
-            ->where('art.stock','>','0')
+            ->join('categoria as c', 'art.idcategoria', '=', 'c.idcategoria')
+            ->select('art.nombre AS articulo', 'c.nombre as categoria','art.idarticulo','art.stock','art.precio_producto')
+            ->where([['art.stock', '>', '0'], ['art.estado', '=', '1'],])
             ->get();
 
         return view("solicitudpedidos.solicitudpedidos.create",["clientes"=>$clientes,"articulos"=>$articulos]); 
@@ -72,7 +74,7 @@ class solicitudpedidosController extends Controller
         try {
             DB::beginTransaction();
             $solicitudpedido = new solicitudpedido;
-            $solicitudpedido->cod_persona=$request->get('cod_cliente');
+            $solicitudpedido->cod_persona=$request->get('codc');
             $solicitudpedido->fecha_hora=now();
             $solicitudpedido->impuesto = $request->get('isv_total');
             $solicitudpedido->total_venta=$request->get('total_venta');
@@ -101,8 +103,7 @@ class solicitudpedidosController extends Controller
             DB::rollback();
         }
         
-        return redirect()->route('solicitudpedidos.index');
-        // return Redirect::to('solicitudpedidos/solicitudpedidos');
+        return redirect()->route('solicitudpedidos.index')->with('store', 'registro');
     }
 
     /**
@@ -163,5 +164,27 @@ class solicitudpedidosController extends Controller
         $solicitupedido=solicitudpedido::findOrFail($idventa);
         $solicitupedido->delete();
         return redirect()->route('solicitudpedidos.index')->with('eliminar', 'Ok');
+    }
+
+    public function downloadPDF($idventa)
+    {
+        $venta=DB::table('venta as v')
+        ->join('persona as p','v.cod_persona','=','p.cod_persona')
+        ->join('detalle_venta as dv','v.idventa','=','dv.idventa')
+        ->select('v.idventa','p.cod_persona','p.primer_nom','p.primer_apellido', 'v.fecha_hora','v.impuesto', 'v.total_venta')
+        ->where('v.idventa','=',$idventa)
+        ->first();
+
+        $detalles=DB::table('detalle_venta as d')
+        ->join('articulo as a','d.idarticulo','=','a.idarticulo')
+        ->select('a.nombre as articulo','d.cantidad','d.precio_venta')
+        ->where('d.idventa','=',$idventa)
+        ->get();
+
+        view()->share('solicitudpedidos.solicitudpedidos.download', ["venta"=>$venta,"detalles"=>$detalles]); 
+
+        $pdf = PDF::loadView('solicitudpedidos.solicitudpedidos.download',["venta"=>$venta,"detalles"=>$detalles]); 
+
+        return $pdf->download();
     }
 }

@@ -13,7 +13,7 @@ class categoria extends Model
 
     public $timestamps=false;
 
-    protected $fillable = ['nombre','descripcion'];
+    protected $fillable = ['nombre','descripcion','estado'];
     protected $guarded =[
     ];
 }

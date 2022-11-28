@@ -31,40 +31,39 @@
         <thead class=thead-dark>
             <tr>
                 <th class="text-center">Codigo</th>
+                <th class="text-center">Fecha Solicitud</th>
                 <th class="text-center">Nombre Cliente</th>
                 <th class="text-center">Apellido Cliente</th>
-                <th class="text-center">Fecha Solicitud</th>
                 <th class="text-center">Impuesto</th>
                 <th class="text-center">Total</th>
                 <th class="text-center">Opciones</th>
             </tr>
         </thead>
         <tbody>
-        @php $i=1; @endphp
             @foreach($ventas as $venta)
                 <tr>
-                    <td class="text-center">{{$i}}</td>
+                    <td class="text-center">{{$venta->idventa}}</td>
+                    <td class="text-center">{{date('Y-m-d', strtotime($venta->fecha_hora))}}</td>
                     <td class="text-center">{{$venta->primer_nom}}</td>
                     <td class="text-center">{{$venta->primer_apellido}}</td>
-                    <td class="text-center">{{date('Y-m-d', strtotime($venta->fecha_hora))}}</td>
                     <td class="text-center">{{$venta->impuesto}}</td>
                     <td class="text-center">{{$venta->total_venta}}</td>
                     <td class="text-center">
                         @can ('visualizar detalle solicitud pedidos')
                         <form action="{{route('solicitudpedidos.destroy',$venta->idventa)}}" class="d-inline formulario-eliminar" method="POST">
-                            <a href="{{route('solicitudpedidos.show',$venta->idventa)}}" class="btn btn-warning btm-sm fa fa-eye"></a>
+                            <a href="{{route('solicitudpedidos.show',$venta->idventa)}}" class="btn btn-warning btn-sm">Detalle</a>
                             @can ('borrar solicitud')
                             <button type="submit"
-                            class="btn btn-danger btm-sm fa fa-times-circle">
+                            class="btn btn-danger btn-sm">Eliminar
                             @csrf
                             @method('DELETE')
                             </button>
                             @endcan
+                            <a type="button" href="{{route('download', $venta->idventa)}}" class="btn btn-primary btn-sm">Comprobante</a>
                         </form>
                         @endcan
-                </td>
+                    </td>
                 </tr>
-            @php $i++; @endphp
             @endforeach
         </tbody>
     </table>
@@ -96,6 +95,16 @@
         Swal.fire(
             'Eliminado!',
             'Se elimino con exito',
+            'success'
+        )
+    </script>
+@endif
+
+@if(session('store') == 'registro')
+    <script>
+        Swal.fire(
+            'Registrado!',
+            'Datos registrado con exito',
             'success'
         )
     </script>

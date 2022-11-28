@@ -47,21 +47,29 @@
                     <td class="text-center">{{ $produc->categoria }}</td>
                     <td class="text-center">{{ $produc->nombre }}</td>
                     <td class="text-center">{{ $produc->precio_producto}}</td>
-                    <td class="text-center">{{ $produc->stock }}</td>
+                    <td class="text-center">
+                        @if($produc->stock > 100)
+                            <a type="button" class="btn btn-sm btn-success">{{ $produc->stock}}</a>
+                        @elseif ($produc->stock > 50)
+                            <a type="button" class="btn btn-sm btn-warning">{{ $produc->stock}}</a>
+                        @else ($produc->stock < 10)
+                            <a type="button" class="btn btn-sm btn-danger">{{ $produc->stock}}</a>
+                        @endif
+                    </td>
                     <td class="text-center">{{ $produc->descripcion }}</td>
                     <td class="text-center">
                         @can ('editar producto')
-                        <form action="{{route('productos.destroy', $produc->idarticulo)}}" class="d-inline formulario-eliminar" method="POST">
-                            <a href="{{route('productos.edit', $produc->idarticulo)}}" class="btn btn-warning btm-sm fa fa-edit"></a>
-                            @can ('borrar producto')
-                            <button type="submit" class="btn btn-danger btm-sm fa fa-times-circle">
-                            @csrf
-                            @method('DELETE')
-                            </button>
-                            @endcan
-                        </form>
+                            <a href="{{route('productos.edit', $produc->idarticulo)}}" class="btn btn-warning btn-sm">Editar</a>
                         @endcan
-                </td>
+
+                        @can ('editar estado producto')
+                            @if($produc->estado == 1)
+                                <a type="button"  href="{{url('change-productos/'.$produc->idarticulo)}}" class="btn btn-sm btn-success">Activo</a>
+                                    @else
+                                <a type="button" href="{{url('change-productos/'.$produc->idarticulo)}}" class="btn btn-sm btn-danger">Inactivo</a>
+                            @endif
+                        @endcan
+                    </td>
                 </tr>
             @php $i++; @endphp
             @endforeach
@@ -72,7 +80,6 @@
 @stop
 
 @section('css')
-
 @stop
 
 @section('js')
@@ -93,33 +100,32 @@
 @if(session('eliminar') == 'Ok')
     <script>
         Swal.fire(
-            'Eliminado!',
-            'Se elimino con exito',
+            'Actualizado!',
+            'Se actualizo con exito el estado',
             'success'
         )
     </script>
 @endif
 
-<script>
-    $('.formulario-eliminar').submit(function(e){
-        e.preventDefault();
+@if(session('store') == 'registro')
+    <script>
+        Swal.fire(
+            'Registrado!',
+            'Datos registrado con exito',
+            'success'
+        )
+    </script>
+@endif
 
-        Swal.fire({
-            title: '¿Estas seguro?',
-            text: "Se eliminara definitivamente",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, Eliminar!',
-            cancelButtonText: 'Cancelar'
-            }).then((result) => {
-            if (result.isConfirmed) {
-                this.submit();
-            }
-        })
-    });
-</script>
+@if(session('update') == 'editado')
+    <script>
+        Swal.fire(
+            'Editado!',
+            'Datos editados con exito',
+            'success'
+        )
+    </script>
+@endif
 
 <script>
     $(document).ready(function() {

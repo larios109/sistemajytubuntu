@@ -42,19 +42,6 @@
                                                 <p class="m-b-0 text-right"><a href="/personas" class="text-white">Ver más</a></p>
                                             </div>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="col-md-4 col-xl-4">
-                                        <div class="card text-white bg-dark">
-                                            <div class="card-block">
-                                            <h5>Solicitud Pedidos</h5>                                               
-                                                @php
-                                                 $cant_ventas = DB::table('venta')->count();                                                
-                                                @endphp
-                                                <h2 class="text-right"><i class="fas fa-fw fa-file-invoice f-left"></i><span>{{$cant_ventas}}</span></h2>
-                                                <p class="m-b-0 text-right"><a href="/solicitudpedidos" class="text-white">Ver más</a></p>
-                                            </div>
-                                        </div>
                                     </div> 
 
                                     <div class="col-md-4 col-xl-4">
@@ -65,33 +52,7 @@
                                                     $cant_prod = DB::table('articulo')->count();                                          
                                                 @endphp
                                                 <h2 class="text-right"><i class="fas fa-fw fa-wine-bottle f-left"></i><span>{{$cant_prod}}</span></h2>
-                                                <p class="m-b-0 text-right"><a href="/listaproductos" class="text-white">Ver más</a></p>
-                                            </div>
-                                        </div>
-                                    </div> 
-
-                                    <div class="col-md-4 col-xl-4">
-                                        <div class="card text-white bg-dark">
-                                            <div class="card-block">
-                                            <h5>Telefonos</h5>                                               
-                                                @php
-                                                    $cant_telefonos = DB::table('telefonos')->count();                                           
-                                                @endphp
-                                                <h2 class="text-right"><i class="fas fa-fw fa-phone f-left"></i><span>{{$cant_telefonos}}</span></h2>
-                                                <p class="m-b-0 text-right"><a href="/telefonos" class="text-white">Ver más</a></p>
-                                            </div>
-                                        </div>
-                                    </div> 
-
-                                    <div class="col-md-4 col-xl-4">
-                                        <div class="card text-white bg-dark">
-                                            <div class="card-block">
-                                            <h5>Correos</h5>                                               
-                                                @php
-                                                    $cant_correos = DB::table('correos')->count();                                        
-                                                @endphp
-                                                <h2 class="text-right"><i class="fas fa-fw fa-envelope f-left"></i><span>{{$cant_correos}}</span></h2>
-                                                <p class="m-b-0 text-right"><a href="/correos" class="text-white">Ver más</a></p>
+                                                <p class="m-b-0 text-right"><a href="/productos" class="text-white">Ver más</a></p>
                                             </div>
                                         </div>
                                     </div> 

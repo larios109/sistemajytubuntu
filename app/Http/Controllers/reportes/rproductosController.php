@@ -23,7 +23,7 @@ class rproductosController extends Controller
     {
         $reporteproductos=DB::table('articulo as a')
         ->join('categoria as c', 'a.idcategoria', '=', 'c.idcategoria')
-        ->select('a.idarticulo', 'c.nombre AS categoria', 'a.nombre', 'a.stock')
+        ->select('a.idarticulo', 'c.nombre AS categoria', 'a.nombre', 'a.stock', 'a.fec_registro')
         ->orderBy('a.idarticulo','desc')->get();
         $user = Auth::user();
         $fecha = now();

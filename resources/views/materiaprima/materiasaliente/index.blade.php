@@ -50,9 +50,9 @@
                     <td class="text-center">
                         @can ('editar materia saliente')
                         <form action="{{route('materiasaliente.destroy',$materias["cod_materia_s"])}}" class="d-inline formulario-eliminar" method='POST' >
-                            <a href="{{route('materiasaliente.edit',$materias["cod_materia_s"])}}" class="btn btn-warning btm-sm fa fa-edit"></a>
+                            <a href="{{route('materiasaliente.edit',$materias["cod_materia_s"])}}" class="btn btn-warning btn-sm">Editar</a>
                             @can ('borrar materia saliente')
-                            <button type="submit" class="btn btn-danger btm-sm fa fa-times-circle">   
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar   
                              @csrf
                              @method('DELETE')
                             </button>
@@ -93,6 +93,26 @@
         Swal.fire(
             'Eliminado!',
             'Se elimino con exito',
+            'success'
+        )
+    </script>
+@endif
+
+@if(session('store') == 'registro')
+    <script>
+        Swal.fire(
+            'Registrado!',
+            'Datos registrado con exito',
+            'success'
+        )
+    </script>
+@endif
+
+@if(session('update') == 'editado')
+    <script>
+        Swal.fire(
+            'Editado!',
+            'Datos editados con exito',
             'success'
         )
     </script>

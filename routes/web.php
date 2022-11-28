@@ -5,11 +5,6 @@ use Illuminate\Support\Facades\Http;
 
 //Controllers personas
 use App\Http\Controllers\personas\personasController;
-use App\Http\Controllers\personas\clienteController;
-use App\Http\Controllers\personas\direccionController;
-use App\Http\Controllers\personas\companiaController;
-use App\Http\Controllers\personas\correosController;
-use App\Http\Controllers\personas\telefonosController;
 
 // Controllers materia prima
 use App\Http\Controllers\materiaprima\materiaentranteController;
@@ -71,36 +66,39 @@ Route::group(['middleware' => ['changepassword']], function () {
 
 //Route personas
 Route::resource('personas',personasController::class)->names('personas');
-Route::resource('cliente',clienteController::class)->names('cliente');
-Route::resource('direccion',direccionController::class)->names('direccion');
-Route::resource('compania',companiaController::class)->names('compania');
-Route::resource('correos',correosController::class)->names('correos');
-Route::resource('telefonos',telefonosController::class)->names('telefonos');
+Route::get('/change-status/{cod_persona}', [personasController::class, 'changestatus']);
 
 // Route Materia Prima
 Route::resource('materiaentrante',materiaentranteController::class)->names('materiaentrante');
+Route::get('/change-materiae/{cod_materia_e}', [materiaentranteController::class, 'changestatus']);
 Route::resource('materiasaliente',materiasalienteController::class)->names('materiasaliente');
 
 // Route productos
 Route::resource('categoria',categoriaController::class)->names('categoria');
+Route::get('/change-categoria/{idcategoria}', [categoriaController::class, 'changestatus']);
 Route::resource('otrosinsumos',otrosinsumosController::class)->names('otrosinsumos');
-// Route::resource('listaproductos',listaproductoController::class)->names('listaproductos');
-Route::resource('inventario',inventarioController::class)->names('inventario');
+Route::get('/change-insumos/{cod_insumos}', [otrosinsumosController::class, 'changestatus']);
 Route::resource('productos',productosController::class)->names('productos');
+Route::get('/change-productos/{idarticulo}', [productosController::class, 'changestatus']);
 
 // Route ventas
-// Route::resource('detallesolicitud',detallesolicitudController::class)->names('detallesolicitud');
 Route::resource('solicitudpedidos',solicitudpedidosController::class)->names('solicitudpedidos');
+Route::get('/download/{idventa}', [solicitudpedidosController::class, 'downloadPDF'])->name('download');
 
 // Route empleados
 Route::resource('pagosalario',pagosalarioController::class)->names('pagosalario');
 Route::resource('usuarios',UsuarioController::class)->names('usuarios');
 Route::resource('colaboradores',colaboradoresController::class)->names('colaboradores');
+Route::get('/change-colaboradores/{cod_empleado}', [colaboradoresController::class, 'changestatus']);
+Route::get('/pago-salario-excel', [pagosalarioController::class, 'exportexcel'])->name('pagosalario.excel');
+Route::get('/plantilla', [pagosalarioController::class, 'plantilla'])->name('plantilla');
+Route::post('/pago-salario-import', [pagosalarioController::class, 'importexcel'])->name('pagosalario.import');
 
 // Route seguridad
 Route::resource('bitacora',bitacoraController::class)->names('bitacora');
 Route::resource('roles',RolController::class)->names('roles');
 Route::resource('preguntas',preguntasController::class)->names('preguntas');
+Route::get('/change-pregunta/{cod_pregunta}', [preguntasController::class, 'changestatus']);
 
 // Route reportes
 Route::resource('reportesolicitud',rsolicitudpedidosController::class)->names('reportesolicitud');
@@ -116,5 +114,5 @@ Route::resource('primerasesion',primerasesionController::class)->names('primeras
 
 //Backup
 Route::resource('backups',backupController::class)->names('backups');
-Route::get('backups/{file_name}', [backupController::class, 'download'])->name('backups.download');
+Route::get('/descargar/{file_name}', [backupController::class, 'download'])->name('backups.descargar');
 Route::delete('backups', [backupController::class, 'clean'])->name('backups.clean');

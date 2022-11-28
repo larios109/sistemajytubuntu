@@ -18,24 +18,24 @@
     <div class="table-responsive">
     <table id="detalles" class="table table-striped table-bordered table-condensed table-hover">
         <thead style="background-color: #A9D0F5">
-            <th>Articulo</th>
-            <th>Cantidad</th>
-            <th>Precio Venta</th>
-            <th>Subtotal</th>
+            <th class="text-center">Articulo</th>
+            <th class="text-center">Cantidad</th>
+            <th class="text-center">Precio Venta</th>
+            <th class="text-center">Subtotal</th>
         </thead>
         <tfoot>
-        <th><h4>ISV</h4> <h4>Total</h4></th>
-        <th></th>
-        <th></th>
-        <th><h4 id="isv">{{$venta->impuesto}}</h4><h4 id="total">{{$venta->total_venta}}</h4></th>
+        <th class="text-center"></th>
+        <th class="text-center"></th>
+        <th class="text-center"><h4>ISV</h4> <h4>Total</h4></th>
+        <th class="text-center"><h4 id="isv">{{$venta->impuesto}}</h4><h4 id="total">{{$venta->total_venta}}</h4></th>
         </tfoot>
         <tbody>
             @foreach($detalles as $det)
               <tr>
-                <td>{{$det->articulo}}</td>
-                <td>{{$det->cantidad}}</td>
-                <td>{{$det->precio_venta}}</td>
-                <td>{{$det->cantidad*$det->precio_venta}}</td>
+                <td class="text-center">{{$det->articulo}}</td>
+                <td class="text-center">{{$det->cantidad}}</td>
+                <td class="text-center">{{$det->precio_venta}}</td>
+                <td class="text-center">{{$det->cantidad*$det->precio_venta}}</td>
               </tr>
             @endforeach              
         </tbody>

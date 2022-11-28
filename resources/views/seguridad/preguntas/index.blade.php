@@ -41,19 +41,19 @@
             @foreach($preguntas as $pregunta)
                 <tr>
                     <td class="text-center">{{$i}}</td>
-                    <td class="text-center">{{$pregunta["pregunta"]}}</td>
-                    <td class="text-center">{{$pregunta["usr_registro"]}}</td>
+                    <td class="text-center">{{$pregunta->pregunta}}</td>
+                    <td class="text-center">{{$pregunta->usr_registro}}</td>
                     <td class="text-center">
                         @can ('editar pregunta')
-                        <form action="{{route('preguntas.destroy',$pregunta["cod_pregunta"])}}" class="d-inline formulario-eliminar" method="POST">
-                            <a href="{{route('preguntas.edit',$pregunta["cod_pregunta"])}}" class="btn btn-warning btm-sm fa fa-edit"></a>
-                            @can ('borrar pregunta')
-                            <button type="submit" class="btn btn-danger btm-sm fa fa-times-circle">
-                            @csrf
-                            @method('DELETE')
-                            </button>
-                            @endcan
-                        </form>
+                            <a href="{{route('preguntas.edit',$pregunta->cod_pregunta)}}" class="btn btn-warning btn-sm">Editar</a>
+                        @endcan
+
+                        @can ('editar estado preguntas')
+                            @if($pregunta->estado == 1)
+                                <a type="button"  href="{{url('change-pregunta/'.$pregunta->cod_pregunta)}}" class="btn btn-sm btn-success">Activo</a>
+                                    @else
+                                <a type="button" href="{{url('change-pregunta/'.$pregunta->cod_pregunta)}}" class="btn btn-sm btn-danger">Inactivo</a>
+                            @endif
                         @endcan
                     </td>
                 </tr>
@@ -87,8 +87,28 @@
 @if(session('eliminar') == 'Ok')
     <script>
         Swal.fire(
-            'Eliminado!',
-            'Se elimino con exito',
+            'Actualizado!',
+            'Se actualizo con exito el estado',
+            'success'
+        )
+    </script>
+@endif
+
+@if(session('store') == 'registro')
+    <script>
+        Swal.fire(
+            'Registrado!',
+            'Datos registrado con exito',
+            'success'
+        )
+    </script>
+@endif
+
+@if(session('update') == 'editado')
+    <script>
+        Swal.fire(
+            'Editado!',
+            'Datos editados con exito',
             'success'
         )
     </script>

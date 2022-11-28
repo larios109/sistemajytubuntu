@@ -15,10 +15,10 @@ class productosController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:visualizar productos|Registrar producto|editar producto|borrar producto',['only'=>['index']]);
+        $this->middleware('permission:visualizar productos|Registrar producto|editar producto|editar estado producto',['only'=>['index']]);
         $this->middleware('permission:Registrar producto',['only'=>['create','store']]);
         $this->middleware('permission:editar producto',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar producto',['only'=>['destroy']]);
+        $this->middleware('permission:editar estado producto',['only'=>['changestatus']]);
     }
     /**
      * Display a listing of the resource.
@@ -31,7 +31,7 @@ class productosController extends Controller
         {
             $productos=DB::table('articulo as a')
             ->join('categoria as c', 'a.idcategoria', '=', 'c.idcategoria')
-            ->select('a.idarticulo', 'c.nombre AS categoria', 'a.nombre', 'a.precio_producto', 'a.stock', 'a.descripcion')
+            ->select('a.idarticulo', 'c.nombre AS categoria', 'a.nombre', 'a.precio_producto', 'a.stock', 'a.descripcion', 'a.estado')
             ->orderBy('a.idarticulo','desc')->get();
             $user = Auth::user();
             $fecha = now();
@@ -46,7 +46,9 @@ class productosController extends Controller
      */
     public function create()
     {   
-        $categorias = DB::table('categoria')->get();
+        $categorias = DB::table('categoria')
+        ->where('estado', '=', '1')
+        ->get();
         return view('productos.productos.create',["categorias"=>$categorias]);
     }
 
@@ -59,15 +61,17 @@ class productosController extends Controller
     public function store(productorequest $request)
     {
         $producto = new productos;
-        $producto -> idcategoria = $request -> get('idcategoria');
+        $producto -> idcategoria = $request -> get('codc');
         $producto -> nombre = $request -> get('nombre');
         $producto -> precio_producto = $request -> get('precio_producto');
         $producto -> stock = $request -> get('stock');
         $producto -> descripcion = $request -> get('descripcion');
+        $producto -> estado = 1;
+        $producto -> fec_registro = now();
         $producto -> usr_registro = auth()->user()->name;
         $producto -> save();
 
-        return redirect()->route('productos.index');
+        return redirect()->route('productos.index')->with('store', 'registro');
     }
 
     /**
@@ -89,8 +93,14 @@ class productosController extends Controller
      */
     public function edit($idarticulo)
     {
-        $producto = productos::findOrFail($idarticulo);
-        $categorias = DB::table('categoria')->get();
+        $producto = DB::table('articulo as a')
+        ->join('categoria as c', 'a.idcategoria', '=', 'c.idcategoria')
+        ->select('a.idarticulo', 'c.idcategoria', 'c.nombre', 'a.nombre as nombre_producto','a.precio_producto', 'a.stock', 'a.descripcion')
+        ->where('a.idarticulo', '=', $idarticulo)->first();
+
+        $categorias = DB::table('categoria')
+        ->where('estado', '=', '1')
+        ->get();
         return view("productos.productos.edit", ["producto" => $producto, "categorias" => $categorias]);
     }
 
@@ -104,13 +114,13 @@ class productosController extends Controller
     public function update(Request $request, $idarticulo)
     {
         $producto = productos::findOrFail($idarticulo);
-        $producto -> idcategoria = $request -> get('idcategoria');
+        $producto -> idcategoria = $request -> get('codc');
         $producto -> nombre = $request -> get('nombre');
         $producto -> precio_producto = $request -> get('precio_producto');
         $producto -> descripcion = $request -> get('descripcion');
         $producto -> stock = $request -> get('stock');
         $producto -> update();
-        return redirect()->route('productos.index');
+        return redirect()->route('productos.index')->with('update', 'editado');
     }
 
     /**
@@ -119,10 +129,21 @@ class productosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($idarticulo)
+    public function destroy($id)
     {
-        $producto = productos::findOrFail($idarticulo);
-        $producto->delete();
+
+    }
+
+    public function changestatus($idarticulo){ 
+
+        $estadoupdate = productos::select('estado')->where('idarticulo', $idarticulo)->first();
+    
+        if($estadoupdate->estado == 1)  {
+            $estado = 0;
+        }else{
+            $estado = 1;
+        }
+        productos::where('idarticulo', $idarticulo)->update(['estado' => $estado]);
         return redirect()->route('productos.index')->with('eliminar', 'Ok');
     }
 }

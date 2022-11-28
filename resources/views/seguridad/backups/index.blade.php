@@ -17,7 +17,7 @@
 @section('content')
 
 <a 
-    href="{{ route('backups.store') }}"
+    href="{{ route('backups.create') }}"
     class="btn btn-outline-info text-center btn-block">
     <spam>Crear Backup</spam> <i class="fas fa-plus-square"></i>
 </a>
@@ -44,11 +44,11 @@
                     <td class="text-center">{{ $backup['created_at'] }}</td>
                     <td class="text-center">
                         <form action="{{ route('backups.destroy',$backup['file_name']) }}" class="d-inline formulario-eliminar" method="POST">
-                            <a class="btn btn-info btn-sm" href="{{ route('backups.download',$backup['file_name']) }}">
+                            <a class="btn btn-info btn-sm" href="{{ route('backups.descargar',$backup['file_name']) }}">
                                 <span>Descargar</span>
                             </a>
                             @can ('borrar backup')
-                            <button type="submit" class="btn btn-danger btn-sm" class="fas fa-trash-alt"><span>Borrar</span>
+                            <button type="submit" class="btn btn-danger btn-sm" class="fas fa-trash-alt"><span>Eliminar</span>
                             @csrf
                             @method('DELETE')
                             </button>

@@ -20,6 +20,8 @@ class productos extends Model
         'stock',
         'descripcion',
         'usr_registro',
+        'estado',
+        'fec_registro',
        ];
    
        protected $guarded =[

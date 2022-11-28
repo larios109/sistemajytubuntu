@@ -24,7 +24,7 @@ class solicitudrequest extends FormRequest
     public function rules()
     {
         return [
-            'cod_cliente'=>'required',
+            'codc'=>'required',
         ];
     }
 }

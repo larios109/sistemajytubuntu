@@ -17,35 +17,27 @@
 
             <div  class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Categoria</label>
-                <select class="col-sm-7" class="form-control" id="idcategoria" name="idcategoria" required>
-                    <option disabled selected>Escoja un codigo de una categoria</option>
-                    @foreach($categorias as $cate)
-                        {
-                            @if ($cate->idcategoria == $producto->idcategoria)
-                            <option value="{{$cate->idcategoria}}" selected>{{ $cate->nombre}}</option>
-                            @else
-                            <option value="{{$cate->idcategoria}}">{{ $cate->nombre}}</option>
-                            @endif
-                        }
-                    @endforeach
-                </select>
-                @if ($errors->has('idcategoria'))
-                    <div     
-                        id="idcategoria-error"                                          
-                        class="error text-danger pl-3"
-                        for="idcategoria"
-                        style="display: block;">
-                        <strong>{{$errors->first('idcategoria')}}</strong>
-                    </div>
-                @endif
+                <div class="col-sm-7">
+                    <input type="text" id="idcategoria" name="idcategoria" class="form-control" readonly="" required
+                    value="{{$producto->nombre}}">
+                </div>
+                <button type="button" id="btnAñadir" class="btn btn-success btnAñadir" style="background:dodgerblue" data-bs-toggle="modal" data-bs-target="#modalAñadir">
+                <i class="fa fa-search"></i>&nbsp;
+                </button>
+            </div>
+
+            <div  class="row mb-3">
+                <div class="col-sm-7">
+                    <input type="number" id="codc" name="codc"  1class="form-control" hidden readonly="" value="{{$producto->idcategoria}}">
+                </div>
             </div>
 
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre</label>
                  <div class="col-sm-7">
                     <input type="text" id="nombre" name="nombre" class="form-control" maxlength="20" 
-                    onkeydown="return /[a-z ]/i.test(event.key)" onkeyup="capitalizarPrimeraLetranombre()" 
-                    placeholder="Ingrese el Nombre del Producto" value="{{$producto->nombre}}" required>
+                    onkeydown="return /[a-z, 1-9 ]/i.test(event.key)" onkeyup="capitalizarPrimeraLetranombre()" 
+                    placeholder="Ingrese el Nombre del Producto" value="{{$producto->nombre_producto}}" required>
                 </div>
                 @if ($errors->has('nombre'))
                     <div               
@@ -62,7 +54,7 @@
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Precio</label>
                  <div class="col-sm-7">
                     <input type="number" id="precio_producto" name="precio_producto"  class="form-control" min="1" max="999999" maxlength="8" 
-                    oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+                    oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"  step="0.00001"
                     placeholder="Ingrese el Precio del Producto" value="{{$producto->precio_producto}}" required>
                 </div>
                 @if ($errors->has('precio_producto'))
@@ -97,9 +89,9 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Descripcion</label>
                  <div class="col-sm-7">
-                    <input type="text" id="descripcion" name="descripcion" class="form-control" maxlength="25" 
+                    <textarea type="text" id="descripcion" name="descripcion" class="form-control" maxlength="25" 
                     onkeyup="capitalizarPrimeraLetradescripcion()" 
-                    placeholder="Ingrese la descripcion del producto" value="{{$producto->descripcion}}" required>
+                    placeholder="Ingrese la descripcion del producto" value="{{$producto->descripcion}}" required>{{$producto->descripcion}}</textarea>
                 </div>
                 @if ($errors->has('descripcion'))
                     <div                 
@@ -128,12 +120,63 @@
             </div>
         </div>
      </form>
+
+    <div class="modal fade" id="modalAñadir" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Buscar Categoria</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+                    
+
+                        <!-- FORMULARIO -->
+                        <div class="table-responsive-sm mt-5">
+                            <table id="tablacategoria" class="table table-stripped table-bordered table-condensed table-hover">
+                                <thead class=thead-dark>
+                                    <tr>
+                                        <th class="text-center">Codigo</th>
+                                        <th class="text-center">Nombre</th>
+                                        <th class="text-center">Descripcion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($categorias as $cate)
+                                        <tr>
+                                            <td class="text-center">{{$cate->idcategoria}}</td>
+                                            <td class="text-center">{{$cate->nombre}}</td>
+                                            <td class="text-center">{{$cate->descripcion}}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="cerrar" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('css')
+<style>
+.modal-lg { 
+    max-width: 90%; 
+}
+</style>
+<!-- datatables extension SELECT -->
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
 @stop
 
 @section('js')
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
 <script>
     var input = document.getElementById('nombre');
     //función que capitaliza la primera letra
@@ -198,4 +241,33 @@
         }
     }
 </script> 
+
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script> 
+<!-- datatables extension SELECT -->
+<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>     
+
+<script>
+    $(document).ready(function() {
+        var table = $('#tablacategoria').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            },
+            // dom: 'Blfrtip',
+            dom: '<"pt-2 row" <"col-xl mt-2"l><"col-xl text-center"B><"col-xl text-right mt-2 buscar"f>> <"row"rti<"col"><p>>',
+            select:true,
+            select:{
+                style:'single'
+            }  
+        });
+        table.on('select', function () {
+            var data = table.row( { selected: true } ).data();
+            console.log(data);
+            $('#cerrar').click();
+            $('#codc').val(data[0]);
+            $('#idcategoria').val(data[1]);
+        })
+    });
+</script>
 @stop

@@ -16,10 +16,10 @@ class categoriaController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:visualizar categorias|Registrar categoria|editar categoria|borrar categoria',['only'=>['index']]);
+        $this->middleware('permission:visualizar categorias|Registrar categoria|editar categoria|editar estado categoria',['only'=>['index']]);
         $this->middleware('permission:Registrar categoria',['only'=>['create','store']]);
         $this->middleware('permission:editar categoria',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar categoria',['only'=>['destroy']]);
+        $this->middleware('permission:editar estado categoria',['only'=>['changestatus']]);
     }
     /**
      * Display a listing of the resource.
@@ -29,7 +29,7 @@ class categoriaController extends Controller
     public function index(Request $request)
     {
         $categorias = DB::table('categoria')
-        ->select('idcategoria','nombre','descripcion')->orderBy('idcategoria', 'desc')->get();
+        ->select('idcategoria','nombre','descripcion', 'estado')->orderBy('idcategoria', 'desc')->get();
         $user = Auth::user();
         $fecha = now();
         return view('productos.categoria.index',["categorias"=>$categorias, "user"=>$user, "fecha"=>$fecha]);
@@ -58,9 +58,10 @@ class categoriaController extends Controller
         $categoria = new categoria();
         $categoria->nombre = $request->nombre;
         $categoria->descripcion = $request->descripcion;
+        $categoria -> estado = 1;
         $categoria->save();
 
-        return redirect()->route('categoria.index');
+        return redirect()->route('categoria.index')->with('store', 'registro');
     }
 
     /**
@@ -100,7 +101,7 @@ class categoriaController extends Controller
         $categoria->descripcion = $request->descripcion;
         $categoria->save();
 
-        return redirect()->route('categoria.index');
+        return redirect()->route('categoria.index')->with('update', 'editado');
     }
 
     /**
@@ -109,10 +110,21 @@ class categoriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($idcategoria)
+    public function destroy($id)
     {
-        $categoria = categoria::findOrFail($idcategoria);
-        $categoria->delete();
+
+    }
+
+    public function changestatus($idcategoria){ 
+
+        $estadoupdate = categoria::select('estado')->where('idcategoria', $idcategoria)->first();
+    
+        if($estadoupdate->estado == 1)  {
+            $estado = 0;
+        }else{
+            $estado = 1;
+        }
+        categoria::where('idcategoria', $idcategoria)->update(['estado' => $estado]);
         return redirect()->route('categoria.index')->with('eliminar', 'Ok');
     }
 }

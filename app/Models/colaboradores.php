@@ -13,7 +13,7 @@ class colaboradores extends Model
 
     public $timestamps=false;
 
-    protected $fillable = ['cod_persona', 'sueldo_bruto', 'fecha_registro', 'fecha_salida', 'motivo_salida', 'usr_registro'];
+    protected $fillable = ['cod_persona', 'sueldo_bruto', 'fecha_registro', 'fecha_salida', 'motivo_salida', 'estado','usr_registro'];
     protected $guarded =[
     ];
 }

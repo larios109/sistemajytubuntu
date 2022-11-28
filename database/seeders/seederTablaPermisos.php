@@ -20,31 +20,13 @@ class seederTablaPermisos extends Seeder
             'visualizar personas',
             'Registrar persona',
             'editar persona',
-            'borrar persona',
+            'editar estado persona',
 
-            //tabla direccion
-            'visualizar direcciones',
-            'Registrar direccion',
-            'editar direccion',
-            'borrar direccion',
-
-            //tabla correos
-            'visualizar correos',
-            'Registrar correo',
-            'editar correo',
-            'borrar correo',
-            
-            //tabla telefonos
-            'visualizar telefonos',
-            'Registrar telefono',
-            'editar telefono',
-            'borrar telefono',
-
-            //tabla usuarios
+            //tabla colaboradores
             'visualizar Colaboradores',
             'Registrar Colaborador',
             'editar Colaborador',
-            'borrar Colaborador',
+            'editar estado colaborador',
                         
             //tabla pago salario
             'visualizar pago salario',
@@ -56,7 +38,7 @@ class seederTablaPermisos extends Seeder
             'visualizar materia entrante',
             'Registrar materia entrante',
             'editar materia entrante',
-            'borrar materia entrante',
+            'editar estado materia',
             
             //tabla materia saliente
             'visualizar materia saliente',
@@ -68,19 +50,19 @@ class seederTablaPermisos extends Seeder
             'visualizar categorias',
             'Registrar categoria',
             'editar categoria',
-            'borrar categoria',
+            'editar estado categoria',
 
             //tabla productos
             'visualizar productos',
             'Registrar producto',
             'editar producto',
-            'borrar producto',
+            'editar estado producto',
 
             //tabla otros insumos
             'visualizar otros insumos',
             'Registrar otros insumos',
             'editar otros insumos',
-            'borrar otros insumos',
+            'editar estado insumos',
 
             //tabla solicitud pedidos
             'visualizar solicitud pedidos',
@@ -104,7 +86,7 @@ class seederTablaPermisos extends Seeder
             'visualizar preguntas',
             'crear pregunta',
             'editar pregunta',
-            'borrar pregunta',
+            'editar estado preguntas',
 
             //tabla backup
             'visualizar backup',

@@ -25,16 +25,13 @@ class personasrequest extends FormRequest
     {
         return [
             'Nombre'=>'required',
-            'Nombre2'=>'required',
             'Apellido'=>'required',
-            'Apellido2'=>'required',
             'tipo'=>'required',
             'DNI'=>'required|unique:persona,dni',
             'Genero'=>'required',
             'Telefono'=>'required',
             'tipotelefono'=>'required',
             'Correo'=>'required',
-            'Nacimiento'=>'required',
             'direccion'=>'required',
             'Departamento'=>'required',
             'Municipio'=>'required',

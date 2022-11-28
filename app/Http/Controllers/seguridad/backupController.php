@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Spatie\Backup\BackupDestination\BackupDestination;
 
 class backupController extends Controller
 {
@@ -70,26 +71,15 @@ class backupController extends Controller
      */
     public function create()
     {
-        Artisan::call('backup:run');
+        Artisan::queue('backup:run', ['--only-db' => 1]);
         return back();
     }
 
     public function download($file_name)
     {
+        $path = Storage::disk('public')->path($file_name);
 
-        $file = config('backup.backup.name') . '/' . $file_name;
-        $disk = Storage::disk(config('backup.backup.destination.disks')[0]);
-        if ($disk->exists($file)) {
-            $fs = Storage::disk(config('backup.backup.destination.disks')[0])->getDriver();
-            $stream = $fs->readStream($file);
-            return \Response::stream(function () use ($stream) {
-                fpassthru($stream);
-            }, 200, [
-                "Content-Type" => $fs->getMimetype($file),
-                "Content-Length" => $fs->getSize($file),
-                "Content-disposition" => "attachment; filename=\"" . basename($file) . "\"",
-            ]);
-        }
+        return response()->download($path);
     }
 
     /**
@@ -100,8 +90,7 @@ class backupController extends Controller
      */
     public function store()
     {
-        Artisan::call('backup:run');
-        return back();
+
     }
 
     /**

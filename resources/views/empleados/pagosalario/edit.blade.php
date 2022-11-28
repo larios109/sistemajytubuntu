@@ -15,35 +15,27 @@
         @method('PUT')
         <div class="card  mb-2">
             <div  class="row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">Codigo Colaborador</label>
-                <select class="form-control selectpicker col-sm-7 border" id="Empleado" name="Empleado"
-                data-live-search="true">
-                    @foreach($colaboradores as $colaborador)
-                        {
-                            @if ($colaborador->cod_empleado == $pagosalarioactu->cod_empleado)
-                            <option value="{{$colaborador->cod_empleado}}_{{$colaborador->sueldo_bruto}}" selected>{{$colaborador->cod_empleado}}.{{$colaborador->nombre}}</option>
-                            @else
-                            <option value="{{$colaborador->cod_empleado}}_{{$colaborador->sueldo_bruto}}">{{$colaborador->cod_empleado}}.{{$colaborador->nombre}}</option>
-                            @endif
-                        }
-                    @endforeach
-                </select>
-                @if ($errors->has('Empleado'))
-                    <div     
-                        id="Empleado-error"                                          
-                        class="error text-danger pl-3"
-                        for="Empleado"
-                        style="display: block;">
-                        <strong>{{$errors->first('Empleado')}}</strong>
-                    </div>
-                @endif
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre Colaborador</label>
+                <div class="col-sm-7">
+                    <input type="text" id="colaborador" name="colaborador" class="form-control" readonly="" value="{{$pagosalarioactu->nombre}}">
+                </div>
+                <button type="button" id="btnAñadir" class="btn btn-success btnAñadir" style="background:dodgerblue" data-bs-toggle="modal" data-bs-target="#modalAñadir">
+                <i class="fa fa-search"></i>&nbsp;
+                </button>
+            </div>
+
+            <div  class="row mb-3">
+                <div class="col-sm-7">
+                    <input type="number" id="codc" name="codc" hidden class="form-control" readonly=""
+                    value="{{$pagosalarioactu->cod_empleado}}">
+                </div>
             </div>
 
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Sueldo Bruto</label>
                  <div class="col-sm-7">
                     <input type="number" id="SueldoB" name="SueldoB" min="1" max="999999" maxlength="6" step="0.00001" 
-                    oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"  
+                    oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" readonly="" 
                     class="form-control" placeholder="Ingrese el sueldo bruto" value="{{$pagosalarioactu->sueldo_bruto}}">
                 </div>
                 @if ($errors->has('SueldoB'))
@@ -180,18 +172,72 @@
             </div>
         </div>
      </form>
+
+     <div class="modal fade" id="modalAñadir" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Buscar Materia</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+                    
+
+                        <!-- FORMULARIO -->
+                        <div class="table-responsive-sm mt-5">
+                            <table id="tablacolaboradores" class="table table-stripped table-bordered table-condensed table-hover">
+                                <thead class=thead-dark>
+                                    <tr>
+                                        <th class="text-center">Codigo</th>
+                                        <th class="text-center">Primer Nombre</th>
+                                        <th class="text-center">Primer Apellido</th>
+                                        <th class="text-center">Sueldo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $i=1; @endphp
+                                    @foreach($tabla_colaboradores as $tabla_colaborador)
+                                        <tr>
+                                            <td class="text-center">{{$tabla_colaborador->cod_empleado}}</td>
+                                            <td class="text-center">{{$tabla_colaborador->primer_nom}}</td>
+                                            <td class="text-center">{{$tabla_colaborador->primer_apellido}}</td>
+                                            <td class="text-center">{{$tabla_colaborador->sueldo_bruto}}</td>
+                                        </tr>
+                                    @php $i++; @endphp
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="cerrar" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('css')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+<style>
+.modal-lg { 
+    max-width: 90%; 
+}
+</style>
+<!-- datatables extension SELECT -->
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
 @stop
 
 @section('js')
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
-<!-- (Optional) Latest compiled and minified JavaScript translation files -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/i18n/defaults-*.min.js"></script> 
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script> 
+<!-- datatables extension SELECT -->
+<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>   
 
 <script>
     var input = document.getElementById('Descripcion');
@@ -246,13 +292,26 @@
 </script> 
 
 <script>
-
-    $("#Empleado").change(mostrarValores);//trae los valores del articulo cada vez que se seleccione
-
-    function mostrarValores()
-    {
-    datospago=document.getElementById('Empleado').value.split('_');
-    $("#SueldoB").val(datospago[1]);
-    }
+    $(document).ready(function() {
+        var table = $('#tablacolaboradores').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            },
+            // dom: 'Blfrtip',
+            dom: '<"pt-2 row" <"col-xl mt-2"l><"col-xl text-center"B><"col-xl text-right mt-2 buscar"f>> <"row"rti<"col"><p>>',
+            select:true,
+            select:{
+                style:'single'
+            }  
+        });
+        table.on('select', function () {
+            var data = table.row( { selected: true } ).data();
+            console.log(data);
+            $('#cerrar').click();
+            $('#colaborador').val(data[1]);
+            $('#codc').val(data[0]);
+            $('#SueldoB').val(data[3]);
+        })
+    });
 </script>
 @stop

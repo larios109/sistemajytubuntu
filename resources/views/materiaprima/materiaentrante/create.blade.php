@@ -17,8 +17,8 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre de la materia</label>
                  <div class="col-sm-7">
-                    <input type="text" id="Materia" name="Materia" class="form-control" maxlength="20" 
-                    onkeydown="return /[a-z, ]/i.test(event.key)" onkeyup="capitalizarPrimeraLetramateria()" 
+                    <input type="text" id="Materia" name="Materia" class="form-control" maxlength="90" 
+                    onkeydown="return /[a-z, 1-9]/i.test(event.key)" onkeyup="capitalizarPrimeraLetramateria()" 
                     placeholder="Ingrese el Nombre de la materia" value="{{old('Materia')}}">
                 </div>
                 @if ($errors->has('Materia'))
@@ -35,9 +35,9 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Descripcion</label>
                  <div class="col-sm-7">
-                    <input type="text" id="Descripcion" name="Descripcion" class="form-control" maxlength="40" 
-                    onkeyup="capitalizarPrimeraLetradescripcion()" 
-                    placeholder="Ingrese una descripcion" value="{{old('Descripcion')}}">
+                    <textarea type="text" id="Descripcion" name="Descripcion" class="form-control" maxlength="100" 
+                    onkeyup="capitalizarPrimeraLetradescripcion()"  rows="5" cols="20"
+                    placeholder="Ingrese una descripcion" value="{{old('Descripcion')}}"></textarea>
                 </div>
                 @if ($errors->has('Descripcion'))
                     <div               
@@ -76,9 +76,9 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Precio compra</label>
                  <div class="col-sm-7">
-                    <input type="number" id="Precio" name="Precio"  class="form-control" min="1" max="99999999" maxlength="8" 
+                    <input type="number" id="Precio" name="Precio"  class="form-control" min="1" max="99999999" maxlength="10" 
                     oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
-                    placeholder="Ingrese el Precio de la materia" value="{{old('Precio')}}">
+                    placeholder="Ingrese el Precio de la materia" step="0.00001" value="{{old('Precio')}}" required>
                 </div>
                 @if ($errors->has('Precio'))
                     <div          
@@ -94,7 +94,7 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Cantidad comprada</label>
                  <div class="col-sm-7">
-                    <input type="number" id="cantidad" name="cantidad"  class="form-control" min="1" max="99999999" maxlength="8" 
+                    <input type="number" id="cantidad" name="cantidad"  class="form-control" min="1" max="99999999" maxlength="10" 
                     oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
                     placeholder="Ingrese la cantidad" value="{{old('cantidad')}}">
                 </div>
@@ -112,7 +112,7 @@
             <div class="row mb-3">
                 <label for="calendar" class="col-sm-2 col-form-label">Fecha caducidad</label>
                  <div class="col-sm-7">
-                    <input type="date" id="caducidad" name="caducidad" class="form-control">
+                    <input type="date" id="caducidad" name="caducidad" class="form-control"  min="2022-01-01">
                 </div>
                 @if ($errors->has('caducidad'))
                     <div     

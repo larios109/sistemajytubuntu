@@ -8,16 +8,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\presguntasrequest;
+use App\Models\preguntas;
 
 class preguntasController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:visualizar preguntas|crear pregunta|editar pregunta|borrar pregunta',['only'=>['index']]);
+        $this->middleware('permission:visualizar preguntas|crear pregunta|editar pregunta|editar estado preguntas',['only'=>['index']]);
         $this->middleware('permission:crear pregunta',['only'=>['create','store']]);
         $this->middleware('permission:editar pregunta',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar pregunta',['only'=>['destroy']]);
+        $this->middleware('permission:editar estado preguntas',['only'=>['changestatus']]);
     }
     /**
      * Display a listing of the resource.
@@ -26,11 +27,10 @@ class preguntasController extends Controller
      */
     public function index()
     {
-        $response = Http::get('http://localhost:3000/preguntas');
+        $preguntas = DB::table('preguntas')->get();
         $user = Auth::user();
         $fecha = now();
-        return view('seguridad.preguntas.index',["user"=>$user, "fecha"=>$fecha])
-        ->with('preguntas', json_decode($response,true));
+        return view('seguridad.preguntas.index',["user"=>$user, "fecha"=>$fecha, "preguntas"=>$preguntas]);
     }
 
     /**
@@ -51,14 +51,14 @@ class preguntasController extends Controller
      */
     public function store(presguntasrequest $request)
     {
+        $pregunta = new preguntas;
+        $pregunta -> pregunta = $request -> get('pregunta');
+        $pregunta -> respuesta = $request -> get('respuesta');
+        $pregunta -> estado = 1;
+        $pregunta -> usr_registro = auth()->user()->name;
+        $pregunta -> save();
 
-        $response = Http::post('http://localhost:3000/preguntas/insertar', [
-            'pregunta' => $request->pregunta,
-            'respuesta' => $request->respuesta,
-            'usr_registro' =>  auth()->user()->name
-        ]);
-
-        return redirect()->route('preguntas.index');
+        return redirect()->route('preguntas.index')->with('store', 'registro');
     }
 
     /**
@@ -80,11 +80,7 @@ class preguntasController extends Controller
      */
     public function edit($cod_pregunta)
     {
-        $response=Http::get('http://localhost:3000/preguntas/'.$cod_pregunta);
-        $actualizarpregunta=json_decode($response->getbody()->getcontents())[0];
-
-        $data=[];
-        $data['actualizarpregunta']=$actualizarpregunta;
+        $actualizarpregunta = preguntas::findOrFail($cod_pregunta);
 
         return view ('seguridad.preguntas.edit',['actualizarpregunta'=>$actualizarpregunta]);
     }
@@ -103,13 +99,12 @@ class preguntasController extends Controller
             'respuesta'=>'required'
         ]);
 
-        $response = Http::put('http://localhost:3000/preguntas/actualizar/' . $cod_pregunta, [
-            'pregunta' => $request->pregunta,
-            'respuesta' => $request->respuesta,
-            'usr_registro' =>  auth()->user()->name
-        ]);
+        $preguntas = preguntas::findOrFail($cod_pregunta);
+        $preguntas ->pregunta = $request->pregunta;
+        $preguntas ->respuesta = $request->respuesta;
+        $preguntas ->update();
 
-        return redirect()->route('preguntas.index');
+        return redirect()->route('preguntas.index')->with('update', 'editado');
     }
 
     /**
@@ -120,7 +115,19 @@ class preguntasController extends Controller
      */
     public function destroy($cod_pregunta)
     {
-        $eliminar = Http::delete('http://localhost:3000/preguntas/eliminar/'.$cod_pregunta);
+
+    }
+
+    public function changestatus($cod_pregunta){ 
+
+        $estadoupdate = preguntas::select('estado')->where('cod_pregunta', $cod_pregunta)->first();
+    
+        if($estadoupdate->estado == 1)  {
+            $estado = 0;
+        }else{
+            $estado = 1;
+        }
+        preguntas::where('cod_pregunta', $cod_pregunta)->update(['estado' => $estado]);
         return redirect()->route('preguntas.index')->with('eliminar', 'Ok');
     }
 }

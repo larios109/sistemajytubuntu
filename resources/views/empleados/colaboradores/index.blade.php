@@ -53,15 +53,15 @@
                     <td class="text-center">{{date('Y-m-d', strtotime($colaborador->fecha_registro))}}</td>
                     <td class="text-center">
                         @can ('editar Colaborador')
-                        <form action="{{route('colaboradores.destroy',$colaborador->cod_empleado)}}" class="d-inline formulario-eliminar" method='POST' >
-                            <a href="{{route('colaboradores.edit',$colaborador->cod_empleado)}}" class="btn btn-warning btm-sm fa fa-edit"></a>
-                            @can ('borrar Colaborador')
-                            <button type="submit" class="btn btn-danger btm-sm fa fa-times-circle">   
-                             @csrf
-                             @method('DELETE')
-                            </button>
-                            @endcan
-                        </form>
+                            <a href="{{route('colaboradores.edit',$colaborador->cod_empleado)}}" class="btn btn-warning btn-sm">Editar</a>
+                        @endcan
+
+                        @can ('editar estado colaborador')
+                            @if($colaborador->estado == 1)
+                                <a type="button"  href="{{url('change-colaboradores/'.$colaborador->cod_empleado)}}" class="btn btn-sm btn-success">Activo</a>
+                            @else
+                                <a type="button" href="{{url('change-colaboradores/'.$colaborador->cod_empleado)}}" class="btn btn-sm btn-danger">Inactivo</a>
+                            @endif
                         @endcan
                     </td>
                 </tr>
@@ -95,33 +95,32 @@
 @if(session('eliminar') == 'Ok')
     <script>
         Swal.fire(
-            'Eliminado!',
-            'Se elimino con exito',
+            'Actualizado!',
+            'Se actualizo con exito el estado',
             'success'
         )
     </script>
 @endif
 
-<script>
-    $('.formulario-eliminar').submit(function(e){
-        e.preventDefault();
+@if(session('store') == 'registro')
+    <script>
+        Swal.fire(
+            'Registrado!',
+            'Datos registrado con exito',
+            'success'
+        )
+    </script>
+@endif
 
-        Swal.fire({
-            title: '¿Estas seguro?',
-            text: "Se eliminara definitivamente",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, Eliminar!',
-            cancelButtonText: 'Cancelar'
-            }).then((result) => {
-            if (result.isConfirmed) {
-                this.submit();
-            }
-        })
-    });
-</script>
+@if(session('update') == 'editado')
+    <script>
+        Swal.fire(
+            'Editado!',
+            'Datos editados con exito',
+            'success'
+        )
+    </script>
+@endif
 
 <script>
     $(document).ready(function() {

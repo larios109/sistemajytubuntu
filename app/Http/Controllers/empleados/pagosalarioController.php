@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\auth;
 use App\Models\pagosalario;
 use App\Http\Requests\pagorequest;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PagosalarioExport;
+use App\Imports\PagosalarioImport;
 
 class pagosalarioController extends Controller
 {
@@ -37,6 +40,17 @@ class pagosalarioController extends Controller
         return view('empleados.pagosalario.index',["user"=>$user, "fecha"=>$fecha, "pagosaalario"=>$pagosaalario]);
     }
 
+    public function plantilla()
+    {
+        $colaboradores = DB::table('colaboradores as c')
+        ->join('persona as p','c.cod_persona','=','p.cod_persona')
+        ->select('c.cod_empleado', 'c.sueldo_bruto', 'p.primer_nom', 'p.segund_nom', 'p.primer_apellido', 'p.segund_apellido', 'p.dni')
+        ->where('c.estado', '=', '1')
+        ->get();
+        return view('empleados.pagosalario.plantilla',["colaboradores"=>$colaboradores]);
+    }
+    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -46,7 +60,8 @@ class pagosalarioController extends Controller
     {
         $colaboradores = DB::table('colaboradores as c')
         ->join('persona as p','c.cod_persona','=','p.cod_persona')
-        ->select('c.cod_empleado', 'c.sueldo_bruto', DB::raw('CONCAT(p.primer_nom," ",p.primer_apellido) as nombre'))
+        ->select('c.cod_empleado', 'c.sueldo_bruto', 'p.primer_nom', 'p.segund_nom', 'p.primer_apellido', 'p.segund_apellido', 'p.dni')
+        ->where('c.estado', '=', '1')
         ->get();
         return view('empleados.pagosalario.create',["colaboradores"=>$colaboradores]);
     }
@@ -60,7 +75,7 @@ class pagosalarioController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'Empleado'=>'required',
+            'codc'=>'required',
             'SueldoB'=>'required',
             'IHSS'=>'required',
             'RAP'=>'required',
@@ -70,19 +85,20 @@ class pagosalarioController extends Controller
             'Sueldo'=>'required'
         ]);
 
-        $response = Http::post('http://localhost:3000/pago_salario/insertar', [
-            'cod_empleado' => $request->Empleado,
-            'sueldo_bruto' => $request->SueldoB,
-            'IHSS' => $request->IHSS,
-            'RAP' => $request->RAP,
-            'otras_deducciones' => $request->deducciones,
-            'vacaciones' => $request->vacaciones,
-            'descripcion_vacaciones' => $request->Descripcion,
-            'salario' => $request->Sueldo,
-            'usr_registro' =>  auth()->user()->name,
-        ]);
+        $pago = new pagosalario;
+        $pago -> cod_empleado = $request -> get('codc');
+        $pago -> sueldo_bruto = $request -> get('SueldoB');
+        $pago -> IHSS = $request -> get('IHSS');
+        $pago -> RAP = $request -> get('RAP');
+        $pago -> otras_deducciones = $request -> get('deducciones');
+        $pago -> vacaciones = $request -> get('vacaciones');
+        $pago -> descripcion_vacaciones = $request -> get('Descripcion');
+        $pago -> salario = $request -> get('Sueldo');
+        $pago -> usr_registro = auth()->user()->name;
+        $pago -> fecha_registro = now();
+        $pago -> save();
 
-        return redirect()->route('pagosalario.index');
+        return redirect()->route('pagosalario.index')->with('store', 'registro');
     }
 
     /**
@@ -104,13 +120,21 @@ class pagosalarioController extends Controller
      */
     public function edit($cod_pago)
     {
-        $colaboradores = DB::table('colaboradores as c')
-        ->join('persona as p','c.cod_persona','=','p.cod_persona')
-        ->select('c.cod_empleado', 'c.sueldo_bruto', DB::raw('CONCAT(p.primer_nom," ",p.primer_apellido) as nombre'))
+        $tabla_colaboradores = DB::table('colaboradores as c')
+        ->join('persona as p', 'c.cod_persona', '=', 'p.cod_persona')
+        ->select('c.cod_empleado', 'p.primer_nom', 'p.primer_apellido', 'c.sueldo_bruto')
+        ->where('c.estado', '=', '1')
         ->get();
-        $pagosalarioactu = pagosalario::findOrFail($cod_pago);
 
-        return view('empleados.pagosalario.edit',['pagosalarioactu'=>$pagosalarioactu, 'colaboradores'=>$colaboradores]);
+        $pagosalarioactu = DB::table('pago_salario as ps')
+        ->join('colaboradores as c', 'ps.cod_empleado', '=', 'c.cod_empleado')
+        ->join('persona as p','c.cod_persona','=','p.cod_persona')
+        ->select('ps.cod_empleado', DB::raw('CONCAT(p.primer_nom," ",p.primer_apellido) as nombre'), 'ps.cod_pago',
+        'ps.sueldo_bruto', 'ps.IHSS', 'ps.RAP', 'ps.otras_deducciones', 'ps.vacaciones', 'ps.descripcion_vacaciones',
+        'ps.salario')
+        ->where('ps.cod_pago', '=', $cod_pago)->first();
+
+        return view('empleados.pagosalario.edit',['pagosalarioactu'=>$pagosalarioactu, 'tabla_colaboradores'=>$tabla_colaboradores]);
     }
 
     /**
@@ -123,7 +147,7 @@ class pagosalarioController extends Controller
     public function update(Request $request, $cod_pago)
     {
         $request->validate([
-            'Empleado'=>'required',
+            'codc'=>'required',
             'SueldoB'=>'required',
             'IHSS'=>'required',
             'RAP'=>'required',
@@ -133,19 +157,18 @@ class pagosalarioController extends Controller
             'Sueldo'=>'required'
         ]);
 
-        $response = Http::put('http://localhost:3000/pago_salario/actualizar/' . $cod_pago, [
-            'cod_empleado' => $request->Empleado,
-            'sueldo_bruto' => $request->SueldoB,
-            'IHSS' => $request->IHSS,
-            'RAP' => $request->RAP,
-            'otras_deducciones' => $request->deducciones,
-            'vacaciones' => $request->vacaciones,
-            'descripcion_vacaciones' => $request->Descripcion,
-            'salario' => $request->Sueldo,
-            'usr_registro' =>  auth()->user()->name
-        ]);
+        $pago = pagosalario::findOrFail($cod_pago);
+        $pago -> cod_empleado = $request -> get('codc');
+        $pago -> sueldo_bruto = $request -> get('SueldoB');
+        $pago -> IHSS = $request -> get('IHSS');
+        $pago -> RAP = $request -> get('RAP');
+        $pago -> otras_deducciones = $request -> get('deducciones');
+        $pago -> vacaciones = $request -> get('vacaciones');
+        $pago -> descripcion_vacaciones = $request -> get('Descripcion');
+        $pago -> salario = $request -> get('Sueldo');
+        $pago -> update();
 
-        return redirect()->route('pagosalario.index');
+        return redirect()->route('pagosalario.index')->with('update', 'editado');
     }
 
     /**
@@ -158,5 +181,19 @@ class pagosalarioController extends Controller
     {
         $eliminar = Http::delete('http://localhost:3000/pago_salario/eliminar/'.$cod_pago); 
         return redirect()->route('pagosalario.index')->with('eliminar', 'Ok');
+    }
+
+    public function exportexcel()
+    {
+        return Excel::download(new PagosalarioExport, 'planilla.xlsx');
+    }
+
+    public function importexcel(Request $request)
+    {
+        $file = $request->file('import_file');
+
+        Excel::import(new PagosalarioImport, $file);
+
+        return redirect()->route('pagosalario.index')->with('succes', 'Ok');
     }
 }

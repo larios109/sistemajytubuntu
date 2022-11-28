@@ -27,7 +27,8 @@ class otrosinsumosrequest extends FormRequest
             'insumo'=>'required|unique:otros_insumos,insumo',
             'Descripcion'=>'required',
             'Precio'=>'required',
-            'cantidad'=>'required'
+            'cantidad'=>'required',
+            'Medida'=>'required'
         ];
     }
 }

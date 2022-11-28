@@ -17,8 +17,8 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre Insumo</label>
                  <div class="col-sm-7">
-                    <input type="text" id="insumo" name="insumo" class="form-control" maxlength="20" 
-                    onkeydown="return /[a-z, ]/i.test(event.key)" onkeyup="capitalizarPrimeraLetrainsumo()"
+                    <input type="text" id="insumo" name="insumo" class="form-control" maxlength="50" 
+                    onkeydown="return /[a-z, 1-9]/i.test(event.key)" onkeyup="capitalizarPrimeraLetrainsumo()"
                      placeholder="Ingrese el Nombre del Producto" value="{{old('insumo')}}">
                 </div>
                 @if ($errors->has('insumo'))
@@ -35,9 +35,9 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Descripcion</label>
                  <div class="col-sm-7">
-                    <input type="text" id="Descripcion" name="Descripcion" class="form-control" maxlength="40" 
+                    <textarea type="text" id="Descripcion" name="Descripcion" class="form-control" maxlength="100" 
                     onkeyup="capitalizarPrimeraLetradescripcion()" 
-                    placeholder="Ingrese una descripcion" value="{{old('Descripcion')}}">
+                    placeholder="Ingrese una descripcion" value="{{old('Descripcion')}}"></textarea>
                 </div>
                 @if ($errors->has('Descripcion'))
                     <div               
@@ -53,9 +53,9 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Precio Insumo</label>
                  <div class="col-sm-7">
-                    <input type="number" id="Precio" name="Precio"  class="form-control" min="1" max="99999999" maxlength="8" 
+                    <input type="number" id="Precio" name="Precio"  class="form-control" min="1" max="99999999" maxlength="9" 
                     oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
-                    placeholder="Ingrese el Precio de la materia" value="{{old('Precio')}}">
+                    placeholder="Ingrese el Precio de la materia" step="0.00001" value="{{old('Precio')}}">
                 </div>
                 @if ($errors->has('Precio'))
                     <div          
@@ -71,7 +71,7 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Cantidad comprada</label>
                  <div class="col-sm-7">
-                    <input type="number" id="cantidad" name="cantidad"  class="form-control" min="1" max="99999999" maxlength="8" 
+                    <input type="number" id="cantidad" name="cantidad"  class="form-control" min="1" max="99999999" maxlength="9" 
                     oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
                     placeholder="Ingrese la cantidad" value="{{old('cantidad')}}">
                 </div>
@@ -82,6 +82,29 @@
                         for="cantidad"
                         style="display: block;">
                         <strong>{{$errors->first('cantidad')}}</strong>
+                    </div>
+                @endif
+            </div>
+
+            <div  class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Tipo de medida</label>
+                <select class="col-sm-7" class="form-control" id="Medida" name="Medida">
+                    <option disabled selected>Escoja una medida</option>
+                    <option>Kilogramos</option>
+                    <option>Libras</option>
+                    <option>Unidad</option>
+                    <option>Quintales</option>
+                    <option>Onzas</option>
+                    <option>Litros</option>
+                    <option>Mililitros</option>
+                </select>
+                @if ($errors->has('Medida'))
+                    <div     
+                        id="Medida-error"                                          
+                        class="error text-danger pl-3"
+                        for="Medida"
+                        style="display: block;">
+                        <strong>{{$errors->first('Medida')}}</strong>
                     </div>
                 @endif
             </div>

@@ -5,6 +5,7 @@
 @section('css')
 <!-- <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet"> -->
 <link href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{ asset('css/switch.css') }}">
 @stop
 
 @section('title', '| Personas')
@@ -36,38 +37,34 @@
                 <th class="text-center">Primer Apellido</th>
                 <th class="text-center">Segundo Apellido</th>
                 <th class="text-center">DNI</th>
-                <th class="text-center">Genero</th>
                 <th class="text-center">Tipo Persona</th>
                 <th class="text-center">Opciones</th>
             </tr>
         </thead>
         <tbody>
-            @php $i=1; @endphp
-            @foreach($personas as $persona)
+            @foreach($personas as $cod_persona=>$persona)
                 <tr>
-                    <td class="text-center">{{$i}}</td>
-                    <td class="text-center">{{$persona["primer_nom"]}}</td>
-                    <td class="text-center">{{$persona["segund_nom"]}}</td>
-                    <td class="text-center">{{$persona["primer_apellido"]}}</td>
-                    <td class="text-center">{{$persona["segund_apellido"]}}</td>
-                    <td class="text-center">{{$persona["dni"]}}</td>
-                    <td class="text-center">{{$persona["genero"]}}</td>
-                    <td class="text-center">{{$persona["tipo_persona"]}}</td>
+                    <td class="text-center">{{$cod_persona+1}}</td>
+                    <td class="text-center">{{$persona->primer_nom}}</td>
+                    <td class="text-center">{{$persona->segund_nom}}</td>
+                    <td class="text-center">{{$persona->primer_apellido}}</td>
+                    <td class="text-center">{{$persona->segund_apellido}}</td>
+                    <td class="text-center">{{$persona->dni}}</td>
+                    <td class="text-center">{{$persona->tipo_persona}}</td>
                     <td class="text-center">
-                        @can ('editar persona')
-                        <form action="{{route('personas.destroy',$persona["cod_persona"])}}" class="d-inline formulario-eliminar" method='POST' >
-                            <a href="{{route('personas.edit',$persona["cod_persona"])}}" class="btn btn-warning btm-sm fa fa-edit"></a>
-                            @can ('borrar persona')
-                            <button type="submit" class="btn btn-danger btm-sm fa fa-times-circle">   
-                             @csrf
-                             @method('DELETE')
-                            </button>
+                            @can ('editar persona')
+                                <a type="button" href="{{route('personas.show',$persona->cod_persona)}}" class="btn btn-sm btn-warning">Editar</a>
                             @endcan
-                        </form>
-                        @endcan
-                </td>
+
+                            @can ('editar estado persona')
+                                @if($persona->estado == 1)
+                                <a type="button"  href="{{url('change-status/'.$persona->cod_persona)}}" class="btn btn-sm btn-success">Activo</a>
+                                    @else
+                                <a type="button" href="{{url('change-status/'.$persona->cod_persona)}}" class="btn btn-sm btn-danger">Inactivo</a>
+                                @endif
+                            @endcan
+                    </td>
                 </tr>
-            @php $i++; @endphp
             @endforeach
         </tbody>
     </table>
@@ -76,7 +73,6 @@
 @stop
 
 @section('css')
-
 @stop
 
 @section('js')
@@ -97,33 +93,32 @@
 @if(session('eliminar') == 'Ok')
     <script>
         Swal.fire(
-            'Eliminado!',
-            'Se elimino con exito',
+            'Actualizado!',
+            'Se actualizo con exito el estado',
             'success'
         )
     </script>
 @endif
 
-<script>
-    $('.formulario-eliminar').submit(function(e){
-        e.preventDefault();
+@if(session('store') == 'registro')
+    <script>
+        Swal.fire(
+            'Registrado!',
+            'Datos registrado con exito',
+            'success'
+        )
+    </script>
+@endif
 
-        Swal.fire({
-            title: '¿Estas seguro?',
-            text: "Se eliminara definitivamente",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, Eliminar!',
-            cancelButtonText: 'Cancelar'
-            }).then((result) => {
-            if (result.isConfirmed) {
-                this.submit();
-            }
-        })
-    });
-</script>
+@if(session('update') == 'editado')
+    <script>
+        Swal.fire(
+            'Editado!',
+            'Datos editados con exito',
+            'success'
+        )
+    </script>
+@endif
 
 <script>
     $(document).ready(function() {

@@ -17,34 +17,24 @@
             
             <div  class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Persona</label>
-                <select class="form-control selectpicker col-sm-7 border" id="persona" name="persona" 
-                data-live-search="true">
-                    <option disabled selected>Escoja un codigo de una persona</option>
-                    @foreach($personas as $persona)
-                        {
-                            @if ($persona->cod_persona == $colaborador->cod_persona)
-                            <option value="{{$persona->cod_persona}}" selected>{{$persona->cod_persona}}.{{$persona->primer_nom}} {{$persona->segund_nom}} {{$persona->primer_apellido}} {{$persona->segund_apellido}}</option>
-                            @else
-                            <option value="{{$persona->cod_persona}}">{{$persona->cod_persona}}.{{$persona->primer_nom}} {{$persona->segund_nom}} {{$persona->primer_apellido}} {{$persona->segund_apellido}}</option>
-                            @endif
-                        }
-                    @endforeach
-                </select>
-                @if ($errors->has('persona'))
-                    <div     
-                        id="persona-error"                                          
-                        class="error text-danger pl-3"
-                        for="persona"
-                        style="display: block;">
-                        <strong>{{$errors->first('persona')}}</strong>
-                    </div>
-                @endif
+                <div class="col-sm-7">
+                    <input type="text" id="persona" name="persona" class="form-control" readonly="" required value="{{$colaborador->nombre}}">
+                </div>
+                <button type="button" id="btnAñadir" class="btn btn-success btnAñadir" style="background:dodgerblue" data-bs-toggle="modal" data-bs-target="#modalAñadir">
+                <i class="fa fa-search"></i>&nbsp;
+                </button>
+            </div>
+
+            <div  class="row mb-3">
+                <div class="col-sm-7">
+                    <input type="number" id="codp" name="codp" hidden class="form-control" readonly="" value="{{$colaborador->cod_empleado}}">
+                </div>
             </div>
 
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Sueldo</label>
                  <div class="col-sm-7">
-                    <input type="number" id="Sueldo" name="Sueldo" min="1" max="999999" maxlength="6" 
+                    <input type="number" id="Sueldo" name="Sueldo" min="1" max="999999" maxlength="10" 
                     step="0.00001" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
                     class="form-control" placeholder="Ingrese el sueldo bruto" value="{{$colaborador->sueldo_bruto}}">
                 </div>
@@ -111,16 +101,95 @@
             </div>
         </div>
      </form>
+
+     <div class="modal fade" id="modalAñadir" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Buscar Materia</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+                    
+
+                        <!-- FORMULARIO -->
+                        <div class="table-responsive-sm mt-5">
+                        <table id="tablapersona" class="table table-stripped table-bordered table-condensed table-hover">
+                            <thead class=thead-dark>
+                                <tr>
+                                    <th class="text-center">Codigo</th>
+                                    <th class="text-center">Primer Nombre</th>
+                                    <th class="text-center">Segundo Nombre</th>
+                                    <th class="text-center">Primer Apellido</th>
+                                    <th class="text-center">Segundo Apellido</th>
+                                    <th class="text-center">DNI</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($personas as $persona)
+                                    <tr>
+                                        <td class="text-center">{{$persona->cod_persona}}</td>
+                                        <td class="text-center">{{$persona->primer_nom}}</td>
+                                        <td class="text-center">{{$persona->segund_nom}}</td>
+                                        <td class="text-center">{{$persona->primer_apellido}}</td>
+                                        <td class="text-center">{{$persona->segund_apellido}}</td>
+                                        <td class="text-center">{{$persona->dni}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="cerrar" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('css')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+<style>
+.modal-lg { 
+    max-width: 90%; 
+}
+</style>
+<!-- datatables extension SELECT -->
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
 @stop
 
 @section('js')
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
-<!-- (Optional) Latest compiled and minified JavaScript translation files -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/i18n/defaults-*.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script> 
+<!-- datatables extension SELECT -->
+<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>  
+
+<script>
+    $(document).ready(function() {
+        var table = $('#tablapersona').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            },
+            // dom: 'Blfrtip',
+            dom: '<"pt-2 row" <"col-xl mt-2"l><"col-xl text-center"B><"col-xl text-right mt-2 buscar"f>> <"row"rti<"col"><p>>',
+            select:true,
+            select:{
+                style:'single'
+            }  
+        });
+        table.on('select', function () {
+            var data = table.row( { selected: true } ).data();
+            console.log(data);
+            $('#cerrar').click();
+            $('#persona').val(data[1]);
+            $('#codp').val(data[0]);
+        })
+    });
+</script>
 @stop

@@ -7,16 +7,18 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
 use App\Http\Requests\materiaentranterequest;
+use Illuminate\Support\Facades\DB;
+use App\Models\mateiraentrante;
 
 class materiaentranteController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:visualizar materia entrante|Registrar materia entrante|editar materia entrante|borrar materia entrante',['only'=>['index']]);
+        $this->middleware('permission:visualizar materia entrante|Registrar materia entrante|editar materia entrante|editar estado materia',['only'=>['index']]);
         $this->middleware('permission:Registrar materia entrante',['only'=>['create','store']]);
         $this->middleware('permission:editar materia entrante',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar materia entrante',['only'=>['destroy']]);
+        $this->middleware('permission:editar estado materia',['only'=>['changestatus']]);
     }
     /**
      * Display a listing of the resource.
@@ -25,11 +27,11 @@ class materiaentranteController extends Controller
      */
     public function index()
     {
-        $response = Http::get('http://localhost:3000/materia_entrante');
+        $materiaentrante = DB::table('materia_prima_entrante')->get();
         $user = Auth::user();
         $fecha = now();
-        return view('materiaprima.materiaentrante.index',["user"=>$user, "fecha"=>$fecha])
-        ->with('materiaentrante', json_decode($response,true));
+        return view('materiaprima.materiaentrante.index',["user"=>$user, "fecha"=>$fecha, 
+        "materiaentrante"=>$materiaentrante]);
     }
 
     /**
@@ -50,17 +52,19 @@ class materiaentranteController extends Controller
      */
     public function store(materiaentranterequest $request)
     {
-        $response = Http::post('http://localhost:3000/materia_entrante/insertar', [
-            'nom_materia' => $request->Materia,
-            'descripcion' => $request->Descripcion,
-            'tip_medida' => $request->Medida,
-            'pre_compra' => $request->Precio,
-            'cant' => $request->cantidad,
-            'fec_caducidad' => $request->caducidad,
-            'usr_registro' =>  auth()->user()->name,
-        ]);
+        $materiaentrante = new mateiraentrante;
+        $materiaentrante -> nom_materia = $request -> get('Materia');
+        $materiaentrante -> descripcion = $request -> get('Descripcion');
+        $materiaentrante -> tip_medida = $request -> get('Medida');
+        $materiaentrante -> pre_compra = $request -> get('Precio');
+        $materiaentrante -> cant = $request -> get('cantidad');
+        $materiaentrante -> fec_compra = now();
+        $materiaentrante -> fec_caducidad  = $request -> get('caducidad');
+        $materiaentrante -> estado = 1;
+        $materiaentrante -> usr_registro = auth()->user()->name;
+        $materiaentrante -> save();
 
-        return redirect()->route('materiaentrante.index'); 
+        return redirect()->route('materiaentrante.index')->with('store', 'registro'); 
     }
 
     /**
@@ -119,7 +123,7 @@ class materiaentranteController extends Controller
             'usr_registro' =>  auth()->user()->name
         ]);
 
-        return redirect()->route('materiaentrante.index'); 
+        return redirect()->route('materiaentrante.index')->with('update', 'editado'); 
     }   
 
     /**
@@ -130,7 +134,19 @@ class materiaentranteController extends Controller
      */
     public function destroy($cod_materia_e)
     {
-        $eliminar = Http::delete('http://localhost:3000/materia_entrante/eliminar/'.$cod_materia_e);
-        return redirect()->route('materiaentrante.index')->with('eliminar', 'Ok'); 
+ 
+    }
+
+    public function changestatus($cod_materia_e){ 
+
+        $estadoupdate = mateiraentrante::select('estado')->where('cod_materia_e', $cod_materia_e)->first();
+    
+        if($estadoupdate->estado == 1)  {
+            $estado = 0;
+        }else{
+            $estado = 1;
+        }
+        mateiraentrante::where('cod_materia_e', $cod_materia_e)->update(['estado' => $estado]);
+        return redirect()->route('materiaentrante.index')->with('eliminar', 'Ok');
     }
 }

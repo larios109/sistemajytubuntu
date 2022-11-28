@@ -30,12 +30,12 @@
     <table id="tablaotrosinsumos" class="table table-stripped table-bordered table-condensed table-hover">
         <thead class=thead-dark>
             <tr>
-                <th class="text-center">Codigo Insumos</th>
+                <th class="text-center">Codigo</th>
                 <th class="text-center">Insumo</th>
                 <th class="text-center">Descripcion</th>
                 <th class="text-center">Precio</th>
                 <th class="text-center">Cantidad</th>
-                <th class="text-center">Fecha Registro</th>
+                <th class="text-center">Medida</th>
                 <th class="text-center">Opciones</th>
             </tr>
         </thead>
@@ -44,24 +44,32 @@
             @foreach($otrosinsumos as $otros)
                 <tr>
                     <td class="text-center">{{$i}}</td>
-                    <td class="text-center">{{$otros["insumo"]}}</td>
-                    <td class="text-center">{{$otros["descripcion"]}}</td>
-                    <td class="text-center">{{$otros["precio"]}}</td>
-                    <td class="text-center">{{$otros["cant"]}}</td>
-                    <td class="text-center">{{date('Y-m-d', strtotime($otros["fecha_registro"]))}}</td>
+                    <td class="text-center">{{$otros->insumo}}</td>
+                    <td class="text-center">{{$otros->descripcion}}</td>
+                    <td class="text-center">{{$otros->precio}}</td>
+                    <td class="text-center">
+                        @if($otros->cant > 100)
+                            <a type="button" class="btn btn-sm btn-success">{{$otros->cant}}</a>
+                        @elseif ($otros->cant > 50)
+                            <a type="button" class="btn btn-sm btn-warning">{{$otros->cant}}</a>
+                        @else ($otros->cant < 10)
+                            <a type="button" class="btn btn-sm btn-danger">{{$otros->cant}}</a>
+                        @endif
+                    </td>
+                    <td class="text-center">{{$otros->tip_medida}}</td>
                     <td class="text-center">
                         @can ('editar otros insumos')
-                        <form action="{{route('otrosinsumos.destroy',$otros["cod_insumos"])}}" class="d-inline formulario-eliminar" method="POST">
-                            <a href="{{route('otrosinsumos.edit',$otros["cod_insumos"])}}" class="btn btn-warning btm-sm fa fa-edit"></a>
-                            @can ('borrar otros insumos')
-                            <button type="submit" class="btn btn-danger btm-sm fa fa-times-circle">
-                            @csrf
-                            @method('DELETE')
-                            </button>
-                            @endcan
-                        </form>
+                            <a href="{{route('otrosinsumos.edit',$otros->cod_insumos)}}" class="btn btn-warning btn-sm">Editar</a>
                         @endcan
-                </td>
+
+                        @can ('editar estado insumos')
+                            @if($otros->estado == 1)
+                                <a type="button"  href="{{url('change-insumos/'.$otros->cod_insumos)}}" class="btn btn-sm btn-success">Activo</a>
+                            @else
+                                <a type="button" href="{{url('change-insumos/'.$otros->cod_insumos)}}" class="btn btn-sm btn-danger">Inactivo</a>
+                            @endif
+                        @endcan
+                    </td>
                 </tr>
             @php $i++; @endphp
             @endforeach
@@ -93,33 +101,32 @@
 @if(session('eliminar') == 'Ok')
     <script>
         Swal.fire(
-            'Eliminado!',
-            'Se elimino con exito',
+            'Actualizado!',
+            'Se actualizo con exito el estado',
             'success'
         )
     </script>
 @endif
 
-<script>
-    $('.formulario-eliminar').submit(function(e){
-        e.preventDefault();
+@if(session('store') == 'registro')
+    <script>
+        Swal.fire(
+            'Registrado!',
+            'Datos registrado con exito',
+            'success'
+        )
+    </script>
+@endif
 
-        Swal.fire({
-            title: '¿Estas seguro?',
-            text: "Se eliminara definitivamente",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, Eliminar!',
-            cancelButtonText: 'Cancelar'
-            }).then((result) => {
-            if (result.isConfirmed) {
-                this.submit();
-            }
-        })
-    });
-</script>
+@if(session('update') == 'editado')
+    <script>
+        Swal.fire(
+            'Editado!',
+            'Datos editados con exito',
+            'success'
+        )
+    </script>
+@endif
 
 <script>
     $(document).ready(function() {

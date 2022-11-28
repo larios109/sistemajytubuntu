@@ -20,7 +20,7 @@ class pagosalario extends Model
         'RAP', 
         'otras_deducciones', 
         'vacaciones', 
-        'descripion_vacaciones', 
+        'descripcion_vacaciones', 
         'salario', 
         'usr_registro',
         'fecha_registro',

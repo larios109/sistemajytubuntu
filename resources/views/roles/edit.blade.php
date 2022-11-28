@@ -54,45 +54,6 @@
                             <div class="col-md-4 col-xl-4">
                                 <div class="card text-dark bg-white">
                                     <div class="card-block">
-                                    <h5>Direcciones</h5>
-                                    @foreach($direcciones as $value)
-                                    <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}
-                                    {{$value->name}}</label>
-                                    <br/>
-                                    @endforeach                                               
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 col-xl-4">
-                                <div class="card text-dark bg-white">
-                                    <div class="card-block">
-                                    <h5>Correos</h5>
-                                    @foreach($Correos as $value)
-                                    <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}
-                                    {{$value->name}}</label>
-                                    <br/>
-                                    @endforeach                                               
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 col-xl-4">
-                                <div class="card text-dark bg-white">
-                                    <div class="card-block">
-                                    <h5>Telefonos</h5>
-                                    @foreach($telefonos as $value)
-                                    <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}
-                                    {{$value->name}}</label>
-                                    <br/>
-                                    @endforeach                                               
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 col-xl-4">
-                                <div class="card text-dark bg-white">
-                                    <div class="card-block">
                                     <h5>Colaboradores</h5>
                                     @foreach($colaboradores as $value)
                                     <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}

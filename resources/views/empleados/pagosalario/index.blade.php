@@ -16,11 +16,31 @@
 @section('content')
 
 @can ('Registrar pago salario')
-<a 
-    href="{{route('pagosalario.create')}}"
-    class="btn btn-outline-info text-center btn-block">
-    <spam>Registrar pago</spam> <i class="fas fa-plus-square"></i>
-</a>
+    <div class="row">
+        <div class="col-md-4 col-xl-4">
+                <a 
+                    href="{{route('pagosalario.create')}}"
+                    class="btn btn-outline-info text-center btn-block">
+                    <spam>Registrar pago</spam> <i class="fas fa-plus-square"></i>
+                </a>
+        </div>
+
+        <div class="col-md-4 col-xl-4">
+            <a href="{{route('pagosalario.excel')}}"
+            class="btn btn-outline-info text-center btn-block">
+            <spam>Plantilla</spam> <i class="fas fa-download"></i>
+            </a>
+        </div>
+
+        <div class="col-md-4 col-xl-4">
+            <button type="button" id="btnAñadir"
+                class="btn btn-outline-info text-center btn-block"
+                data-bs-toggle="modal" data-bs-target="#modalAñadir">
+                <spam>Subir plantilla</spam> <i class="fas fa-upload"></i>
+            </button>
+            </a>
+        </div>
+    </div>
 @endcan
 
 <span id="puser" hidden>{{$user->name}}</span>
@@ -58,9 +78,9 @@
                     <td class="text-center">
                         @can ('editar pago salario')
                         <form action="{{route('pagosalario.destroy',$pago->cod_pago)}}" class="d-inline formulario-eliminar" method='POST' >
-                            <a href="{{route('pagosalario.edit',$pago->cod_pago)}}" class="btn btn-warning btm-sm fa fa-edit"></a>
+                            <a href="{{route('pagosalario.edit',$pago->cod_pago)}}" class="btn btn-warning btn-sm">Editar</a>
                             @can ('borrar pago salario')
-                            <button type="submit" class="btn btn-danger btm-sm fa fa-times-circle">   
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar   
                              @csrf
                              @method('DELETE')
                             </button>
@@ -75,10 +95,33 @@
     </table>
 </div>
 
+    <div class="modal fade" id="modalAñadir" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Subir Plantilla</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+                    
+
+                    <!-- FORMULARIO -->
+                    <form action="{{route('pagosalario.import')}}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="file" name="import_file">
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="cerrar" data-bs-dismiss="modal">Cerrar</button>
+                            <button class="btn btn-primary" type="submit">Importar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('css')
-
 @stop
 
 @section('js')
@@ -94,6 +137,10 @@
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @if(session('eliminar') == 'Ok')
@@ -101,6 +148,36 @@
         Swal.fire(
             'Eliminado!',
             'Se elimino con exito',
+            'success'
+        )
+    </script>
+@endif
+
+@if(session('succes') == 'Ok')
+    <script>
+        Swal.fire(
+            'Registrados!',
+            'Datos Importados exitosamente',
+            'success'
+        )
+    </script>
+@endif
+
+@if(session('store') == 'registro')
+    <script>
+        Swal.fire(
+            'Registrado!',
+            'Datos registrado con exito',
+            'success'
+        )
+    </script>
+@endif
+
+@if(session('update') == 'editado')
+    <script>
+        Swal.fire(
+            'Editado!',
+            'Datos editados con exito',
             'success'
         )
     </script>

@@ -48,9 +48,9 @@
                     <td class="text-center">
                     @can ('editar rol')
                     <form action="{{route('roles.destroy',$role->id)}}"  method='POST'>
-                        <a href="{{route('roles.edit',$role->id)}}" class="btn btn-warning btm-sm fa fa-edit"></a>
+                        <a href="{{route('roles.edit',$role->id)}}" class="btn btn-warning btn-sm">Editar</a>
                         @can ('borrar rol')
-                        <button type="submit" class="btn btn-danger btm-sm fa fa-times-circle">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar
                         @csrf   
                         @method('DELETE')
                         </button>
@@ -82,6 +82,29 @@
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('store') == 'registro')
+    <script>
+        Swal.fire(
+            'Registrado!',
+            'Datos registrado con exito',
+            'success'
+        )
+    </script>
+@endif
+
+@if(session('update') == 'editado')
+    <script>
+        Swal.fire(
+            'Editado!',
+            'Datos editados con exito',
+            'success'
+        )
+    </script>
+@endif
+
 <script>
     $(document).ready(function() {
         $('#tablaroels').DataTable({

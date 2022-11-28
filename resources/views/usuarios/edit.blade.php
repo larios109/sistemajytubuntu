@@ -18,7 +18,7 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre</label>
                  <div class="col-sm-7">
-                    <input type="text" id="name" name="name" class="form-control" maxlength="30" 
+                    <input type="text" id="name" name="name" class="form-control" maxlength="30" readonly=""
                     onkeydown="return /[a-z ]/i.test(event.key)" onkeyup="this.value=this.value.toUpperCase();" 
                     placeholder="Ingrese el Nombre" value="{{$user->name}}">
                 </div>

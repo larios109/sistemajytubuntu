@@ -17,7 +17,7 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre Categoria</label>
                  <div class="col-sm-7">
-                    <input type="text" id="nombre" name="nombre" class="form-control" maxlength="20" 
+                    <input type="text" id="nombre" name="nombre" class="form-control" maxlength="40" 
                     onkeydown="return /[a-z ]/i.test(event.key)" onkeyup="capitalizarPrimeraLetracategoria()"
                      placeholder="Ingrese el Nombre de la categoria" value="{{old('nombre')}}" required>
                 </div>
@@ -35,9 +35,9 @@
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Descripcion</label>
                  <div class="col-sm-7">
-                    <input type="text" id="descripcion" name="descripcion" class="form-control" maxlength="60" 
+                    <textarea type="text" id="descripcion" name="descripcion" class="form-control" maxlength="100"
                     onkeydown="return /[a-z ]/i.test(event.key)" onkeyup="capitalizarPrimeraLetradescripcion()"
-                     placeholder="Ingrese una descripcion" value="{{old('descripcion')}}" required>
+                    placeholder="Ingrese una descripcion" value="{{old('descripcion')}}" required></textarea>
                 </div>
                 @if ($errors->has('categoria'))
                     <div               

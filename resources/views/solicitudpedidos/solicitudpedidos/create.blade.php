@@ -12,47 +12,42 @@
 <form action="{{route('solicitudpedidos.store')}}" method='POST'>
   @csrf
 
-  <div class="row mb-3">
-      <label for="nombre" class="col-sm-2 col-form-label">Cliente</label>
-      <select name="cod_cliente" id="cod_cliente" class="form-control selectpicker col-sm-7 border" data-live-search="true">
-      <option disabled selected>Escoja un cliente</option>
-        @foreach($clientes as $cliente)
-          <option value="{{$cliente->cod_persona}}">{{$cliente->primer_nom}} {{$cliente->primer_apellido}}</option>
-        @endforeach
-      </select>
-      @if ($errors->has('cod_cliente'))
-        <div     
-          id="cod_cliente-error"                                          
-          class="error text-danger pl-3"
-          for="cod_cliente"
-          style="display: block;">
-          <strong>{{$errors->first('cod_cliente')}}</strong>
-        </div>
-      @endif
-  </div>
-
-  <hr class="bg-dark border-1 border-top border-dark">
-
-  <div class="row">
-    <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
-      <div class="form-group">
-        <label>Producto</label>
-        <select name="pidarticulo" id="pidarticulo" class="form-control selectpicker border" data-live-search="true">
-        <option disabled selected>Escoja un producto</option>
-          @foreach($articulos as $articulo)
-            <option value="{{$articulo->idarticulo}}_{{$articulo->stock}}_{{$articulo->precio_producto}}">{{$articulo->articulo}}</option>
-          @endforeach
-        </select>
+    <div  class="row mb-3">
+      <label for="colFormLabel" class="col-sm-2 col-form-label">Cliente</label>
+      <div class="col-sm-7">
+          <input type="text" id="cliente" name="cliente" class="form-control" readonly="" required>
       </div>
+      <button type="button" id="btnAñadir" class="btn btn-success btnAñadir" style="background:dodgerblue" data-bs-toggle="modal" data-bs-target="#modalAñadir">
+      <i class="fa fa-search"></i>&nbsp;
+      </button>
+    </div>
+
+    <div  class="row mb-3">
+        <div class="col-sm-7">
+            <input type="number" id="codc" name="codc" hidden class="form-control" readonly="">
+        </div>
+    </div>
+
+    <hr class="bg-dark border-1 border-top border-dark">
+
+    <div  class="row mb-3">
+      <label for="colFormLabel" class="col-sm-2 col-form-label">Producto</label>
+        <div class="col-sm-7">
+            <input type="text" id="producto" name="producto" class="form-control" readonly="" required>
+        </div>
+        <button type="button" id="btnAñadir2" class="btn btn-success btnAñadir" style="background:dodgerblue" data-bs-toggle="modal" data-bs-target="#modalproductos">
+        <i class="fa fa-search"></i>&nbsp;
+        </button>
     </div>
 
     <div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
         <div class="form-group">
-            <label >Cantidad</label>
-            <input type="number" name="pcantidad" id="pcantidad" class="form-control" placeholder="Cantidad" min="1" 
-            max="99999999" maxlength="8" >
+            <input type="number" name="pidarticulo" id="pidarticulo" hidden class="form-control" readonly="" maxlength="10"
+            value="">
         </div>
     </div>
+
+  <div class="row">
 
     <div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
       <div class="form-group">
@@ -63,33 +58,47 @@
     
     <div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
       <div class="form-group">
-          <label for="precio_venta">Precio de producto</label>
+          <label for="precio_venta">Precio producto</label>
           <input type="number" disabled name="pprecio_venta" id="pprecio_venta" class="form-control" placeholder="Precio producto">
       </div>
     </div>
 
-    <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
+    <div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
+        <div class="form-group">
+            <label >Cantidad</label>
+            <input type="number" name="pcantidad" id="pcantidad" class="form-control" placeholder="Cantidad" min="1" 
+            max="99999999" maxlength="8">
+        </div>
+    </div>
+
+    <div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
       <div class="form-group">
-        <button class="btn btn-primary" type="button" id="bt_add">Agregar</button>
+          <label for="precio_venta">ISV</label>
+          <input type="number" name="ISV" id="ISV" class="form-control" placeholder="ISV en decimales 0.18" min="1" 
+            max="99" maxlength="8" step="0.01">
       </div>
     </div>
+
+      <div class="form-group-agregar">
+        <button class="btn btn-success" type="button" id="bt_add" style="background:dodgerblue">Añadir</button>
+      </div>
 
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <div class="table-responsive">
         <table id="detalles" class="table table-striped table-bordered table-condensed table-hover">
           <thead style="background-color: #A9D0F5">
-              <th>Opciones</th>
-              <th>Articulo</th>
-              <th>Cantidad</th>
-              <th>Precio Venta</th>
-              <th>Subtotal</th>
+              <th class="text-center">Opciones</th>
+              <th class="text-center">Articulo</th>
+              <th class="text-center">Cantidad</th>
+              <th class="text-center">Precio Venta</th>
+              <th class="text-center">Subtotal</th>
           </thead>
           <tfoot>
-            <th><h4>ISV</h4> <h4>Total</h4></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th><h4 id="isv">0.00</h4><input type="hidden" name="isv_total" id="isv_total"> <h4 id="total">0.00</h4><input type="hidden" name="total_venta" id="total_venta"></th>
+            <th class="text-center"></th>
+            <th class="text-center"></th>
+            <th class="text-center"></th>
+            <th class="text-center"><h4>ISV</h4> <h4>Total</h4></th>
+            <th class="text-center"><h4 id="isv">0.00</h4><input type="hidden" name="isv_total" id="isv_total"> <h4 id="total">0.00</h4><input type="hidden" name="total_venta" id="total_venta"></th>
           </tfoot>
           <tbody>              
           </tbody>
@@ -107,18 +116,169 @@
     </div>
   </div>
 </form>
+
+    <div class="modal fade" id="modalAñadir" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Buscar Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+                    
+
+                        <!-- FORMULARIO -->
+                        <div class="table-responsive-sm mt-5">
+                          <table id="tablapersonas" class="table table-stripped table-bordered table-condensed table-hover">
+                            <thead class=thead-dark>
+                                <tr>
+                                    <th class="text-center">Codigo</th>
+                                    <th class="text-center">Primer Nombre</th>
+                                    <th class="text-center">Segundo Nombre</th>
+                                    <th class="text-center">Primer Apellido</th>
+                                    <th class="text-center">Segundo Apellido</th>
+                                    <th class="text-center">DNI</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($clientes as $cliente)
+                                    <tr>
+                                        <td class="text-center">{{$cliente->cod_persona}}</td>
+                                        <td class="text-center">{{$cliente->primer_nom}}</td>
+                                        <td class="text-center">{{$cliente->segund_nom}}</td>
+                                        <td class="text-center">{{$cliente->primer_apellido}}</td>
+                                        <td class="text-center">{{$cliente->segund_apellido}}</td>
+                                        <td class="text-center">{{$cliente->dni}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="cerrar" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalproductos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Buscar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+                        <!-- FORMULARIO -->
+                        <div class="table-responsive-sm mt-5">
+                            <table id="tablalistaproductos" class="table table-stripped table-bordered table-condensed table-hover">
+                              <thead class=thead-dark>
+                                  <tr>
+                                      <th class="text-center">Codigo</th>
+                                      <th class="text-center">Categoria</th>
+                                      <th class="text-center">Nombre</th>
+                                      <th class="text-center">Precio</th>
+                                      <th class="text-center">Stock</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  @foreach($articulos as $articulo)
+                                      <tr>
+                                          <td class="text-center">{{$articulo->idarticulo}}</td>
+                                          <td class="text-center">{{ $articulo->categoria }}</td>
+                                          <td class="text-center">{{ $articulo->articulo }}</td>
+                                          <td class="text-center">{{ $articulo->precio_producto}}</td>
+                                          <td class="text-center">{{ $articulo->stock}}</td>
+                                      </tr>
+                                  @endforeach
+                              </tbody>
+                          </table>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="cerrar2" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('css')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+<style>
+.modal-lg { 
+    max-width: 90%; 
+}
+
+.form-group-agregar{
+  display:flex;
+  align-items:Center;
+}
+</style>
+<!-- datatables extension SELECT -->
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
 @stop
 
 @section('js')
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
-<!-- (Optional) Latest compiled and minified JavaScript translation files -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/i18n/defaults-*.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script> 
+<!-- datatables extension SELECT -->
+<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script> 
+
+<script>
+    $(document).ready(function() {
+        var table = $('#tablapersonas').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            },
+            // dom: 'Blfrtip',
+            dom: '<"pt-2 row" <"col-xl mt-2"l><"col-xl text-center"B><"col-xl text-right mt-2 buscar"f>> <"row"rti<"col"><p>>',
+            select:true,
+            select:{
+                style:'single'
+            }  
+        });
+        table.on('select', function () {
+            var data = table.row( { selected: true } ).data();
+            console.log(data);
+            $('#cerrar').click();
+            $('#codc').val(data[0]);
+            $('#cliente').val(data[1]);
+        })
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        var table = $('#tablalistaproductos').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            },
+            // dom: 'Blfrtip',
+            dom: '<"pt-2 row" <"col-xl mt-2"l><"col-xl text-center"B><"col-xl text-right mt-2 buscar"f>> <"row"rti<"col"><p>>',
+            select:true,
+            select:{
+                style:'single'
+            }  
+        });
+        table.on('select', function () {
+            var data = table.row( { selected: true } ).data();
+            console.log(data);
+            $('#cerrar2').click();
+            $('#pidarticulo').val(data[0]);
+            $('#producto').val(data[2]);
+            $('#pprecio_venta').val(data[3]);
+            $('#pstock').val(data[4]);
+        })
+    });
+</script>
 
 <script>
   $(document).ready(function(){
@@ -129,39 +289,35 @@
 
   var cont=0;
   total=0;
-  isv=0;
   isv2=0;
   subtotal=[];
   $("#guardar").hide();
-  $("#pidarticulo").change(mostrarValores);//trae los valores del articulo cada vez que se seleccione
-
-  function mostrarValores()
-  {
-    datosArticulo=document.getElementById('pidarticulo').value.split('_');
-    $("#pprecio_venta").val(datosArticulo[2]);
-    $("#pstock").val(datosArticulo[1]);
-  }
 
   function agregar(){
-    datosArticulo=document.getElementById('pidarticulo').value.split('_');
-    idarticulo=datosArticulo[0];
-    articulo=$("#pidarticulo option:selected").text();
+    // datosArticulo=document.getElementById('pidarticulo');
+    // idarticulo=$("#pidarticulo").val();
+    datosArticulo = $("#pidarticulo").val();
+    idarticulo = [datosArticulo];
+    articulo=$("#producto").val();
     cantidad=$("#pcantidad").val();
     precio_producto=$("#pprecio_venta").val();
     stock=$("#pstock").val();
-    if (idarticulo!="" && cantidad!="" && cantidad>0 && precio_producto!="")
+    isv=$("#ISV").val();
+
+    if (idarticulo!="" && cantidad!="" && cantidad>0 && precio_producto!="" && isv!="")
     {
         if (stock>=cantidad) 
         {
           subtotal[cont]=(cantidad*precio_producto);
-          isv=(isv+(0.18*subtotal[cont]));
-          isv2=0.18*subtotal[cont];
-          total=total+isv2+subtotal[cont];
-          var fila='<tr class="selected" id="fila'+cont+'"><td><button type="button" class="btn btn-danger" onclick="eliminar('+cont+');">X</button></td><td><input type="hidden" name="idarticulo[]" value="'+idarticulo+'">'+articulo+'</td><td><input type="number" readonly="" name="cantidad[]" value="'+cantidad+'"></td><td><input type="number" readonly="" name="precio_producto[]" value="'+precio_producto+'"></td><td>'+subtotal[cont]+'</td></tr>';
+          isv3=(isv*subtotal[cont]);
+          isv2=isv2+isv3;
+          total=total+isv3+subtotal[cont];
+
+          var fila='<tr class="selected" id="fila'+cont+'"><td><button type="button" class="btn btn-danger" onclick="eliminar('+cont+');">X</button></td><td><input type="hidden" name="idarticulo[]" value="'+idarticulo+'">'+articulo+'</td><td><input type="number" readonly="" name="cantidad[]" value="'+cantidad+'"></td><td><input type="number" readonly="" name="precio_producto[]" value="'+precio_producto+'"></td><td class="text-center">'+subtotal[cont]+'</td></tr>';
           cont++;
           limpiar();
-          $("#isv").html(isv);
-          $("#isv_total").val(isv);
+          $("#isv").html(isv2);
+          $("#isv_total").val(isv2);
           $("#total").html(total);
           $("#total_venta").val(total);
           evaluar();
@@ -174,7 +330,7 @@
     }
     else
     {
-      alert("Error al ingresar el detalle de la venta, revise los datos del articulo")
+      alert("Error al ingresar el detalle, revise los datos del producto")
     }
   
   }
@@ -182,6 +338,9 @@
     $("#pcantidad").val("");
     $("#pprecio_venta").val("");
     $("#pstock").val("");
+    $("#producto").val("");
+    $("#pidarticulo").val("");
+    $("#ISV").val("");
   }
   function evaluar()
   {
@@ -195,10 +354,10 @@
     }
    }
    function eliminar(index){
-    isv=(isv-(0.18*subtotal[cont]));
-    total=total-subtotal[index]-isv2; 
-    $("#isv").html(isv);
-    $("#isv_total").val(isv); 
+    isv2=isv2-isv3;
+    total=total-isv3-subtotal[index]; 
+    $("#isv").html(isv2);
+    $("#isv_total").val(isv2); 
     $("#total").html(total); 
     $("#total_venta").val(total);
     $("#fila" + index).remove();
