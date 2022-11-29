@@ -70,8 +70,8 @@ return [
             //     'timeout' => 60 * 5,
             // ],
             'dump' => [
-                // 'dump_binary_path' => env('DB_MYSQLDUMP_PATH'),
-                'dump_command_path' =>' ',
+                'dump_binary_path' => '/usr/local/mysql/bin',
+                // 'dump_command_path' =>' ',
             ],
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
