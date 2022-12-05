@@ -64,7 +64,7 @@ return [
             //     'timeout' => 60 * 5,
             // ],
             'dump' => [
-                'dump_binary_path' => '/usr/bin/mysqldump',
+                'dump_binary_path' => '/usr/bin/mysql',
                 'use_single_transaction',
                 'timeout' => 60 * 5,
             ],
