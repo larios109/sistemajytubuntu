@@ -14,6 +14,7 @@ use App\Http\Controllers\materiaprima\materiasalienteController;
 use App\Http\Controllers\productos\categoriaController;
 use App\Http\Controllers\productos\otrosinsumosController;
 use App\Http\Controllers\productos\productosController;
+use App\Http\Controllers\productos\kardexController;
 use App\Http\Controllers\productos\inventarioController;
 
 // Controllers ventas
@@ -80,6 +81,7 @@ Route::resource('otrosinsumos',otrosinsumosController::class)->names('otrosinsum
 Route::get('/change-insumos/{cod_insumos}', [otrosinsumosController::class, 'changestatus']);
 Route::resource('productos',productosController::class)->names('productos');
 Route::get('/change-productos/{idarticulo}', [productosController::class, 'changestatus']);
+Route::resource('kardex',kardexController::class)->names('kardex');
 
 // Route ventas
 Route::resource('solicitudpedidos',solicitudpedidosController::class)->names('solicitudpedidos');
@@ -116,3 +118,5 @@ Route::resource('primerasesion',primerasesionController::class)->names('primeras
 Route::resource('backups',backupController::class)->names('backups');
 Route::get('/descargar/{file_name}', [backupController::class, 'download'])->name('backups.descargar');
 Route::delete('backups', [backupController::class, 'clean'])->name('backups.clean');
+Route::get('/exportar', [backupController::class, 'exportar'])->name('backups.exportar');
+Route::get('/importar', [backupController::class, 'importar'])->name('backups.importar');

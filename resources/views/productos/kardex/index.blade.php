@@ -7,22 +7,13 @@
 <link href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 @stop
 
-@section('title', '| Productos')
+@section('title', '| Kardex')
 @section('content_header')
-    <h1 class="text-center">Productos</h1>
+    <h1 class="text-center">Kardex</h1>
     <hr class="bg-dark border-1 border-top border-dark">
 @stop
 
 @section('content')
-
-@can ('Registrar producto')
-<a 
-    href="{{route('productos.create')}}"
-    class="btn btn-outline-info text-center btn-block">
-    <spam>Registrar Producto</spam> <i class="fas fa-plus-square"></i>
-</a>
-@endcan
-
 <span id="puser" hidden>{{$user->name}}</span>
 <span id="pfecha" hidden>{{$fecha}}</span>
 
@@ -31,45 +22,23 @@
         <thead class=thead-dark>
             <tr>
                 <th class="text-center">Codigo</th>
-                <th class="text-center">Categoria</th>
-                <th class="text-center">Nombre</th>
-                <th class="text-center">Precio</th>
-                <th class="text-center">Stock</th>
+                <th class="text-center">Producto</th>
+                <th class="text-center">Cantidad</th>
+                <th class="text-center">Movimiento</th>
                 <th class="text-center">Descripcion</th>
-                <th class="text-center">Opciones</th>
+                <th class="text-center">Fecha Registro</th>
             </tr>
         </thead>
         <tbody>
             @php $i=1; @endphp
-            @foreach($productos as $produc)
+            @foreach($movimientos as $movimiento)
                 <tr>
                     <td class="text-center">{{$i}}</td>
-                    <td class="text-center">{{ $produc->categoria }}</td>
-                    <td class="text-center">{{ $produc->nombre }}</td>
-                    <td class="text-center">{{ $produc->precio_producto}}</td>
-                    <td class="text-center">
-                        @if($produc->stock > 100)
-                            <a type="button" class="btn btn-sm btn-success">{{ $produc->stock}}</a>
-                        @elseif ($produc->stock > 50)
-                            <a type="button" class="btn btn-sm btn-warning">{{ $produc->stock}}</a>
-                        @else ($produc->stock < 10)
-                            <a type="button" class="btn btn-sm btn-danger">{{ $produc->stock}}</a>
-                        @endif
-                    </td>
-                    <td class="text-center">{{ $produc->descripcion }}</td>
-                    <td class="text-center">
-                        @can ('editar producto')
-                            <a href="{{route('productos.edit', $produc->idarticulo)}}" class="btn btn-warning btn-sm">Editar</a>
-                        @endcan
-
-                        @can ('editar estado producto')
-                            @if($produc->estado == 1)
-                                <a type="button"  href="{{url('change-productos/'.$produc->idarticulo)}}" class="btn btn-sm btn-success">Activo</a>
-                                    @else
-                                <a type="button" href="{{url('change-productos/'.$produc->idarticulo)}}" class="btn btn-sm btn-danger">Inactivo</a>
-                            @endif
-                        @endcan
-                    </td>
+                    <td class="text-center">{{ $movimiento->nombre }}</td>
+                    <td class="text-center">{{ $movimiento->cant }}</td>
+                    <td class="text-center">{{ $movimiento->kardex }}</td>
+                    <td class="text-center">{{ $movimiento->usr_registro}}</td>
+                    <td class="text-center">{{date('Y-m-d', strtotime($movimiento->fecha_registro))}}</td>
                 </tr>
             @php $i++; @endphp
             @endforeach
@@ -94,38 +63,6 @@
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-@if(session('eliminar') == 'Ok')
-    <script>
-        Swal.fire(
-            'Actualizado!',
-            'Se actualizo con exito el estado',
-            'success'
-        )
-    </script>
-@endif
-
-@if(session('store') == 'registro')
-    <script>
-        Swal.fire(
-            'Registrado!',
-            'Datos registrado con exito',
-            'success'
-        )
-    </script>
-@endif
-
-@if(session('update') == 'editado')
-    <script>
-        Swal.fire(
-            'Editado!',
-            'Datos editados con exito',
-            'success'
-        )
-    </script>
-@endif
-
 <script>
     $(document).ready(function() {
         $('#tablalistaproductos').DataTable({
@@ -138,7 +75,7 @@
                 {
                     extend: 'pdf',
                     className: 'btn btn-danger glyphicon glyphicon-duplicate',
-                    title: 'Jota y T | Productos',
+                    title: 'Jota y T | Kardex',
                     messageTop: 'Usuario: ' +$("#puser").text() +' \n Fecha: ' +$("#pfecha").text(),
                     customize: function ( doc ) {
                     doc.content.splice( 0, 0, {

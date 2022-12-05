@@ -45,12 +45,6 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            // 'url' => env('DATABASE_URL'),
-            // 'host' => env('DB_HOST', '127.0.0.1'),
-            // 'port' => env('DB_PORT', '3306'),
-            // 'database' => env('DB_DATABASE', 'jytcomercializadora'),
-            // 'username' => env('DB_USERNAME', 'root'),
-            // 'password' => env('DB_PASSWORD', 'JotaYT2021**$$'),
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
@@ -69,16 +63,16 @@ return [
             //     'use_single_transaction',
             //     'timeout' => 60 * 5,
             // ],
-            // 'dump' => [
-            //     'dump_binary_path' => '\usr\local\mysql\bin',
-            //     'use_single_transaction',
-            //     'timeout' => 60 * 5,
-            // ],
             'dump' => [
-                'dump_binary_path' => '\usr\mysql\bin',
+                'dump_binary_path' => '\usr\bin\mysqldump',
                 'use_single_transaction',
-                 'timeout' => 60 * 5, 
+                'timeout' => 60 * 5,
             ],
+            // 'dump' => [
+            //     'dump_binary_path' => '\usr\mysql\bin',
+            //     'use_single_transaction',
+            //      'timeout' => 60 * 5, 
+            // ],
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],

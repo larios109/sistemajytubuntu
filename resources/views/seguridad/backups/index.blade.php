@@ -22,6 +22,12 @@
     <spam>Crear Backup</spam> <i class="fas fa-plus-square"></i>
 </a>
 
+<a 
+    href="{{ route('backups.exportar') }}" hidden
+    class="btn btn-outline-info text-center btn-block">
+    <spam>Exportar</spam> <i class="fas fa-plus-square"></i>
+</a>
+
 <div class="table-responsive-sm mt-5">
     <table id="tablabackup" class="table table-stripped table-bordered table-condensed table-hover">
         <thead class=thead-dark>
@@ -54,13 +60,15 @@
                             </button>
                             @endcan
                         </form>
+                        <a class="btn btn-warning btn-sm" href="{{ route('backups.importar') }}">
+                            <span>Restaurar</span>
+                        </a>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 </div>
-
 @stop
 
 @section('css')

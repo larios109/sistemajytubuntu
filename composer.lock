@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f54d0008e1ada71dcf6ba1b9d5ab0ba0",
+    "content-hash": "6debe7d9f1d6cba8a84c0874a89fe0aa",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -4158,6 +4158,65 @@
                 "source": "https://github.com/sabberworm/PHP-CSS-Parser/tree/8.4.0"
             },
             "time": "2021-12-11T13:40:54+00:00"
+        },
+        {
+            "name": "sarfraznawaz2005/backupmanager",
+            "version": "1.4.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sarfraznawaz2005/backupmanager.git",
+                "reference": "e6c6689596088248cc8ad1a3892b0a0632289496"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sarfraznawaz2005/backupmanager/zipball/e6c6689596088248cc8ad1a3892b0a0632289496",
+                "reference": "e6c6689596088248cc8ad1a3892b0a0632289496",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5|~6|~7|~8|~9"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Sarfraznawaz2005\\BackupManager\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "BackupManager": "Sarfraznawaz2005\\BackupManager\\Facades\\BackupManager"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sarfraznawaz2005\\BackupManager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sarfraz Ahmed",
+                    "email": "sarfraznawaz2005@gmail.com",
+                    "homepage": "http://codeinphp.github.io"
+                }
+            ],
+            "description": "laravel package to backup/restore files and database.",
+            "homepage": "https://github.com/sarfraznawaz2005/backupmanager",
+            "keywords": [
+                "backup",
+                "database",
+                "laravel",
+                "restore",
+                "server"
+            ],
+            "support": {
+                "issues": "https://github.com/sarfraznawaz2005/backupmanager/issues",
+                "source": "https://github.com/sarfraznawaz2005/backupmanager/tree/1.4.3"
+            },
+            "time": "2022-05-31T05:13:51+00:00"
         },
         {
             "name": "spatie/db-dumper",

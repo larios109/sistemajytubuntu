@@ -179,6 +179,7 @@ return [
         App\Providers\JetstreamServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Sarfraznawaz2005\BackupManager\ServiceProvider::class,
 
     ],
 
@@ -236,6 +237,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'PDF' => Barryvdh\DomPDF\Facades::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'BackupManager' => Sarfraznawaz2005\BackupManager\Facades\BackupManager::class,
 
     ],
 

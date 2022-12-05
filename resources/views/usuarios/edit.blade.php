@@ -20,7 +20,7 @@
                  <div class="col-sm-7">
                     <input type="text" id="name" name="name" class="form-control" maxlength="30" readonly=""
                     onkeydown="return /[a-z ]/i.test(event.key)" onkeyup="this.value=this.value.toUpperCase();" 
-                    placeholder="Ingrese el Nombre" value="{{$user->name}}">
+                    placeholder="Ingrese el Nombre" value="USUARIO NUEVO">
                 </div>
                 @if ($errors->has('Nombre'))
                     <div                 

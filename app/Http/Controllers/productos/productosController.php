@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\auth;
 use App\Http\Requests\productorequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\productos;
+use App\Models\kardex;
 
 class productosController extends Controller
 {
@@ -33,8 +34,11 @@ class productosController extends Controller
             ->join('categoria as c', 'a.idcategoria', '=', 'c.idcategoria')
             ->select('a.idarticulo', 'c.nombre AS categoria', 'a.nombre', 'a.precio_producto', 'a.stock', 'a.descripcion', 'a.estado')
             ->orderBy('a.idarticulo','desc')->get();
+
             $user = Auth::user();
+
             $fecha = now();
+
             return view('productos.productos.index',["productos"=>$productos, "user"=>$user, "fecha"=>$fecha]);
         }
     }
@@ -71,6 +75,14 @@ class productosController extends Controller
         $producto -> usr_registro = auth()->user()->name;
         $producto -> save();
 
+        $kardex = new kardex;
+        $kardex -> idarticulo = $producto->idarticulo;
+        $kardex -> movimiento = 'Entrada';
+        $kardex -> cant = $request -> get('stock');
+        $kardex -> usr_registro = auth()->user()->name;
+        $kardex -> fecha_registro = now();
+        $kardex -> save();
+
         return redirect()->route('productos.index')->with('store', 'registro');
     }
 
@@ -82,7 +94,7 @@ class productosController extends Controller
      */
     public function show($id)
     {
-        
+
     }
 
     /**
@@ -120,6 +132,15 @@ class productosController extends Controller
         $producto -> descripcion = $request -> get('descripcion');
         $producto -> stock = $request -> get('stock');
         $producto -> update();
+
+        $kardex = new kardex;
+        $kardex -> idarticulo = $producto->idarticulo;
+        $kardex -> movimiento = 'Entrada';
+        $kardex -> cant = $request -> get('stock');
+        $kardex -> usr_registro = auth()->user()->name;
+        $kardex -> fecha_registro = now();
+        $kardex -> save();
+
         return redirect()->route('productos.index')->with('update', 'editado');
     }
 

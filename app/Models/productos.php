@@ -22,9 +22,14 @@ class productos extends Model
         'usr_registro',
         'estado',
         'fec_registro',
-       ];
+    ];
    
-       protected $guarded =[
+    protected $guarded =[
    
-       ];
+    ];
+
+    public function kardex()
+    {
+        return $this->hasOne('App\Models\kardex', 'cod_kardex', 'movimiento', 'cant', 'usr_registro', 'fecha_registro');
+    }
 }

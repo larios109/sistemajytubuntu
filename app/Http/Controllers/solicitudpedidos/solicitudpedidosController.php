@@ -10,6 +10,7 @@ use App\Http\Requests\solicitudrequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\detallesolicitudpedido;
 use App\Models\solicitudpedido;
+use App\Models\kardex;
 use Carbon\Carbon;
 use Response;
 use Illuminate\Support\Collection;
@@ -94,6 +95,15 @@ class solicitudpedidosController extends Controller
                 $detallesolicitudpedido->cantidad=$cantidad[$cont];
                 $detallesolicitudpedido->precio_venta=$precio_venta[$cont];
                 $detallesolicitudpedido->save();
+
+                $kardex = new kardex;
+                $kardex -> idarticulo = $idarticulo[$cont];
+                $kardex -> movimiento = 'Salida';
+                $kardex -> cant = $cantidad[$cont];
+                $kardex -> usr_registro = auth()->user()->name;
+                $kardex -> fecha_registro = now();
+                $kardex -> save();
+
                 $cont=$cont+1;
             }
 

@@ -300,6 +300,10 @@ return [
                     'can'=> 'visualizar productos',
                 ],
                 [
+                    'text' => 'Kardex',
+                    'url'  => '/kardex',
+                ],
+                [
                     'text' => 'Otros Insumos',
                     'url'  => '/otrosinsumos',
                     'can'=> 'visualizar otros insumos',

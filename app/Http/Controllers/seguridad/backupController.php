@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Spatie\Backup\BackupDestination\BackupDestination;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class backupController extends Controller
 {
@@ -145,5 +147,28 @@ class backupController extends Controller
     private function isBackupDisk(string $diskName)
     {
         return in_array($diskName, config('backup.backup.destination.disks'));
+    }
+
+    public function exportar()
+    {
+        $ubicacionArchivoTemporal = getcwd() . DIRECTORY_SEPARATOR . "Respaldo_" . uniqid(date("Y-m-d") . "_", true) . ".sql";
+        
+        $salida = "";
+        
+        $codigoSalida = 0;
+        
+        $comando = sprintf("%s --user=\"%s\" --password=\"%s\" %s > %s", env("UBICACION_MYSQLDUMP"), env("DB_USERNAME"), env("DB_PASSWORD"), env("DB_DATABASE"), $ubicacionArchivoTemporal);
+        
+        exec($comando, $salida, $codigoSalida);
+        if ($codigoSalida !== 0) {
+            return "Código de salida distinto de 0, se obtuvo código (" . $codigoSalida . "). Revise los ajustes e intente de nuevo";
+        }
+
+        return response()->download($ubicacionArchivoTemporal)->deleteFileAfterSend(true);
+    }
+
+    public function importar()
+    {
+        return redirect()->route('backups.index')->with('succes', 'Ok');
     }
 }
