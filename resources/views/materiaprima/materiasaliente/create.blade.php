@@ -33,7 +33,7 @@
             <div  class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Materia Disponible</label>
                 <div class="col-sm-7">
-                    <input type="number" id="cantidadd" name="cantidadd" class="form-control" readonly="">
+                    <input type="number" id="materiaDisponible" name="materiaDisponible" class="form-control" readonly="">
                 </div>
             </div>
 
@@ -60,7 +60,7 @@
                  <div class="col-sm-7">
                     <input type="number" id="cantidad" name="cantidad" min="1" max="99999" maxlength="5" 
                     oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
-                    class="form-control" placeholder="Ingrese la Cantidad" value="{{old('cantidad')}}">
+                    class="form-control" placeholder="Ingrese la Cantidad" onclick="validar()" value="{{old('cantidad')}}">
                 </div>
                 @if ($errors->has('cantidad'))
                     <div               
@@ -193,21 +193,23 @@
     }
 </script> 
 
-<!-- <script>
-    const form = document.getElementById('formstore');
+<script>
+   
+    form = document.getElementById('formstore'); 
+    var cont=0;
 
     form.addEventListener("submit", function(event){
-            cantidad=$("#cantidadd").val();
-            cant=$("#cantidad").val(); 
-            if (cant > cantidad) {
+            var cantidadActual = parseInt(document.getElementById('materiaDisponible').value);
+            cantSaliente = $("#cantidad").val();
+            if (cantidadActual < cantSaliente) {
                 event.preventDefault();
+                $("#cantidad").val("");
                 alert("La cantidad a usar supera la cantidad actual");
-            }else{
-
+                cont++;
             }
-        }
+        } 
     )
-</script> -->
+</script>
 
 <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap5.min.js"></script>
@@ -234,7 +236,7 @@
             $('#cerrar').click();
             $('#Materia').val(data[1]);
             $('#codm').val(data[0]);
-            $('#cantidadd').val(data[4]);
+            $('#materiaDisponible').val(data[4]);
         })
     });
 </script>
