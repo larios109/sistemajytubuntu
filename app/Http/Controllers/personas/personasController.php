@@ -158,7 +158,7 @@ class personasController extends Controller
         $correo -> correo = $request -> get('Correo');
         $correo -> usr_registro = auth()->user()->name;
         $correo -> fec_registro = now();
-        $correo -> update();
+        $correo -> save();
 
         $telefono = telefonos::findOrFail($cod_persona);
         $telefono -> tip_telefono = $request -> get('tipotelefono');
