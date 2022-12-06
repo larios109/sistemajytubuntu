@@ -53,7 +53,7 @@
                     <td class="text-center">{{$persona->tipo_persona}}</td>
                     <td class="text-center">
                             @can ('editar persona')
-                                <a type="button" href="{{route('personas.show',$persona->cod_persona)}}" class="btn btn-sm btn-warning">Editar</a>
+                                <a type="button" href="{{route('personas.edit',$persona->cod_persona)}}" class="btn btn-sm btn-warning">Editar</a>
                             @endcan
 
                             @can ('editar estado persona')

@@ -217,13 +217,6 @@
                 @endif
             </div>
 
-            <div class="row mb-3">
-                 <div class="col-sm-7">
-                    <input type="text" hidden id="cod_direccion" name="cod_direccion" class="form-control" readonly=""
-                    value="{{$actualizarpersona->cod_direccion}}">
-                </div>
-            </div>
-
             <div  class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Departamento ID</label>
                 <select class="col-sm-7" class="form-control" id="Departamento" name="Departamento">
@@ -577,7 +570,7 @@
                  <div class="col-sm-7">
                     <textarea type="text" id="direccion" name="direccion" class="form-control" maxlength="200" rows="10" cols="40"
                     onkeyup="capitalizarPrimeraLetradireccion()" placeholder="Ingrese la referncia de la direccion" 
-                    value="{{$actualizarpersona->ref_direccion}}"></textarea>
+                    value="{{$actualizarpersona->ref_direccion}}">{{$actualizarpersona->ref_direccion}}</textarea>
                 </div>
                 @if ($errors->has('direccion'))
                     <div               

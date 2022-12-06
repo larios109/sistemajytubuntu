@@ -102,16 +102,16 @@ class personasController extends Controller
      */
     public function show($cod_persona)
     {
-        $actualizarpersona = DB::table('persona as p')
-        ->join('telefonos as t', 't.cod_persona', '=', 'p.cod_persona')
-        ->join('correos as c', 'c.cod_persona', '=', 'p.cod_persona')
-        ->join('direcciones as d', 'd.cod_persona', '=', 'p.cod_persona')
-        ->select('p.cod_persona', 'p.primer_nom', 'p.segund_nom', 'p.primer_apellido', 'p.segund_apellido',
-        'p.dni', 'p.genero', 'p.tipo_persona', 'c.cod_correo', 'c.correo', 't.cod_telefono', 't.telefono', 't.tip_telefono', 'd.cod_direccion'
-        ,'d.ref_direccion', 'd.departamento_id', 'd.municipio_id')
-        ->where('p.cod_persona', '=', $cod_persona)->first();
+        // $actualizarpersona = DB::table('persona as p')
+        // ->join('telefonos as t', 't.cod_persona', '=', 'p.cod_persona')
+        // ->join('correos as c', 'c.cod_persona', '=', 'p.cod_persona')
+        // ->join('direcciones as d', 'd.cod_persona', '=', 'p.cod_persona')
+        // ->select('p.cod_persona', 'p.primer_nom', 'p.segund_nom', 'p.primer_apellido', 'p.segund_apellido',
+        // 'p.dni', 'p.genero', 'p.tipo_persona', 'c.cod_correo', 'c.correo', 't.cod_telefono', 't.telefono', 't.tip_telefono', 'd.cod_direccion'
+        // ,'d.ref_direccion', 'd.departamento_id', 'd.municipio_id')
+        // ->where('p.cod_persona', '=', $cod_persona)->first();
 
-        return view('personas.personas.show',['actualizarpersona'=>$actualizarpersona]);
+        // return view('personas.personas.show',['actualizarpersona'=>$actualizarpersona]);
     }
 
     /**
@@ -131,7 +131,7 @@ class personasController extends Controller
         ,'d.ref_direccion', 'd.departamento_id', 'd.municipio_id')
         ->where('p.cod_persona', '=', $cod_persona)->first();
 
-        return view('personas.personas.show',['actualizarpersona'=>$actualizarpersona]);
+        return view('personas.personas.edit',['actualizarpersona'=>$actualizarpersona]);
     }
 
     /**
