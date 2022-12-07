@@ -5,6 +5,7 @@
 @section('css')
 <!-- <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet"> -->
 <link href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css" rel="stylesheet">
 @stop
 
 @section('title', '| Solicitud Pedidos')
@@ -14,6 +15,25 @@
 @stop
 
 @section('content')
+<div class="form-inline" id="form_main_ventas">
+    <div class="form-group mx-sm-3 mb-5">
+        <div class="input-group">
+            <div class="input-group-append">				
+                <span class="input-group-text"><div class="sb-nav-link-icon"></div>Fecha Inicio</span>
+            </div>
+            <input type="text" id="min" name="min" class="form-control" data-toggle="tooltip" data-placement="top" title="">
+        </div>
+    </div>
+
+    <div class="form-group mx-sm-3 mb-5">
+        <div class="input-group">
+            <div class="input-group-append">				
+                <span class="input-group-text"><div class="sb-nav-link-icon"></div>Fecha Fin</span>
+            </div>
+            <input type="text" id="max" name="max" class="form-control" data-toggle="tooltip" data-placement="top" title="">
+        </div>
+    </div>
+</div>
 
 @can ('Registrar solicitud')
 <a 
@@ -36,7 +56,7 @@
                 <th class="text-center">Apellido Cliente</th>
                 <th class="text-center">Impuesto</th>
                 <th class="text-center">Total</th>
-                <th class="text-center">Opciones</th>
+                <th class="text-center notexport">Opciones</th>
             </tr>
         </thead>
         <tbody>
@@ -68,7 +88,6 @@
         </tbody>
     </table>
 </div>
-
 @stop
 
 @section('css')
@@ -87,6 +106,10 @@
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+<script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
+<link href="https://code.jquery.com/jquery-3.5.1.js">
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -145,6 +168,9 @@
                     className: 'btn btn-danger glyphicon glyphicon-duplicate',
                     title: 'Jota y T | Solicitud Pedidos',
                     messageTop: 'Usuario: ' +$("#puser").text() +' \n Fecha: ' +$("#pfecha").text(),
+                    exportOptions: {
+                        columns: ':not(.notexport)'
+                    },
                     customize: function ( doc ) {
                     doc.content.splice( 0, 0, {
                             margin: [ 0, 0, 0, 12 ],
@@ -158,13 +184,58 @@
                 {
                     extend: 'print',
                     text: 'Imprimir',
-                    className: 'btn btn-secondary glyphicon glyphicon-duplicate'
+                    className: 'btn btn-secondary glyphicon glyphicon-duplicate',
+                    exportOptions: {
+                        columns: ':not(.notexport)'
+                    },
                 },
                 {
                     extend: 'excel',
-                    className: 'btn btn-success glyphicon glyphicon-duplicate'
+                    className: 'btn btn-success glyphicon glyphicon-duplicate',
+                    exportOptions: {
+                        columns: ':not(.notexport)'
+                    },
                 }
             ]
+        });
+    });
+
+    var minDate, maxDate;
+ 
+    // Custom filtering function which will search data in column four between two values
+    $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+            var min = minDate.val();
+            var max = maxDate.val();
+            var date = new Date( data[1] );
+    
+            if (
+                ( min === null && max === null ) ||
+                ( min === null && date <= max ) ||
+                ( min <= date   && max === null ) ||
+                ( min <= date   && date <= max )
+            ) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+    $(document).ready(function fecha() {
+        // Create date inputs
+        minDate = new DateTime($('#min'), {
+            format: 'D MMM YYYY'
+        });
+        maxDate = new DateTime($('#max'), {
+            format: 'D MMM YYYY'
+        });
+    
+        // DataTables initialisation
+        var table = $('#tablasolicitud').DataTable();
+    
+        // Refilter the table
+        $('#min, #max').on('change', function () {
+            table.draw();
         });
     });
 </script>

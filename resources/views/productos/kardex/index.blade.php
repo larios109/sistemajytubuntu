@@ -5,15 +5,37 @@
 @section('css')
 <!-- <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet"> -->
 <link href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css" rel="stylesheet">
 @stop
 
 @section('title', '| Kardex')
+
 @section('content_header')
     <h1 class="text-center">Kardex</h1>
     <hr class="bg-dark border-1 border-top border-dark">
 @stop
 
 @section('content')
+<div class="form-inline" id="form_main_ventas">
+    <div class="form-group mx-sm-3 mb-5">
+        <div class="input-group">
+            <div class="input-group-append">				
+                <span class="input-group-text"><div class="sb-nav-link-icon"></div>Fecha Inicio</span>
+            </div>
+            <input type="text" id="min" name="min" class="form-control" data-toggle="tooltip" data-placement="top" title="">
+        </div>
+    </div>
+
+    <div class="form-group mx-sm-3 mb-5">
+        <div class="input-group">
+            <div class="input-group-append">				
+                <span class="input-group-text"><div class="sb-nav-link-icon"></div>Fecha Fin</span>
+            </div>
+            <input type="text" id="max" name="max" class="form-control" data-toggle="tooltip" data-placement="top" title="">
+        </div>
+    </div>
+</div>
+
 <span id="puser" hidden>{{$user->name}}</span>
 <span id="pfecha" hidden>{{$fecha}}</span>
 
@@ -25,8 +47,8 @@
                 <th class="text-center">Producto</th>
                 <th class="text-center">Cantidad</th>
                 <th class="text-center">Movimiento</th>
-                <th class="text-center">Descripcion</th>
-                <th class="text-center">Fecha Registro</th>
+                <th class="text-center">Usuario Registro</th>
+                <th class="text-center notexport">Fecha Registro</th>
             </tr>
         </thead>
         <tbody>
@@ -63,6 +85,10 @@
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+<script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
+<link href="https://code.jquery.com/jquery-3.5.1.js">
+
 <script>
     $(document).ready(function() {
         $('#tablalistaproductos').DataTable({
@@ -77,6 +103,9 @@
                     className: 'btn btn-danger glyphicon glyphicon-duplicate',
                     title: 'Jota y T | Kardex',
                     messageTop: 'Usuario: ' +$("#puser").text() +' \n Fecha: ' +$("#pfecha").text(),
+                    exportOptions: {
+                        columns: ':not(.notexport)'
+                    },
                     customize: function ( doc ) {
                     doc.content.splice( 0, 0, {
                             margin: [ 0, 0, 0, 12 ],
@@ -89,13 +118,58 @@
                 {
                     extend: 'print',
                     text: 'Imprimir',
-                    className: 'btn btn-secondary glyphicon glyphicon-duplicate'
+                    className: 'btn btn-secondary glyphicon glyphicon-duplicate',
+                    exportOptions: {
+                        columns: ':not(.notexport)'
+                    },
                 },
                 {
                     extend: 'excel',
-                    className: 'btn btn-success glyphicon glyphicon-duplicate'
+                    className: 'btn btn-success glyphicon glyphicon-duplicate',
+                    exportOptions: {
+                        columns: ':not(.notexport)'
+                    },
                 }
             ]
+        });
+    });
+
+    var minDate, maxDate;
+ 
+    // Custom filtering function which will search data in column four between two values
+    $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+            var min = minDate.val();
+            var max = maxDate.val();
+            var date = new Date( data[5] );
+    
+            if (
+                ( min === null && max === null ) ||
+                ( min === null && date <= max ) ||
+                ( min <= date   && max === null ) ||
+                ( min <= date   && date <= max )
+            ) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+    $(document).ready(function fecha() {
+        // Create date inputs
+        minDate = new DateTime($('#min'), {
+            format: 'D MMM YYYY'
+        });
+        maxDate = new DateTime($('#max'), {
+            format: 'D MMM YYYY'
+        });
+    
+        // DataTables initialisation
+        var table = $('#tablalistaproductos').DataTable();
+    
+        // Refilter the table
+        $('#min, #max').on('change', function () {
+            table.draw();
         });
     });
 </script>

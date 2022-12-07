@@ -317,37 +317,6 @@ return [
             'can'=> 'visualizar solicitud pedidos',
         ],
         [
-            'text'    => 'Reportes',
-            'icon'    => 'fas fa-fw fa-file',
-            'can'=> 'visualizar reportes',
-            'submenu' => [
-                [
-                    'text' => 'Reporte Colaboradores',
-                    'url'  => '/reportempleado',
-                ],
-                [
-                    'text' => 'Reporte Telefonos y Correos',
-                    'url'  => '/telefonoscorreos',
-                ],
-                [
-                    'text' => 'Reporte Salarios',
-                    'url'  => '/reportesalarios',
-                ],
-                [
-                    'text' => 'Reporte Productos',
-                    'url'  => '/reporteproductos',
-                ],
-                [
-                    'text' => 'Reporte Materia Saliente',
-                    'url'  => '/rmateriasaliente',
-                ],
-                [
-                    'text' => 'Reporte Otros Insumos',
-                    'url'  => '/rotrosinsumos',
-                ],
-            ],
-        ],
-        [
             'text'    => 'Seguridad',
             'icon'    => 'fas fa-fw fa-lock',
             'submenu' => [
@@ -365,11 +334,6 @@ return [
                     'text' => 'Roles',
                     'url'  => '/roles',
                     'can'=> 'visualizar roles',
-                ],
-                [
-                    'text' => 'Preguntas',
-                    'url'  => '/preguntas',
-                    'can'=> 'visualizar preguntas',
                 ],
                 [
                     'text' => 'Usuarios',

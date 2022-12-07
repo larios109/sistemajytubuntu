@@ -34,7 +34,7 @@
                 <th class="text-center">Nombre</th>
                 <th class="text-center">Correo</th>
                 <th class="text-center">Rol</th>
-                <th class="text-center">Opciones</th>
+                <th class="text-center notexport">Opciones</th>
             </tr>
         </thead>
         <tbody>
@@ -157,6 +157,9 @@
                     className: 'btn btn-danger glyphicon glyphicon-duplicate',
                     title: 'Jota y T | Usuarios',
                     messageTop: 'Usuario: ' +$("#puser").text() +' \n Fecha: ' +$("#pfecha").text(),
+                    exportOptions: {
+                        columns: ':not(.notexport)'
+                    },
                     customize: function ( doc ) {
                     doc.content.splice( 0, 0, {
                             margin: [ 0, 0, 0, 12 ],
@@ -169,11 +172,17 @@
                 {
                     extend: 'print',
                     text: 'Imprimir',
-                    className: 'btn btn-secondary glyphicon glyphicon-duplicate'
+                    className: 'btn btn-secondary glyphicon glyphicon-duplicate',
+                    exportOptions: {
+                        columns: ':not(.notexport)'
+                    },
                 },
                 {
                     extend: 'excel',
-                    className: 'btn btn-success glyphicon glyphicon-duplicate'
+                    className: 'btn btn-success glyphicon glyphicon-duplicate',
+                    exportOptions: {
+                        columns: ':not(.notexport)'
+                    },
                 }
             ]
         });

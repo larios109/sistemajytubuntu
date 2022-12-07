@@ -33,7 +33,7 @@ class pagosalarioController extends Controller
         $pagosaalario = DB::table('pago_salario as ps')
         ->join('colaboradores as c','c.cod_empleado','=','ps.cod_empleado')
         ->join('persona as p','c.cod_persona','=','p.cod_persona')
-        ->select('ps.cod_pago', 'c.cod_empleado', DB::raw('CONCAT(p.primer_nom," ",p.primer_apellido) as nombre'), 'ps.sueldo_bruto', 'ps.IHSS', 'ps.RAP', 'ps.otras_deducciones' , 'ps.vacaciones', 'ps.descripcion_vacaciones', 'ps.salario')
+        ->select('ps.cod_pago', 'c.cod_empleado', DB::raw('CONCAT(p.primer_nom," ",p.primer_apellido) as nombre'), 'ps.sueldo_bruto', 'ps.IHSS', 'ps.RAP', 'ps.otras_deducciones' , 'ps.vacaciones', 'ps.descripcion_vacaciones', 'ps.salario', 'ps.fecha_registro')
         ->get();
         $user = Auth::user();
         $fecha = now();
