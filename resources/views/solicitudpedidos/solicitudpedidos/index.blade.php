@@ -70,18 +70,18 @@
                     <td class="text-center">{{$venta->total_venta}}</td>
                     <td class="text-center">
                         @can ('visualizar detalle solicitud pedidos')
-                        <form action="{{route('solicitudpedidos.destroy',$venta->idventa)}}" class="d-inline formulario-eliminar" method="POST">
                             <a href="{{route('solicitudpedidos.show',$venta->idventa)}}" class="btn btn-warning btn-sm">Detalle</a>
-                            @can ('borrar solicitud')
-                            <button type="submit"
-                            class="btn btn-danger btn-sm">Eliminar
-                            @csrf
-                            @method('DELETE')
-                            </button>
-                            @endcan
-                            <a type="button" href="{{route('download', $venta->idventa)}}" class="btn btn-primary btn-sm">Comprobante</a>
-                        </form>
                         @endcan
+
+                        @can ('')
+                            @if($venta->estado == 1)
+                            <a type="button"  href="{{url('change-solicitud/'.$venta->idventa)}}" class="btn btn-sm btn-success">Activo</a>
+                                @else
+                            <a type="button" href="{{url('change-solicitud/'.$venta->idventa)}}" class="btn btn-sm btn-danger">Inactivo</a>
+                            @endif
+                        @endcan
+
+                        <a type="button" href="{{route('download', $venta->idventa)}}" class="btn btn-primary btn-sm">Comprobante</a>
                     </td>
                 </tr>
             @endforeach
@@ -116,8 +116,8 @@
 @if(session('eliminar') == 'Ok')
     <script>
         Swal.fire(
-            'Eliminado!',
-            'Se elimino con exito',
+            'Actualizado!',
+            'Se actualizo con exito el estado',
             'success'
         )
     </script>
@@ -132,27 +132,6 @@
         )
     </script>
 @endif
-
-<script>
-    $('.formulario-eliminar').submit(function(e){
-        e.preventDefault();
-
-        Swal.fire({
-            title: '¿Estas seguro?',
-            text: "Se eliminara definitivamente",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, Eliminar!',
-            cancelButtonText: 'Cancelar'
-            }).then((result) => {
-            if (result.isConfirmed) {
-                this.submit();
-            }
-        })
-    });
-</script>
 
 <script>
     $(document).ready(function() {

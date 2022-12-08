@@ -86,9 +86,11 @@ Route::resource('kardex',kardexController::class)->names('kardex');
 // Route ventas
 Route::resource('solicitudpedidos',solicitudpedidosController::class)->names('solicitudpedidos');
 Route::get('/download/{idventa}', [solicitudpedidosController::class, 'downloadPDF'])->name('download');
+Route::get('/change-solicitud/{idventa}', [solicitudpedidosController::class, 'changestatus']);
 
 // Route empleados
 Route::resource('pagosalario',pagosalarioController::class)->names('pagosalario');
+Route::get('/change-pago/{cod_pago}', [pagosalarioController::class, 'changestatus']);
 Route::resource('usuarios',UsuarioController::class)->names('usuarios');
 Route::resource('colaboradores',colaboradoresController::class)->names('colaboradores');
 Route::get('/change-colaboradores/{cod_empleado}', [colaboradoresController::class, 'changestatus']);

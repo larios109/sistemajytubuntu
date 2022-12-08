@@ -18,6 +18,7 @@ class solicitudpedido extends Model
      'fecha_hora',
      'impuesto',
      'total_venta',
+     'estado',
      'usr_registro',
     ];
     protected $guarded =[

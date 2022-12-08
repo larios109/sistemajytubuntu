@@ -38,7 +38,7 @@ class solicitudpedidosController extends Controller
         {
            $ventas=DB::table('venta as v')
             ->join('persona as p','v.cod_persona','=','p.cod_persona')
-            ->select('v.idventa','v.cod_persona','p.primer_nom','p.primer_apellido', 'v.fecha_hora','v.impuesto', 'v.total_venta')
+            ->select('v.idventa','v.cod_persona','p.primer_nom','p.primer_apellido', 'v.fecha_hora','v.impuesto', 'v.total_venta', 'v.estado')
             ->orderBy('v.idventa')->get();
             $user = Auth::user();
             $fecha = now();
@@ -79,6 +79,7 @@ class solicitudpedidosController extends Controller
             $solicitudpedido->fecha_hora=now();
             $solicitudpedido->impuesto = $request->get('isv_total');
             $solicitudpedido->total_venta=$request->get('total_venta');
+            $solicitudpedido -> estado = 1;
             $solicitudpedido->usr_registro=auth()->user()->name;
             $solicitudpedido->save();
 
@@ -196,5 +197,18 @@ class solicitudpedidosController extends Controller
         $pdf = PDF::loadView('solicitudpedidos.solicitudpedidos.download',["venta"=>$venta,"detalles"=>$detalles]); 
 
         return $pdf->download();
+    }
+
+    public function changestatus($idventa){ 
+
+        $estadoupdate = solicitudpedido::select('estado')->where('idventa', $idventa)->first();
+    
+        if($estadoupdate->estado == 1)  {
+            $estado = 0;
+        }else{
+            $estado = 1;
+        }
+        solicitudpedido::where('idventa', $idventa)->update(['estado' => $estado]);
+        return redirect()->route('solicitudpedidos.index')->with('eliminar', 'Ok');
     }
 }

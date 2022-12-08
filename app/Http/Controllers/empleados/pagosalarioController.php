@@ -33,7 +33,8 @@ class pagosalarioController extends Controller
         $pagosaalario = DB::table('pago_salario as ps')
         ->join('colaboradores as c','c.cod_empleado','=','ps.cod_empleado')
         ->join('persona as p','c.cod_persona','=','p.cod_persona')
-        ->select('ps.cod_pago', 'c.cod_empleado', DB::raw('CONCAT(p.primer_nom," ",p.primer_apellido) as nombre'), 'ps.sueldo_bruto', 'ps.IHSS', 'ps.RAP', 'ps.otras_deducciones' , 'ps.vacaciones', 'ps.descripcion_vacaciones', 'ps.salario', 'ps.fecha_registro')
+        ->select('ps.cod_pago', 'c.cod_empleado', DB::raw('CONCAT(p.primer_nom," ",p.primer_apellido) as nombre'), 'ps.sueldo_bruto', 'ps.IHSS', 'ps.RAP', 'ps.otras_deducciones' , 'ps.vacaciones', 'ps.descripcion_vacaciones', 'ps.salario', 'ps.fecha_registro', 'ps.estado',
+        'ps.periodo_pago')
         ->get();
         $user = Auth::user();
         $fecha = now();
@@ -82,6 +83,7 @@ class pagosalarioController extends Controller
             'deducciones'=>'required',
             'vacaciones'=>'required',
             'Descripcion'=>'required',
+            'periodo' => 'required',
             'Sueldo'=>'required'
         ]);
 
@@ -93,7 +95,9 @@ class pagosalarioController extends Controller
         $pago -> otras_deducciones = $request -> get('deducciones');
         $pago -> vacaciones = $request -> get('vacaciones');
         $pago -> descripcion_vacaciones = $request -> get('Descripcion');
+        $pago -> periodo_pago = $request -> get('periodo');
         $pago -> salario = $request -> get('Sueldo');
+        $pago -> estado = 1;
         $pago -> usr_registro = auth()->user()->name;
         $pago -> fecha_registro = now();
         $pago -> save();
@@ -131,7 +135,7 @@ class pagosalarioController extends Controller
         ->join('persona as p','c.cod_persona','=','p.cod_persona')
         ->select('ps.cod_empleado', DB::raw('CONCAT(p.primer_nom," ",p.primer_apellido) as nombre'), 'ps.cod_pago',
         'ps.sueldo_bruto', 'ps.IHSS', 'ps.RAP', 'ps.otras_deducciones', 'ps.vacaciones', 'ps.descripcion_vacaciones',
-        'ps.salario')
+        'ps.salario', 'ps.periodo_pago', 'ps.fecha_registro')
         ->where('ps.cod_pago', '=', $cod_pago)->first();
 
         return view('empleados.pagosalario.edit',['pagosalarioactu'=>$pagosalarioactu, 'tabla_colaboradores'=>$tabla_colaboradores]);
@@ -154,6 +158,8 @@ class pagosalarioController extends Controller
             'deducciones'=>'required',
             'vacaciones'=>'required',
             'Descripcion'=>'required',
+            'periodo' => 'required',
+            'fecha_pago' => 'required',
             'Sueldo'=>'required'
         ]);
 
@@ -165,6 +171,8 @@ class pagosalarioController extends Controller
         $pago -> otras_deducciones = $request -> get('deducciones');
         $pago -> vacaciones = $request -> get('vacaciones');
         $pago -> descripcion_vacaciones = $request -> get('Descripcion');
+        $pago -> periodo_pago = $request -> get('periodo');
+        $pago -> fecha_registro = $request -> get('fecha_pago');
         $pago -> salario = $request -> get('Sueldo');
         $pago -> update();
 
@@ -195,5 +203,18 @@ class pagosalarioController extends Controller
         Excel::import(new PagosalarioImport, $file);
 
         return redirect()->route('pagosalario.index')->with('succes', 'Ok');
+    }
+
+    public function changestatus($cod_pago){ 
+
+        $estadoupdate = pagosalario::select('estado')->where('cod_pago', $cod_pago)->first();
+    
+        if($estadoupdate->estado == 1)  {
+            $estado = 0;
+        }else{
+            $estado = 1;
+        }
+        pagosalario::where('cod_pago', $cod_pago)->update(['estado' => $estado]);
+        return redirect()->route('pagosalario.index')->with('eliminar', 'Ok');
     }
 }

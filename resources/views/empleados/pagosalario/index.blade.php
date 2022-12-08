@@ -78,9 +78,9 @@
                 <th class="text-center">RAP</th>
                 <th class="text-center">Otras deducciones</th>
                 <th class="text-center">Vacaciones</th>
-                <th class="text-center">Descripcion vacaciones</th>
                 <th class="text-center">Salario</th>
                 <th class="text-center">Fecha Pago</th>
+                <th class="text-center">Periodo Pago</th>
                 <th class="text-center notexport">Opciones</th>
             </tr>
         </thead>
@@ -95,20 +95,20 @@
                     <td class="text-center">{{$pago->RAP}}</td>
                     <td class="text-center">{{$pago->otras_deducciones}}</td>
                     <td class="text-center">{{$pago->vacaciones}}</td>
-                    <td class="text-center">{{$pago->descripcion_vacaciones}}</td>
                     <td class="text-center">{{$pago->salario}}</td>
                     <td class="text-center">{{date('Y-m-d', strtotime($pago->fecha_registro))}}</td>
+                    <td class="text-center">{{$pago->periodo_pago}}</td>
                     <td class="text-center">
                         @can ('editar pago salario')
-                        <form action="{{route('pagosalario.destroy',$pago->cod_pago)}}" class="d-inline formulario-eliminar" method='POST' >
                             <a href="{{route('pagosalario.edit',$pago->cod_pago)}}" class="btn btn-warning btn-sm">Editar</a>
-                            @can ('borrar pago salario')
-                            <button type="submit" class="btn btn-danger btn-sm">Eliminar   
-                             @csrf
-                             @method('DELETE')
-                            </button>
-                            @endcan
-                        </form>
+                        @endcan
+
+                        @can ('')
+                            @if($pago->estado == 1)
+                            <a type="button"  href="{{url('change-pago/'.$pago->cod_pago)}}" class="btn btn-sm btn-success">Activo</a>
+                                @else
+                            <a type="button" href="{{url('change-pago/'.$pago->cod_pago)}}" class="btn btn-sm btn-danger">Inactivo</a>
+                            @endif
                         @endcan
                     </td>
                 </tr>
@@ -173,8 +173,8 @@
 @if(session('eliminar') == 'Ok')
     <script>
         Swal.fire(
-            'Eliminado!',
-            'Se elimino con exito',
+            'Actualizado!',
+            'Se actualizo con exito el estado',
             'success'
         )
     </script>
@@ -209,27 +209,6 @@
         )
     </script>
 @endif
-
-<script>
-    $('.formulario-eliminar').submit(function(e){
-        e.preventDefault();
-
-        Swal.fire({
-            title: '¿Estas seguro?',
-            text: "Se eliminara definitivamente",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, Eliminar!',
-            cancelButtonText: 'Cancelar'
-            }).then((result) => {
-            if (result.isConfirmed) {
-                this.submit();
-            }
-        })
-    });
-</script>
 
 <script>
     $(document).ready(function() {

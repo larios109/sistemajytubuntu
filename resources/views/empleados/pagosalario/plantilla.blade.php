@@ -12,6 +12,7 @@
         <th>Otras Deducciones</th>
         <th>Vacaciones</th>
         <th>Descripcion Vacaciones</th>
+        <th>Periodo Pago</th>
         <th>Sueldo</th>
     </tr>
 </thead>

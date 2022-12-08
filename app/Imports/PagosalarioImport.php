@@ -26,7 +26,9 @@ class PagosalarioImport implements ToModel, WithHeadingRow, WithCalculatedFormul
             'otras_deducciones' => $row['otras_deducciones'],
             'vacaciones'    => $row['vacaciones'],
             'descripcion_vacaciones'    => $row['descripcion_vacaciones'],
+            'periodo_pago' => $row['periodo_pago'],
             'salario'    => $row['sueldo'],
+            'estado'    => 1,
             'usr_registro'    => auth()->user()->name,
             'fecha_registro'    => now(),
         ]);
@@ -42,6 +44,7 @@ class PagosalarioImport implements ToModel, WithHeadingRow, WithCalculatedFormul
             '*.otras_deducciones' => ['numeric', 'required'],
             '*.vacaciones' => ['numeric', 'required'],
             '*.descripcion_vacaciones' => ['string', 'required'],
+            '*.periodo_pago' => ['string', 'required'],
             '*.sueldo' => ['numeric', 'required'],
         ];
     }

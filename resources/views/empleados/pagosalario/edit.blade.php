@@ -50,7 +50,7 @@
             </div>
 
             <div class="row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">IHSS</label>
+                <label for="colFormLabel" class="col-sm-2 col-form-label">IHSS (-)</label>
                  <div class="col-sm-7">
                     <input type="number" id="IHSS" name="IHSS" min="1" max="99999" maxlength="5" step="0.00001" 
                     oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
@@ -69,7 +69,7 @@
             </div>
 
             <div class="row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">RAP</label>
+                <label for="colFormLabel" class="col-sm-2 col-form-label">RAP (-)</label>
                  <div class="col-sm-7">
                     <input type="number" id="RAP" name="RAP" class="form-control" min="1" max="99999" maxlength="5" 
                     step="0.00001" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" onchange="res(this.value);"  
@@ -87,7 +87,7 @@
             </div>
 
             <div class="row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">Otras deducciones</label>
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Otras deducciones (-)</label>
                  <div class="col-sm-7">
                     <input type="number" id="deducciones" name="deducciones" min="1" max="99999" maxlength="5" 
                     step="0.00001" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" onchange="res(this.value);"  class="form-control" 
@@ -105,7 +105,7 @@
             </div>
 
             <div class="row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">vacaciones</label>
+                <label for="colFormLabel" class="col-sm-2 col-form-label">vacaciones (-)</label>
                  <div class="col-sm-7">
                     <input type="number" id="vacaciones" name="vacaciones" min="1" max="99999" maxlength="5" 
                     step="0.00001" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" onchange="res(this.value);"  
@@ -126,7 +126,7 @@
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Descripcion vacaciones</label>
                  <div class="col-sm-7">
                     <input type="text" id="Descripcion" name="Descripcion" class="form-control" maxlength="15" 
-                    onkeyup="capitalizarPrimeraLetradescripcion()" placeholder="Ingrese la Descripcion de vacaciones" 
+                    onkeyup="capitalizarPrimeraLetradescripciondescripcion()" placeholder="Ingrese la Descripcion de vacaciones" 
                     value="{{$pagosalarioactu->descripcion_vacaciones}}">
                 </div>
                 @if ($errors->has('Descripcion'))
@@ -137,6 +137,42 @@
                         style="display: block;">
                         <strong>{{$errors->first('Descripcion')}}</strong>
                      </div>
+                @endif
+            </div>
+
+            <div class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Periodo Pago</label>
+                 <div class="col-sm-7">
+                    <input type="text" id="periodo" name="periodo" class="form-control" 
+                    maxlength="40"  onkeyup="capitalizarPrimeraLetradescripcion()" 
+                    placeholder="Ingrese la Descripcion de vacaciones" value="{{$pagosalarioactu->periodo_pago}}">
+                </div>
+                @if ($errors->has('periodo'))
+                    <div
+                        id="periodo-error"                                              
+                        class="error text-danger pl-3"
+                        for="periodo"
+                        style="display: block;">
+                        <strong>{{$errors->first('periodo')}}</strong>
+                     </div>
+                @endif
+            </div>
+
+            
+            <div class="row mb-3">
+                <label for="calendar" class="col-sm-2 col-form-label">Fecha Pago</label>
+                 <div class="col-sm-7">
+                    <input type="date" id="fecha_pago" name="fecha_pago" class="form-control" min="2022-01-01"
+                    value="{{date('Y-m-d', strtotime($pagosalarioactu->fecha_registro))}}">
+                </div>
+                @if ($errors->has('fecha_pago'))
+                    <div     
+                        id="fecha_pago-error"                                          
+                        class="fecha_pago text-danger pl-3"
+                        for="fecha_pago"
+                        style="display: block;">
+                        <strong>{{$errors->first('fecha_pago')}}</strong>
+                    </div>
                 @endif
             </div>
 
@@ -242,7 +278,7 @@
 <script>
     var input = document.getElementById('Descripcion');
     //función que capitaliza la primera letra
-    function capitalizarPrimeraLetradescripcion() {
+    function capitalizarPrimeraLetradescripciondescripcion() {
     //almacenamos el valor del input
     var palabra = input.value;
     //Si el valor es nulo o undefined salimos
@@ -255,6 +291,23 @@
     }
     //escribimos la palabra con la primera letra mayuscula
     input.value = mayuscula.concat(minuscula);
+    }
+
+    var input2 = document.getElementById('periodo');
+    //función que capitaliza la primera letra
+    function capitalizarPrimeraLetradescripcion() {
+    //almacenamos el valor del input
+    var palabra = input2.value;
+    //Si el valor es nulo o undefined salimos
+    if(!input2.value) return;
+    // almacenamos la mayuscula
+    var mayuscula = palabra.substring(0,1).toUpperCase();
+    //si la palabra tiene más de una letra almacenamos las minúsculas
+    if (palabra.length > 0) {
+        var minuscula = palabra.substring(1).toLowerCase();
+    }
+    //escribimos la palabra con la primera letra mayuscula
+    input2.value = mayuscula.concat(minuscula);
     }
 </script>
 

@@ -22,6 +22,8 @@ class pagosalario extends Model
         'vacaciones', 
         'descripcion_vacaciones', 
         'salario', 
+        'estado',
+        'periodo_pago',
         'usr_registro',
         'fecha_registro',
     ];
