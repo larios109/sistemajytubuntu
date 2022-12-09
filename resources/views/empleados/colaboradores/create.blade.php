@@ -46,6 +46,22 @@
                 @endif
             </div>
 
+            <div class="row mb-3">
+                <label for="calendar" class="col-sm-2 col-form-label">Fecha Entrada</label>
+                 <div class="col-sm-7">
+                    <input type="date" id="Fecha" name="Fecha" class="form-control">
+                </div>
+                @if ($errors->has('Fecha'))
+                    <div     
+                        id="Fecha-error"                                          
+                        class="Fecha text-danger pl-3"
+                        for="Fecha"
+                        style="display: block;">
+                        <strong>{{$errors->first('Fecha')}}</strong>
+                    </div>
+                @endif
+            </div>
+
             <div class="row">
                 <div class="col-sm-6 col-xs-12 mb-2">
                     <a href="{{route('colaboradores.index')}}"

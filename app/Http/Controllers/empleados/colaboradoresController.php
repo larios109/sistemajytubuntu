@@ -66,7 +66,7 @@ class colaboradoresController extends Controller
         $colaborador = new colaboradores;
         $colaborador -> cod_persona  = $request -> get('codp');
         $colaborador -> sueldo_bruto = $request -> get('Sueldo');
-        $colaborador -> fecha_registro = now();
+        $colaborador -> fecha_registro = $request -> get('Fecha');
         $colaborador -> estado = 1;
         $colaborador -> usr_registro = auth()->user()->name;
         $colaborador -> save();
@@ -96,7 +96,7 @@ class colaboradoresController extends Controller
         $colaborador = DB::table('colaboradores as c')
         ->join('persona as p','c.cod_persona','=','p.cod_persona')
         ->select('c.cod_empleado', DB::raw('CONCAT(p.primer_nom," ",p.primer_apellido) as nombre'), 'c.sueldo_bruto', 
-        'c.motivo_salida')
+        'c.motivo_salida', 'c.fecha_registro')
         ->where('c.cod_empleado', '=', $cod_empleado)->first();
 
         $personas = DB::table('persona')
@@ -119,6 +119,7 @@ class colaboradoresController extends Controller
         $colaborador = colaboradores::findOrFail($cod_empleado);
         $colaborador -> cod_persona  = $request -> get('codp');
         $colaborador -> sueldo_bruto = $request -> get('Sueldo');
+        $colaborador -> fecha_registro = $request -> get('Fecha');
         $colaborador -> fecha_salida = $request -> get('salida');
         $colaborador -> motivo_salida = $request -> get('motivo');
         $colaborador -> update();

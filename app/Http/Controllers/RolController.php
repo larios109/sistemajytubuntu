@@ -68,43 +68,39 @@ class RolController extends Controller
         ->select('id', 'name', 'guard_name')
         ->whereBetween('id', [25, 28])->get();
 
+        $kardex = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [29, 31])->get();
+
         $insumos = DB::table('permissions')
         ->select('id', 'name', 'guard_name')
-        ->whereBetween('id', [29, 32])->get();
+        ->whereBetween('id', [32, 35])->get();
 
         $solicitud = DB::table('permissions')
         ->select('id', 'name', 'guard_name')
-        ->whereBetween('id', [33, 36])->get();
-
-        $reportes = DB::table('permissions')
-        ->select('id', 'name', 'guard_name')
-        ->where('id', '=', '37')->get();
+        ->whereBetween('id', [36, 39])->get();
 
         $bitacora = DB::table('permissions')
         ->select('id', 'name', 'guard_name')
-        ->where('id', '=', '38')->get();
+        ->where('id', '=', '40')->get();
 
         $roles = DB::table('permissions')
         ->select('id', 'name', 'guard_name')
-        ->whereBetween('id', [39, 42])->get();
-
-        $preguntas = DB::table('permissions')
-        ->select('id', 'name', 'guard_name')
-        ->whereBetween('id', [43, 46])->get();
+        ->whereBetween('id', [41, 44])->get();
 
         $backup = DB::table('permissions')
         ->select('id', 'name', 'guard_name')
-        ->whereBetween('id', [47, 49])->get();
+        ->whereBetween('id', [49, 51])->get();
 
         $usuaruios = DB::table('permissions')
         ->select('id', 'name', 'guard_name')
-        ->whereBetween('id', [50, 53])->get();
+        ->whereBetween('id', [52, 55])->get();
 
         return view ('roles.create',compact('permission'),["personas"=>$personas, "usuaruios"=>$usuaruios,
         "colaboradores"=>$colaboradores,
         "pagosalario"=>$pagosalario, "materiaentrante"=>$materiaentrante, "materiasaliente"=>$materiasaliente,
-        "categorias"=>$categorias, "productos"=>$productos, "insumos"=>$insumos, "solicitud"=>$solicitud,
-        "reportes"=>$reportes, "bitacora"=>$bitacora, "roles"=>$roles, "preguntas"=>$preguntas, "backup"=>$backup]);
+        "categorias"=>$categorias, "productos"=>$productos, "insumos"=>$insumos, "kardex"=>$kardex, "solicitud"=>$solicitud,
+         "bitacora"=>$bitacora, "roles"=>$roles, "backup"=>$backup]);
     }
 
     /**
@@ -177,47 +173,43 @@ class RolController extends Controller
         ->select('id', 'name', 'guard_name')
         ->whereBetween('id', [25, 28])->get();
 
+        $kardex = DB::table('permissions')
+        ->select('id', 'name', 'guard_name')
+        ->whereBetween('id', [29, 31])->get();
+
         $insumos = DB::table('permissions')
         ->select('id', 'name', 'guard_name')
-        ->whereBetween('id', [29, 32])->get();
+        ->whereBetween('id', [32, 35])->get();
 
         $solicitud = DB::table('permissions')
         ->select('id', 'name', 'guard_name')
-        ->whereBetween('id', [33, 36])->get();
-
-        $reportes = DB::table('permissions')
-        ->select('id', 'name', 'guard_name')
-        ->where('id', '=', '37')->get();
+        ->whereBetween('id', [36, 39])->get();
 
         $bitacora = DB::table('permissions')
         ->select('id', 'name', 'guard_name')
-        ->where('id', '=', '38')->get();
+        ->where('id', '=', '40')->get();
 
         $roles = DB::table('permissions')
         ->select('id', 'name', 'guard_name')
-        ->whereBetween('id', [39, 42])->get();
-
-        $preguntas = DB::table('permissions')
-        ->select('id', 'name', 'guard_name')
-        ->whereBetween('id', [43, 46])->get();
+        ->whereBetween('id', [41, 44])->get();
 
         $backup = DB::table('permissions')
         ->select('id', 'name', 'guard_name')
-        ->whereBetween('id', [47, 49])->get();
+        ->whereBetween('id', [49, 51])->get();
 
         $usuaruios = DB::table('permissions')
         ->select('id', 'name', 'guard_name')
-        ->whereBetween('id', [50, 53])->get();
+        ->whereBetween('id', [52, 55])->get();
 
         $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
             ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
             ->all();
     
-        return view('roles.edit',compact('role','permission','rolePermissions'),["personas"=>$personas,
-        "colaboradores"=>$colaboradores, "pagosalario"=>$pagosalario, "materiaentrante"=>$materiaentrante, 
-        "materiasaliente"=>$materiasaliente,
-        "categorias"=>$categorias, "productos"=>$productos, "insumos"=>$insumos, "solicitud"=>$solicitud,
-        "reportes"=>$reportes, "bitacora"=>$bitacora, "roles"=>$roles, "preguntas"=>$preguntas, "backup"=>$backup, "usuaruios"=>$usuaruios]);
+        return view('roles.edit',compact('role','permission','rolePermissions'),["personas"=>$personas, "usuaruios"=>$usuaruios,
+        "colaboradores"=>$colaboradores,
+        "pagosalario"=>$pagosalario, "materiaentrante"=>$materiaentrante, "materiasaliente"=>$materiasaliente,
+        "categorias"=>$categorias, "productos"=>$productos, "insumos"=>$insumos, "kardex"=>$kardex, "solicitud"=>$solicitud,
+         "bitacora"=>$bitacora, "roles"=>$roles, "backup"=>$backup]);
     }
 
     /**

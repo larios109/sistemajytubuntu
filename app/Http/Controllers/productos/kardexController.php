@@ -15,10 +15,9 @@ class kardexController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:visualizar productos|Registrar producto|editar producto|editar estado producto',['only'=>['index']]);
-        $this->middleware('permission:Registrar producto',['only'=>['create','store']]);
-        $this->middleware('permission:editar producto',['only'=>['edit','update']]);
-        $this->middleware('permission:editar estado producto',['only'=>['changestatus']]);
+        $this->middleware('permission:visualizar kardex|Registrar kardex|editar kardex|',['only'=>['index']]);
+        $this->middleware('permission:Registrar kardex',['only'=>['create','store']]);
+        $this->middleware('permission:editar kardex',['only'=>['edit','update']]);
     }
     /**
      * Display a listing of the resource.

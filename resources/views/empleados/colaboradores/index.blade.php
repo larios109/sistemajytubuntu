@@ -57,7 +57,7 @@
                 <th class="text-center">Sueldo</th>
                 <th class="text-center">Correo</th>
                 <th class="text-center">Telefono</th>
-                <th class="text-center">Fecha Registro</th>
+                <th class="text-center">Fecha Entrada</th>
                 <th class="text-center notexport">Opciones</th>
             </tr>
         </thead>
@@ -68,7 +68,7 @@
                     <td class="text-center">{{$i}}</td>
                     <td class="text-center">{{$colaborador->primer_nom}}</td>
                     <td class="text-center">{{$colaborador->primer_apellido}}</td>
-                    <td class="text-center">{{$colaborador->sueldo_bruto}}</td>
+                    <td class="text-center">{{number_format($colaborador->sueldo_bruto,2)}}</td>
                     <td class="text-center">{{$colaborador->correo}}</td>
                     <td class="text-center">{{$colaborador->telefono}}</td>
                     <td class="text-center">{{date('Y-m-d', strtotime($colaborador->fecha_registro))}}</td>

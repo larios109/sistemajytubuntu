@@ -302,6 +302,7 @@ return [
                 [
                     'text' => 'Kardex',
                     'url'  => '/kardex',
+                    'can'=> 'visualizar kardex',
                 ],
                 [
                     'text' => 'Otros Insumos',

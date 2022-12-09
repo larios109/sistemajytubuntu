@@ -67,13 +67,13 @@
                     <td class="text-center">{{$venta->primer_nom}}</td>
                     <td class="text-center">{{$venta->primer_apellido}}</td>
                     <td class="text-center">{{$venta->impuesto}}</td>
-                    <td class="text-center">{{$venta->total_venta}}</td>
+                    <td class="text-center">{{number_format($venta->total_venta, 2)}}</td>
                     <td class="text-center">
                         @can ('visualizar detalle solicitud pedidos')
                             <a href="{{route('solicitudpedidos.show',$venta->idventa)}}" class="btn btn-warning btn-sm">Detalle</a>
                         @endcan
 
-                        @can ('')
+                        @can ('Editar estado solicitud')
                             @if($venta->estado == 1)
                             <a type="button"  href="{{url('change-solicitud/'.$venta->idventa)}}" class="btn btn-sm btn-success">Activo</a>
                                 @else

@@ -49,6 +49,23 @@
                 @endif
             </div>
 
+            <div class="row mb-3">
+                <label for="calendar" class="col-sm-2 col-form-label">Fecha Entrada</label>
+                 <div class="col-sm-7">
+                    <input type="date" id="Fecha" name="Fecha" class="form-control" min="2022-01-01"
+                    value="{{date('Y-m-d', strtotime($colaborador->fecha_registro))}}">
+                </div>
+                @if ($errors->has('caducidad'))
+                    <div     
+                        id="caducidad-error"                                          
+                        class="caducidad text-danger pl-3"
+                        for="caducidad"
+                        style="display: block;">
+                        <strong>{{$errors->first('caducidad')}}</strong>
+                    </div>
+                @endif
+            </div>
+
             
             <div class="row mb-3">
                 <label for="calendar" class="col-sm-2 col-form-label">Fecha Salida</label>

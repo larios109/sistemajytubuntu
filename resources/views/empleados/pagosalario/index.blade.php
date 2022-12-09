@@ -76,7 +76,7 @@
                 <th class="text-center">Sueldo Bruto</th>
                 <th class="text-center">IHSS</th>
                 <th class="text-center">RAP</th>
-                <th class="text-center">Otras deducciones</th>
+                <th class="text-center">Otras Deducciones</th>
                 <th class="text-center">Vacaciones</th>
                 <th class="text-center">Salario</th>
                 <th class="text-center">Fecha Pago</th>
@@ -90,7 +90,7 @@
                 <tr>
                     <td class="text-center">{{$i}}</td>
                     <td class="text-center">{{$pago->nombre}}</td>
-                    <td class="text-center">{{$pago->sueldo_bruto}}</td>
+                    <td class="text-center">{{number_format($pago->sueldo_bruto,2)}}</td>
                     <td class="text-center">{{$pago->IHSS}}</td>
                     <td class="text-center">{{$pago->RAP}}</td>
                     <td class="text-center">{{$pago->otras_deducciones}}</td>
@@ -103,7 +103,7 @@
                             <a href="{{route('pagosalario.edit',$pago->cod_pago)}}" class="btn btn-warning btn-sm">Editar</a>
                         @endcan
 
-                        @can ('')
+                        @can ('editar estado pago')
                             @if($pago->estado == 1)
                             <a type="button"  href="{{url('change-pago/'.$pago->cod_pago)}}" class="btn btn-sm btn-success">Activo</a>
                                 @else

@@ -18,10 +18,10 @@ class pagosalarioController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:visualizar pago salario|Registrar pago salario|editar pago salario|borrar pago salario',['only'=>['index']]);
+        $this->middleware('permission:visualizar pago salario|Registrar pago salario|editar pago salario|editar estado pago',['only'=>['index']]);
         $this->middleware('permission:Registrar pago salario',['only'=>['create','store']]);
         $this->middleware('permission:editar pago salario',['only'=>['edit','update']]);
-        $this->middleware('permission:borrar pago salario',['only'=>['destroy']]);
+        $this->middleware('permission:editar estado pago',['only'=>['changestatus']]);
     }
     /**
      * Display a listing of the resource.

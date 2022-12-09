@@ -52,12 +52,12 @@
         <thead class=thead-dark>
             <tr>
                 <th class="text-center">Codigo</th>
-                <th class="text-center">Nombre Materia</th>
+                <th class="text-center">Materia</th>
                 <th class="text-center">Descripcion</th>
                 <th class="text-center">Tipo Medida</th>
                 <th class="text-center">Precio Compra</th>
                 <th class="text-center">Cantidad</th>
-                <th class="text-center">Fecha compra</th>
+                <th class="text-center">Fecha Compra</th>
                 <th class="text-center">Fecha Caducidad</th>
                 <th class="text-center notexport">Opciones</th>
             </tr>

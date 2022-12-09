@@ -132,6 +132,19 @@
                             <div class="col-md-4 col-xl-4">
                                 <div class="card text-dark bg-white">
                                     <div class="card-block">
+                                    <h5>Kardex</h5>
+                                    @foreach($kardex as $value)
+                                    <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}
+                                    {{$value->name}}</label>
+                                    <br/>
+                                    @endforeach                                               
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-xl-4">
+                                <div class="card text-dark bg-white">
+                                    <div class="card-block">
                                     <h5>Otros Insumos</h5>
                                     @foreach($insumos as $value)
                                     <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}
@@ -171,20 +184,6 @@
                             <div class="col-md-4 col-xl-4">
                                 <div class="card text-dark bg-white">
                                     <div class="card-block">
-                                    <h5>Preguntas</h5>
-                                    @foreach($preguntas as $value)
-                                    <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}
-                                    {{$value->name}}</label>
-                                    <br/>
-                                    @endforeach                                               
-                                    </div>
-                                </div>
-                            </div>
-
-                            
-                            <div class="col-md-4 col-xl-4">
-                                <div class="card text-dark bg-white">
-                                    <div class="card-block">
                                     <h5>Usuarios</h5>
                                     @foreach($usuaruios as $value)
                                     <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}
@@ -200,19 +199,6 @@
                                     <div class="card-block">
                                     <h5>Backup</h5>
                                     @foreach($backup as $value)
-                                    <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}
-                                    {{$value->name}}</label>
-                                    <br/>
-                                    @endforeach                                               
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 col-xl-4">
-                                <div class="card text-dark bg-white">
-                                    <div class="card-block">
-                                    <h5>Reportes</h5>
-                                    @foreach($reportes as $value)
                                     <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}
                                     {{$value->name}}</label>
                                     <br/>

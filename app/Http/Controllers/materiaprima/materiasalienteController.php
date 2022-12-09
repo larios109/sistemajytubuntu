@@ -27,11 +27,14 @@ class materiasalienteController extends Controller
      */
     public function index()
     {
-        $response = Http::get('http://localhost:3000/materia_saliente');
+        $materiasaliente = DB::table('materia_prima_saliente as ms')
+        ->join('materia_prima_entrante as me', 'ms.cod_materia_e', '=', 'me.cod_materia_e')
+        ->select('ms.cod_materia_s', 'me.nom_materia', 'ms.descripcion_s', 'ms.cant_saliente', 'ms.fec_registro')
+        ->orderBy('cod_materia_s','desc')
+        ->get();
         $user = Auth::user();
         $fecha = now();
-        return view('materiaprima.materiasaliente.index',["user"=>$user, "fecha"=>$fecha])
-        ->with('materiasaliente', json_decode($response,true));
+        return view('materiaprima.materiasaliente.index',["user"=>$user, "fecha"=>$fecha, "materiasaliente"=>$materiasaliente]);
     }
 
     /**

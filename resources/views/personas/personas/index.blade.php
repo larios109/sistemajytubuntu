@@ -31,7 +31,7 @@
     <table id="tablapersona" class="table table-stripped table-bordered table-condensed table-hover">
         <thead class=thead-dark>
             <tr>
-                <th class="text-center">Codigo Persona</th>
+                <th class="text-center">Codigo</th>
                 <th class="text-center">Primer Nombre</th>
                 <th class="text-center">Segundo Nombre</th>
                 <th class="text-center">Primer Apellido</th>

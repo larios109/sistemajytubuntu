@@ -21,10 +21,10 @@ class solicitudpedidosController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:visualizar solicitud pedidos|Registrar solicitud|borrar solicitud|visualizar detalle solicitud pedidos',['only'=>['index']]);
+        $this->middleware('permission:visualizar solicitud pedidos|Registrar solicitud|Editar estado solicitud|visualizar detalle solicitud pedidos',['only'=>['index']]);
         $this->middleware('permission:Registrar solicitud',['only'=>['create','store']]);
         $this->middleware('permission:visualizar detalle solicitud pedidos',['only'=>['show']]);
-        $this->middleware('permission:borrar solicitud',['only'=>['destroy']]);
+        $this->middleware('permission:Editar estado solicitud',['only'=>['changestatus']]);
     }
     
     /**

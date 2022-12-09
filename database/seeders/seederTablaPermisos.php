@@ -32,7 +32,7 @@ class seederTablaPermisos extends Seeder
             'visualizar pago salario',
             'Registrar pago salario',
             'editar pago salario',
-            'borrar pago salario',
+            'editar estado pago',
 
             //tabla materia entrante
             'visualizar materia entrante',
@@ -58,6 +58,11 @@ class seederTablaPermisos extends Seeder
             'editar producto',
             'editar estado producto',
 
+            //tabla kardex
+            'visualizar kardex',
+            'Registrar kardex',
+            'editar kardex',
+
             //tabla otros insumos
             'visualizar otros insumos',
             'Registrar otros insumos',
@@ -67,11 +72,8 @@ class seederTablaPermisos extends Seeder
             //tabla solicitud pedidos
             'visualizar solicitud pedidos',
             'Registrar solicitud',
-            'borrar solicitud',
+            'Editar estado solicitud',
             'visualizar detalle solicitud pedidos',
-
-            //Modulo Reportes
-            'visualizar reportes',
 
             //tabla bitacora
             'visualizar bitacora',

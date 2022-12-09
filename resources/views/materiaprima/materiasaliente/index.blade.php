@@ -51,8 +51,8 @@
     <table id="tablamaterias" class="table table-stripped table-bordered table-condensed table-hover">
         <thead class=thead-dark>
             <tr>
-                <th class="text-center">Codigo Materia</th>
-                <th class="text-center">Nombre Materia</th>
+                <th class="text-center">Codigo</th>
+                <th class="text-center">Materia</th>
                 <th class="text-center">Descripcion</th>
                 <th class="text-center">Cantidad Saliente</th>
                 <th class="text-center">Fecha Registro</th>
@@ -64,14 +64,14 @@
             @foreach($materiasaliente as $materias)
                 <tr>
                     <td class="text-center">{{$i}}</td>
-                    <td class="text-center">{{$materias["nom_materia"]}}</td>
-                    <td class="text-center">{{$materias["descripcion_s"]}}</td>
-                    <td class="text-center">{{$materias["cant_saliente"]}}</td>
-                    <td class="text-center">{{date('Y-m-d', strtotime($materias["fec_registro"]))}}</td>
+                    <td class="text-center">{{$materias->nom_materia}}</td>
+                    <td class="text-center">{{$materias->descripcion_s}}</td>
+                    <td class="text-center">{{$materias->cant_saliente}}</td>
+                    <td class="text-center">{{date('Y-m-d', strtotime($materias->fec_registro))}}</td>
                     <td class="text-center">
                         @can ('editar materia saliente')
-                        <form action="{{route('materiasaliente.destroy',$materias["cod_materia_s"])}}" class="d-inline formulario-eliminar" method='POST' >
-                            <a href="{{route('materiasaliente.edit',$materias["cod_materia_s"])}}" class="btn btn-warning btn-sm">Editar</a>
+                        <form action="{{route('materiasaliente.destroy',$materias->cod_materia_s)}}" class="d-inline formulario-eliminar" method='POST' >
+                            <a href="{{route('materiasaliente.edit',$materias->cod_materia_s)}}" class="btn btn-warning btn-sm">Editar</a>
                             @can ('borrar materia saliente')
                             <button type="submit" class="btn btn-danger btn-sm">Eliminar   
                              @csrf

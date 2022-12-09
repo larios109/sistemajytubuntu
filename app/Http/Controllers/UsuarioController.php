@@ -111,7 +111,7 @@ class UsuarioController extends Controller
         $this->validate ($request,[
             'name'=>'required',
             'email'=>'required|email|unique:users,email,'.$id,
-            'password'=>['required', 'same:confirm-password', Rules\Password::defaults() -> mixedCase() -> numbers() 
+            'password'=>[ Rules\Password::defaults() -> mixedCase() -> numbers() 
             -> letters() -> symbols()],
             'roles'=>'required'
         ]);
