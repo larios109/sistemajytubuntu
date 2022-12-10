@@ -95,7 +95,7 @@
                     <td class="text-center">{{$pago->RAP}}</td>
                     <td class="text-center">{{$pago->otras_deducciones}}</td>
                     <td class="text-center">{{$pago->vacaciones}}</td>
-                    <td class="text-center">{{$pago->salario}}</td>
+                    <td class="text-center">{{number_format($pago->salario, 2)}}</td>
                     <td class="text-center">{{date('Y-m-d', strtotime($pago->fecha_registro))}}</td>
                     <td class="text-center">{{$pago->periodo_pago}}</td>
                     <td class="text-center">
