@@ -15,6 +15,11 @@
         @method('PUT')
         <div class="card  mb-2">
 
+            <div class="col-sm-7" hidden>
+                <input type="text" id="nombre" name="nombre" class="form-control" maxlength="30" readonly=""
+                value="{{$user->name}}">
+            </div>
+
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre</label>
                  <div class="col-sm-7">

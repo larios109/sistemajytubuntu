@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Models\User;
+use App\Models\bitacora;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -71,6 +72,14 @@ class UsuarioController extends Controller
         $user=User::create($input);
         $user->assignRole($request->input('roles'));
 
+        $bitacora = new bitacora;
+        $bitacora -> usr = auth()->user()->name;
+        $bitacora -> tabla = 'Usuarios';
+        $bitacora -> evento = 'Registro';
+        $bitacora -> fecha_registro = now();
+        $bitacora -> campo_1 = 'Se registro un nuevo usuario';
+        $bitacora -> save();
+
         return redirect()->route('usuarios.index')->with('store', 'registro');
     }
 
@@ -126,6 +135,15 @@ class UsuarioController extends Controller
         $user=User::find($id);
         $user->update($input);
         DB::table('model_has_roles')->where('model_id',$id)->delete();
+
+        $nombre = $request -> get('nombre');
+        $bitacora = new bitacora;
+        $bitacora -> usr = auth()->user()->name;
+        $bitacora -> tabla = 'Usuarios';
+        $bitacora -> evento = 'Actualizacion';
+        $bitacora -> fecha_registro = now();
+        $bitacora -> campo_1 = 'Se actualizo un usuario: '.$nombre;
+        $bitacora -> save();
 
         $user->assignRole($request->input('roles'));
         return redirect()->route('usuarios.index')->with('update', 'editado');

@@ -8,6 +8,8 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\auth;
+use App\Models\User;
+use App\Models\bitacora;
 
 class RolController extends Controller
 {
@@ -118,6 +120,16 @@ class RolController extends Controller
     
         $role = Role::create(['name' => $request->input('name')]);
         $role->syncPermissions($request->input('permission'));
+
+        $nombre = $request -> get('name');
+
+        $bitacora = new bitacora;
+        $bitacora -> usr = auth()->user()->name;
+        $bitacora -> tabla = 'Roles';
+        $bitacora -> evento = 'Registro';
+        $bitacora -> fecha_registro = now();
+        $bitacora -> campo_1 = 'Se registro un nuevo rol: '.$nombre;
+        $bitacora -> save();
     
         return redirect()->route('roles.index')->with('store', 'registro');   
     }
@@ -229,6 +241,15 @@ class RolController extends Controller
         $role = Role::find($id);
         $role->name = $request->input('name');
         $role->save();
+
+        $nombre = $request -> get('name');
+        $bitacora = new bitacora;
+        $bitacora -> usr = auth()->user()->name;
+        $bitacora -> tabla = 'Roles';
+        $bitacora -> evento = 'Actualizacion';
+        $bitacora -> fecha_registro = now();
+        $bitacora -> campo_1 = 'Se actualizo un rol: '.$nombre;
+        $bitacora -> save();
     
         $role->syncPermissions($request->input('permission'));
         return redirect()->route('roles.index')->with('update', 'editado');  

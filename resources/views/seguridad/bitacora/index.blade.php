@@ -48,12 +48,7 @@
                 <th class="text-center">Usuario</th>
                 <th class="text-center">Evento</th>
                 <th class="text-center">Tabla</th>
-                <th class="text-center">Campo 1</th>
-                <th class="text-center">Campo 2</th>
-                <th class="text-center">Campo 3</th>
-                <th class="text-center">Campo 4</th>
-                <th class="text-center">Campo 5</th>
-                <th class="text-center">Campo 6</th>
+                <th class="text-center">Descripcion</th>
             </tr>
         </thead>
         <tbody>
@@ -66,11 +61,6 @@
                     <td class="text-center">{{$bitacora->evento}}</td>
                     <td class="text-center">{{$bitacora->tabla}}</td>
                     <td class="text-center">{{$bitacora->campo_1}}</td>
-                    <td class="text-center">{{$bitacora->campo_2}}</td>
-                    <td class="text-center">{{$bitacora->campo_3}}</td>
-                    <td class="text-center">{{$bitacora->campo_4}}</td>
-                    <td class="text-center">{{$bitacora->campo_5}}</td>
-                    <td class="text-center">{{$bitacora->campo_6}}</td>
                 </tr>
             @php $i++; @endphp
             @endforeach

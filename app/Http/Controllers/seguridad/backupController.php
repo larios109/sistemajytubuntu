@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Spatie\Backup\BackupDestination\BackupDestination;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use App\Models\bitacora;
 
 class backupController extends Controller
 {
@@ -74,6 +75,13 @@ class backupController extends Controller
     public function create()
     {
         Artisan::queue('backup:run', ['--only-db' => 1]);
+        $bitacora = new bitacora;
+        $bitacora -> usr = auth()->user()->name;
+        $bitacora -> tabla = 'Backup';
+        $bitacora -> evento = 'Registro';
+        $bitacora -> fecha_registro = now();
+        $bitacora -> campo_1 = 'Se registro un nuevo backup';
+        $bitacora -> save();
         return back();
     }
 
