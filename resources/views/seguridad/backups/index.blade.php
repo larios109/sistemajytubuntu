@@ -60,9 +60,6 @@
                             </button>
                             @endcan
                         </form>
-                        <a class="btn btn-warning btn-sm" href="{{ route('backups.importar') }}">
-                            <span>Restaurar</span>
-                        </a>
                     </td>
                 </tr>
             @endforeach
