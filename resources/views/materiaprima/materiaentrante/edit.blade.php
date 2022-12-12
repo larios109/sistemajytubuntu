@@ -10,10 +10,15 @@
 @stop
 
 @section('content')
-    <form action="{{route('materiaentrante.update', $materiae->cod_materia_e)}}" method='POST'>
+    <form action="{{route('materiaentrante.update', $materiae->cod_materia_e)}}" method='POST' id="formedit">
         @csrf
         @method('PUT')
         <div class="card  mb-2">
+
+            <div class="col-sm-7" >
+                    <input type="number" id="codmateria" name="codmateria"  hidden class="form-control" readonly=""
+                    value="{{$materiae->cod_materia_e}}">
+            </div>
 
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Nombre de la materia</label>
@@ -89,6 +94,11 @@
                         <strong>{{$errors->first('Precio')}}</strong>
                     </div>
                 @endif
+            </div>
+
+            <div class="col-sm-7" >
+                    <input type="number" id="stock_antigui" name="stock_antigui" hidden  class="form-control" readonly=""
+                    value="{{$materiae->cant}}">
             </div>
 
             <div class="row mb-3">
@@ -211,5 +221,23 @@
             alert("esta acción está prohibida");
         }
     }
-</script> 
+</script>
+
+<script>
+   
+    form = document.getElementById('formedit'); 
+    var cont=0;
+
+    form.addEventListener("submit", function(event){
+            var stockAnitguo = parseInt(document.getElementById('stock_antigui').value);
+            var stockActual = parseInt(document.getElementById('cantidad').value);
+            if (stockActual < stockAnitguo) {
+                event.preventDefault();
+                $("#cantidad").val("");
+                alert("Si desea reducir la materia dirijase al kardex de materia o materia saliente");
+                cont++;
+            }
+        } 
+    )
+</script>
 @stop

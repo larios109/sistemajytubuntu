@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\productos;
+namespace App\Http\Controllers\materiaprima;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
 use Illuminate\Support\Facades\DB;
-use App\Models\productos;
-use App\Models\kardex;
+use App\Models\mateiraentrante;
+use App\Models\materiasaliente;
+use App\Models\kardexmateria;
 
-class kardexController extends Controller
+class kardexmateriaController extends Controller
 {
     public function __construct()
     {
@@ -32,13 +33,13 @@ class kardexController extends Controller
 
             $fecha = now();
 
-            $movimientos = DB::table('kardex as k')
-            ->join('articulo as a', 'k.idarticulo', '=', 'a.idarticulo')
-            ->select('k.cod_kardex', 'a.nombre', 'k.movimiento as kardex', 'k.cant', 'k.usr_registro', 'k.fecha_registro')
-            ->orderBy('k.cod_kardex','desc')
+            $movimientos = DB::table('kardex_materia as k')
+            ->join('materia_prima_entrante as me', 'k.cod_materia_e', '=', 'me.cod_materia_e')
+            ->select('k.cod_kardex_materia', 'me.nom_materia', 'k.movimiento as kardex', 'k.cant', 'k.usr_registro', 'k.fecha_registro')
+            ->orderBy('k.cod_kardex_materia','desc')
             ->get();
 
-            return view('productos.kardex.index',["movimientos"=>$movimientos, "user"=>$user, "fecha"=>$fecha]);
+            return view('materiaprima.kardexmateria.index',["movimientos"=>$movimientos, "user"=>$user, "fecha"=>$fecha]);
         }
     }
 
@@ -49,12 +50,12 @@ class kardexController extends Controller
      */
     public function create()
     {   
-        $articulos=DB::table('articulo as art')
-        ->select('idarticulo' ,'nombre', 'stock','tip_medida')
-        ->where([['stock', '>', '0'], ['estado', '=', '1'],])
+        $materiaentratne=DB::table('materia_prima_entrante as me')
+        ->select('cod_materia_e' ,'nom_materia', 'cant', 'fec_compra', 'fec_caducidad', 'estado')
+        ->where([['cant', '>', '0'], ['estado', '=', '1'],])
         ->get();
 
-        return view("productos.kardex.create",["articulos"=>$articulos]); 
+        return view("materiaprima.kardexmateria.create",["materiaentratne"=>$materiaentratne]); 
     }
 
     /**
@@ -66,19 +67,19 @@ class kardexController extends Controller
     public function store(Request $request)
     {
 
-        $kardex = new kardex;
-        $kardex -> idarticulo = $request -> get('codproducto');
+        $kardex = new kardexmateria;
+        $kardex -> cod_materia_e = $request -> get('codmateria');
         $kardex -> movimiento = $request -> get('movimiento');
         $kardex -> cant = $request -> get('cantidad');
-        $idarticulo = $request -> get('codproducto');
-        $producto = productos::where('idarticulo', $idarticulo)->first();
-        $producto -> stock -= $request -> get('cantidad');
-        $producto ->save();
+        $cod_materia_e = $request -> get('codmateria');
+        $materia = mateiraentrante::where('cod_materia_e', $cod_materia_e)->first();
+        $materia -> cant -= $request -> get('cantidad');
+        $materia ->save();
         $kardex -> usr_registro = auth()->user()->name;
         $kardex -> fecha_registro = now();
         $kardex -> save();
 
-        return redirect()->route('kardex.index')->with('store', 'registro');
+        return redirect()->route('kardexmateria.index')->with('store', 'registro');
     }
 
     /**

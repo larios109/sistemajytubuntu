@@ -32,7 +32,7 @@ class productosController extends Controller
         {
             $productos=DB::table('articulo as a')
             ->join('categoria as c', 'a.idcategoria', '=', 'c.idcategoria')
-            ->select('a.idarticulo', 'c.nombre AS categoria', 'a.nombre', 'a.precio_producto', 'a.stock', 'a.descripcion', 'a.estado')
+            ->select('a.idarticulo', 'c.nombre AS categoria', 'a.nombre', 'a.precio_producto', 'a.stock', 'a.descripcion', 'a.tip_medida', 'a.estado')
             ->orderBy('a.idarticulo','desc')->get();
 
             $user = Auth::user();
@@ -69,6 +69,7 @@ class productosController extends Controller
         $producto -> nombre = $request -> get('nombre');
         $producto -> precio_producto = $request -> get('precio_producto');
         $producto -> stock = $request -> get('stock');
+        $producto -> tip_medida = $request -> get('Medida');
         $producto -> descripcion = $request -> get('descripcion');
         $producto -> estado = 1;
         $producto -> fec_registro = now();
@@ -107,7 +108,7 @@ class productosController extends Controller
     {
         $producto = DB::table('articulo as a')
         ->join('categoria as c', 'a.idcategoria', '=', 'c.idcategoria')
-        ->select('a.idarticulo', 'c.idcategoria', 'c.nombre', 'a.nombre as nombre_producto','a.precio_producto', 'a.stock', 'a.descripcion')
+        ->select('a.idarticulo', 'c.idcategoria', 'c.nombre', 'a.nombre as nombre_producto','a.precio_producto', 'a.stock', 'a.tip_medida', 'a.descripcion')
         ->where('a.idarticulo', '=', $idarticulo)->first();
 
         $categorias = DB::table('categoria')
@@ -131,12 +132,16 @@ class productosController extends Controller
         $producto -> precio_producto = $request -> get('precio_producto');
         $producto -> descripcion = $request -> get('descripcion');
         $producto -> stock = $request -> get('stock');
+        $producto -> tip_medida = $request -> get('Medida');
         $producto -> update();
-
+        
         $kardex = new kardex;
         $kardex -> idarticulo = $producto->idarticulo;
         $kardex -> movimiento = 'Entrada';
-        $kardex -> cant = $request -> get('stock');
+        $actual = $request -> get('stock');
+        $antiguo = $request -> get('stock_antigui');
+        $ecuacion = $actual - $antiguo;
+        $kardex -> cant = $ecuacion;
         $kardex -> usr_registro = auth()->user()->name;
         $kardex -> fecha_registro = now();
         $kardex -> save();

@@ -35,7 +35,7 @@
                 <th class="text-center">Nombre</th>
                 <th class="text-center">Precio</th>
                 <th class="text-center">Stock</th>
-                <th class="text-center">Descripcion</th>
+                <th class="text-center">Medida</th>
                 <th class="text-center notexport">Opciones</th>
             </tr>
         </thead>
@@ -56,7 +56,7 @@
                             <a type="button" class="btn btn-sm btn-danger">{{ $produc->stock}}</a>
                         @endif
                     </td>
-                    <td class="text-center">{{ $produc->descripcion }}</td>
+                    <td class="text-center">{{ $produc->tip_medida }}</td>
                     <td class="text-center">
                         @can ('editar producto')
                             <a href="{{route('productos.edit', $produc->idarticulo)}}" class="btn btn-warning btn-sm">Editar</a>

@@ -10,7 +10,7 @@
 @stop
 
 @section('content')
-    <form action="{{route('productos.update', $producto->idarticulo)}}" method='POST'>
+    <form action="{{route('productos.update', $producto->idarticulo)}}" method='POST' id="formedit">
         @csrf
         @method('PUT')
         <div class="card  mb-2">
@@ -68,10 +68,15 @@
                 @endif
             </div>
 
+            <div class="col-sm-7" >
+                    <input type="number" id="stock_antigui" name="stock_antigui" hidden  class="form-control" readonly=""
+                    value="{{$producto->stock}}">
+            </div>
+
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Stock</label>
                  <div class="col-sm-7">
-                    <input type="number" id="cantidad" name="stock"  class="form-control" min="1" max="99999999" maxlength="10" 
+                    <input type="number" id="stock" name="stock"  class="form-control" min="1" max="99999999" maxlength="10" 
                     oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
                     placeholder="Ingrese la Cantidad" value="{{$producto->stock}}" required>
                 </div>
@@ -82,6 +87,29 @@
                         for="cantidad"
                         style="display: block;">
                         <strong>{{$errors->first('cantidad')}}</strong>
+                    </div>
+                @endif
+            </div>
+
+            <div  class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Tipo de medida</label>
+                <select class="col-sm-7" class="form-control" id="Medida" name="Medida">
+                    <option selected value="{{$producto->tip_medida}}">{{$producto->tip_medida}}</option>
+                    <option>Kilogramos</option>
+                    <option>Libras</option>
+                    <option>Unidad</option>
+                    <option>Quintales</option>
+                    <option>Onzas</option>
+                    <option>Litros</option>
+                    <option>Mililitros</option>
+                </select>
+                @if ($errors->has('Medida'))
+                    <div     
+                        id="Medida-error"                                          
+                        class="error text-danger pl-3"
+                        for="Medida"
+                        style="display: block;">
+                        <strong>{{$errors->first('Medida')}}</strong>
                     </div>
                 @endif
             </div>
@@ -119,7 +147,7 @@
                 </div>
             </div>
         </div>
-     </form>
+    </form>
 
     <div class="modal fade" id="modalAñadir" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -241,6 +269,25 @@
         }
     }
 </script> 
+
+<script>
+   
+    form = document.getElementById('formedit'); 
+    var cont=0;
+
+    form.addEventListener("submit", function(event){
+            var stockAnitguo = parseInt(document.getElementById('stock_antigui').value);
+            var stockActual = parseInt(document.getElementById('stock').value);
+            if (stockActual < stockAnitguo) {
+                event.preventDefault();
+                $("#cantidad").val("");
+                alert("Si desea reducir el stock dirijase al kardex Productos");
+                cont++;
+            }
+        } 
+    )
+</script>
+
 
 <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap5.min.js"></script>

@@ -18,6 +18,7 @@ class productos extends Model
         'nombre',
         'precio_producto',
         'stock',
+        'tip_medida',
         'descripcion',
         'usr_registro',
         'estado',

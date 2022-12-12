@@ -129,14 +129,12 @@ class solicitudpedidosController extends Controller
         ->join('persona as p','v.cod_persona','=','p.cod_persona')
         ->join('detalle_venta as dv','v.idventa','=','dv.idventa')
         ->select('v.idventa','p.cod_persona','p.primer_nom','p.primer_apellido', 'v.fecha_hora','v.impuesto', 'v.total_venta')
-        ->where('v.idventa','=',$id)
-        ->first();
+        ->where('v.idventa','=',$id)->first();
 
         $detalles=DB::table('detalle_venta as d')
         ->join('articulo as a','d.idarticulo','=','a.idarticulo')
         ->select('a.nombre as articulo','d.cantidad','d.precio_venta')
-        ->where('d.idventa','=',$id)
-        ->get();
+        ->where('d.idventa','=',$id)->get();
 
         return view("solicitudpedidos.solicitudpedidos.show",["venta"=>$venta,"detalles"=>$detalles]);
     }

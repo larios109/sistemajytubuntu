@@ -283,6 +283,11 @@ return [
                     'url'  => '/materiasaliente',
                     'can'=> 'visualizar materia saliente',
                 ],
+                [
+                    'text' => 'Kardex Materia Prima',
+                    'url'  => '/kardexmateria',
+                    'can'=> '',
+                ],
             ],
         ],
         [
@@ -300,14 +305,9 @@ return [
                     'can'=> 'visualizar productos',
                 ],
                 [
-                    'text' => 'Kardex',
+                    'text' => 'Kardex Productos',
                     'url'  => '/kardex',
                     'can'=> 'visualizar kardex',
-                ],
-                [
-                    'text' => 'Otros Insumos',
-                    'url'  => '/otrosinsumos',
-                    'can'=> 'visualizar otros insumos',
                 ],
             ],
         ],

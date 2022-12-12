@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\auth;
 use App\Http\Requests\materiaentranterequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\mateiraentrante;
+use App\Models\kardexmateria;
 
 class materiaentranteController extends Controller
 {
@@ -63,6 +64,14 @@ class materiaentranteController extends Controller
         $materiaentrante -> estado = 1;
         $materiaentrante -> usr_registro = auth()->user()->name;
         $materiaentrante -> save();
+
+        $kardex = new kardexmateria;
+        $kardex -> cod_materia_e = $materiaentrante->cod_materia_e;
+        $kardex -> movimiento = 'Entrada';
+        $kardex -> cant = $request -> get('cantidad');
+        $kardex -> usr_registro = auth()->user()->name;
+        $kardex -> fecha_registro = now();
+        $kardex -> save();
 
         return redirect()->route('materiaentrante.index')->with('store', 'registro'); 
     }
@@ -122,6 +131,17 @@ class materiaentranteController extends Controller
             'fec_caducidad' => $request->caducidad,
             'usr_registro' =>  auth()->user()->name
         ]);
+
+        $kardex = new kardexmateria;
+        $kardex -> cod_materia_e = $request -> get('codmateria');
+        $kardex -> movimiento = 'Entrada';
+        $actual = $request -> get('cantidad');
+        $antiguo = $request -> get('stock_antigui');
+        $ecuacion = $actual - $antiguo;
+        $kardex -> cant = $ecuacion;
+        $kardex -> usr_registro = auth()->user()->name;
+        $kardex -> fecha_registro = now();
+        $kardex -> save();
 
         return redirect()->route('materiaentrante.index')->with('update', 'editado'); 
     }   

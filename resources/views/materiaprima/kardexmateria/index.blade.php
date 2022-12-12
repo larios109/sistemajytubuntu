@@ -8,10 +8,10 @@
 <link href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css" rel="stylesheet">
 @stop
 
-@section('title', '| Kardex')
+@section('title', '| Kardex Materia')
 
 @section('content_header')
-    <h1 class="text-center">Kardex</h1>
+    <h1 class="text-center">Kardex Materia</h1>
     <hr class="bg-dark border-1 border-top border-dark">
 @stop
 
@@ -37,7 +37,7 @@
 </div>
 
 <a 
-    href="{{route('kardex.create')}}"
+    href="{{route('kardexmateria.create')}}"
     class="btn btn-outline-info text-center btn-block">
     <spam>Registrar Movimiento</spam> <i class="fas fa-plus-square"></i>
 </a>
@@ -50,7 +50,7 @@
         <thead class=thead-dark>
             <tr>
                 <th class="text-center">Codigo</th>
-                <th class="text-center">Producto</th>
+                <th class="text-center">Materia</th>
                 <th class="text-center">Movimiento</th>
                 <th class="text-center">Cantidad</th>
                 <th class="text-center">Usuario Registro</th>
@@ -62,7 +62,7 @@
             @foreach($movimientos as $movimiento)
                 <tr>
                     <td class="text-center">{{$i}}</td>
-                    <td class="text-center">{{ $movimiento->nombre }}</td>
+                    <td class="text-center">{{ $movimiento->nom_materia }}</td>
                     <td class="text-center">{{ $movimiento->kardex }}</td>
                     <td class="text-center">{{ $movimiento->cant }}</td>
                     <td class="text-center">{{ $movimiento->usr_registro}}</td>
@@ -119,7 +119,7 @@
                 {
                     extend: 'pdf',
                     className: 'btn btn-danger glyphicon glyphicon-duplicate',
-                    title: 'Jota y T | Kardex Productos',
+                    title: 'Jota y T | Kardex Materia',
                     messageTop: 'Usuario: ' +$("#puser").text() +' \n Fecha: ' +$("#pfecha").text(),
                     exportOptions: {
                         columns: ':not(.notexport)'

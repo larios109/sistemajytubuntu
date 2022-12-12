@@ -84,6 +84,29 @@
                 @endif
             </div>
 
+            <div  class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Tipo de medida</label>
+                <select class="col-sm-7" class="form-control" id="Medida" name="Medida">
+                    <option disabled selected>Escoja una medida</option>
+                    <option>Kilogramos</option>
+                    <option>Libras</option>
+                    <option>Unidad</option>
+                    <option>Quintales</option>
+                    <option>Onzas</option>
+                    <option>Litros</option>
+                    <option>Mililitros</option>
+                </select>
+                @if ($errors->has('Medida'))
+                    <div     
+                        id="Medida-error"                                          
+                        class="error text-danger pl-3"
+                        for="Medida"
+                        style="display: block;">
+                        <strong>{{$errors->first('Medida')}}</strong>
+                    </div>
+                @endif
+            </div>
+
             <div class="row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">Descripcion</label>
                  <div class="col-sm-7">

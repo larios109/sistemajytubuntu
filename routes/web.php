@@ -9,6 +9,7 @@ use App\Http\Controllers\personas\personasController;
 // Controllers materia prima
 use App\Http\Controllers\materiaprima\materiaentranteController;
 use App\Http\Controllers\materiaprima\materiasalienteController;
+use App\Http\Controllers\materiaprima\kardexmateriaController;
 
 // Controllers productos
 use App\Http\Controllers\productos\categoriaController;
@@ -73,6 +74,7 @@ Route::get('/change-status/{cod_persona}', [personasController::class, 'changest
 Route::resource('materiaentrante',materiaentranteController::class)->names('materiaentrante');
 Route::get('/change-materiae/{cod_materia_e}', [materiaentranteController::class, 'changestatus']);
 Route::resource('materiasaliente',materiasalienteController::class)->names('materiasaliente');
+Route::resource('kardexmateria',kardexmateriaController::class)->names('kardexmateria');
 
 // Route productos
 Route::resource('categoria',categoriaController::class)->names('categoria');

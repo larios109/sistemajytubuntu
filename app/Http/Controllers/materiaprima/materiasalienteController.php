@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\materiasaliente;
+use App\Models\kardexmateria;
 
 class materiasalienteController extends Controller
 {
@@ -70,6 +71,14 @@ class materiasalienteController extends Controller
             'cant_saliente' => $request->cantidad,
             'usr_registro' =>  auth()->user()->name,
         ]);
+
+        $kardex = new kardexmateria;
+        $kardex -> cod_materia_e = $request -> get('codm');
+        $kardex -> movimiento = 'Salida';
+        $kardex -> cant = $request -> get('cantidad');
+        $kardex -> usr_registro = auth()->user()->name;
+        $kardex -> fecha_registro = now();
+        $kardex -> save();
 
         return redirect()->route('materiasaliente.index')->with('store', 'registro'); 
     }

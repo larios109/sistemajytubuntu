@@ -27,4 +27,9 @@ class mateiraentrante extends Model
 
     protected $guarded =[
     ];
+
+    public function kardexmateria()
+    {
+        return $this->hasOne('App\Models\kardexmateria', 'cod_kardex_materia', 'movimiento', 'cant', 'usr_registro', 'fecha_registro');
+    }
 }
